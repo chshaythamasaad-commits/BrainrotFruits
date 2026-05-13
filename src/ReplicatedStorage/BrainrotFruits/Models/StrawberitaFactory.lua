@@ -6,16 +6,15 @@ local ZERO = Vector3.new(0, 0, 0)
 local ONE = Vector3.new(1, 1, 1)
 
 local SEED_PLACEMENTS = {
-	{ offset = Vector3.new(-0.72, 2.18, -0.68), rotation = CFrame.Angles(0, 0, math.rad(-8)) },
-	{ offset = Vector3.new(0.02, 2.31, -0.69), rotation = CFrame.Angles(0, 0, math.rad(7)) },
-	{ offset = Vector3.new(0.7, 2.13, -0.68), rotation = CFrame.Angles(0, 0, math.rad(10)) },
-	{ offset = Vector3.new(-0.95, 1.56, -0.72), rotation = CFrame.Angles(0, 0, math.rad(7)) },
-	{ offset = Vector3.new(-0.32, 1.74, -0.75), rotation = CFrame.Angles(0, 0, math.rad(-10)) },
-	{ offset = Vector3.new(0.46, 1.72, -0.75), rotation = CFrame.Angles(0, 0, math.rad(8)) },
-	{ offset = Vector3.new(0.98, 1.42, -0.7), rotation = CFrame.Angles(0, 0, math.rad(-7)) },
-	{ offset = Vector3.new(-0.62, 0.98, -0.69), rotation = CFrame.Angles(0, 0, math.rad(9)) },
-	{ offset = Vector3.new(0.08, 0.92, -0.72), rotation = CFrame.Angles(0, 0, math.rad(-8)) },
-	{ offset = Vector3.new(0.63, 0.84, -0.67), rotation = CFrame.Angles(0, 0, math.rad(7)) },
+	{ offset = Vector3.new(-0.94, 2.34, -0.68), rotation = CFrame.Angles(0, 0, math.rad(-8)) },
+	{ offset = Vector3.new(-0.24, 2.48, -0.7), rotation = CFrame.Angles(0, 0, math.rad(7)) },
+	{ offset = Vector3.new(0.48, 2.42, -0.7), rotation = CFrame.Angles(0, 0, math.rad(10)) },
+	{ offset = Vector3.new(1.02, 2.13, -0.66), rotation = CFrame.Angles(0, 0, math.rad(-7)) },
+	{ offset = Vector3.new(-1.22, 1.55, -0.68), rotation = CFrame.Angles(0, 0, math.rad(8)) },
+	{ offset = Vector3.new(1.22, 1.5, -0.68), rotation = CFrame.Angles(0, 0, math.rad(-8)) },
+	{ offset = Vector3.new(-0.86, 0.72, -0.66), rotation = CFrame.Angles(0, 0, math.rad(9)) },
+	{ offset = Vector3.new(0, 0.58, -0.7), rotation = CFrame.Angles(0, 0, math.rad(-8)) },
+	{ offset = Vector3.new(0.86, 0.72, -0.66), rotation = CFrame.Angles(0, 0, math.rad(7)) },
 }
 
 local function getVariant(variantName)
@@ -184,8 +183,8 @@ local function buildBlockyBody(model, root, variant, scale)
 
 	createBrick(model, root, {
 		name = "FlatFacePanel",
-		size = Vector3.new(1.55, 1.08, 0.08),
-		offset = Vector3.new(0, 1.52, -0.66),
+		size = Vector3.new(1.82, 1.22, 0.09),
+		offset = Vector3.new(0, 1.56, -0.68),
 		color = variant.bellyColor,
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
@@ -203,72 +202,91 @@ local function buildBlockyBody(model, root, variant, scale)
 end
 
 local function buildFace(model, root, variant, scale)
-	local faceZ = -0.73
+	local faceZ = -0.79
 
 	createBrick(model, root, {
-		name = "LeftSquareEye",
-		size = Vector3.new(0.44, 0.44, 0.055),
-		offset = Vector3.new(-0.42, 1.7, faceZ),
+		name = "LeftEyeFrame",
+		size = Vector3.new(0.58, 0.62, 0.06),
+		offset = Vector3.new(-0.45, 1.75, faceZ),
+		color = Color3.fromRGB(39, 31, 39),
+		material = Enum.Material.SmoothPlastic,
+	}, scale)
+	createBrick(model, root, {
+		name = "RightEyeFrame",
+		size = Vector3.new(0.58, 0.62, 0.06),
+		offset = Vector3.new(0.45, 1.75, faceZ),
+		color = Color3.fromRGB(39, 31, 39),
+		material = Enum.Material.SmoothPlastic,
+	}, scale)
+	createBrick(model, root, {
+		name = "LeftEyeWhite",
+		size = Vector3.new(0.42, 0.46, 0.065),
+		offset = Vector3.new(-0.45, 1.75, faceZ - 0.035),
 		color = Color3.fromRGB(255, 255, 255),
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 	createBrick(model, root, {
-		name = "RightSquareEye",
-		size = Vector3.new(0.44, 0.44, 0.055),
-		offset = Vector3.new(0.42, 1.7, faceZ),
+		name = "RightEyeWhite",
+		size = Vector3.new(0.42, 0.46, 0.065),
+		offset = Vector3.new(0.45, 1.75, faceZ - 0.035),
 		color = Color3.fromRGB(255, 255, 255),
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 	createBrick(model, root, {
 		name = "LeftPixelPupil",
-		size = Vector3.new(0.17, 0.22, 0.06),
-		offset = Vector3.new(-0.35, 1.65, faceZ - 0.04),
+		size = Vector3.new(0.18, 0.22, 0.07),
+		offset = Vector3.new(-0.45, 1.69, faceZ - 0.08),
 		color = Color3.fromRGB(31, 27, 32),
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 	createBrick(model, root, {
 		name = "RightPixelPupil",
-		size = Vector3.new(0.17, 0.22, 0.06),
-		offset = Vector3.new(0.35, 1.75, faceZ - 0.04),
+		size = Vector3.new(0.18, 0.22, 0.07),
+		offset = Vector3.new(0.45, 1.69, faceZ - 0.08),
 		color = Color3.fromRGB(31, 27, 32),
 		material = Enum.Material.SmoothPlastic,
+	}, scale)
+	createBrick(model, root, {
+		name = "LeftEyeHighlight",
+		size = Vector3.new(0.1, 0.1, 0.075),
+		offset = Vector3.new(-0.54, 1.87, faceZ - 0.12),
+		color = Color3.fromRGB(164, 238, 255),
+		material = Enum.Material.Neon,
+	}, scale)
+	createBrick(model, root, {
+		name = "RightEyeHighlight",
+		size = Vector3.new(0.1, 0.1, 0.075),
+		offset = Vector3.new(0.36, 1.87, faceZ - 0.12),
+		color = Color3.fromRGB(164, 238, 255),
+		material = Enum.Material.Neon,
 	}, scale)
 
 	createBrick(model, root, {
 		name = "LeftBlockCheek",
-		size = Vector3.new(0.28, 0.16, 0.055),
-		offset = Vector3.new(-0.73, 1.3, faceZ - 0.02),
+		size = Vector3.new(0.28, 0.18, 0.06),
+		offset = Vector3.new(-0.72, 1.33, faceZ - 0.04),
 		color = variant.cheekColor,
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 	createBrick(model, root, {
 		name = "RightBlockCheek",
-		size = Vector3.new(0.28, 0.16, 0.055),
-		offset = Vector3.new(0.73, 1.3, faceZ - 0.02),
+		size = Vector3.new(0.28, 0.18, 0.06),
+		offset = Vector3.new(0.72, 1.33, faceZ - 0.04),
 		color = variant.cheekColor,
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 
 	createBrick(model, root, {
-		name = "SmilePixelLeft",
-		size = Vector3.new(0.18, 0.06, 0.06),
-		offset = Vector3.new(-0.13, 1.22, faceZ - 0.04),
-		rotation = CFrame.Angles(0, 0, math.rad(-18)),
+		name = "TinyOpenMouth",
+		size = Vector3.new(0.34, 0.22, 0.07),
+		offset = Vector3.new(0, 1.25, faceZ - 0.08),
 		color = Color3.fromRGB(45, 32, 40),
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 	createBrick(model, root, {
-		name = "SmilePixelRight",
-		size = Vector3.new(0.18, 0.06, 0.06),
-		offset = Vector3.new(0.13, 1.22, faceZ - 0.04),
-		rotation = CFrame.Angles(0, 0, math.rad(18)),
-		color = Color3.fromRGB(45, 32, 40),
-		material = Enum.Material.SmoothPlastic,
-	}, scale)
-	createBrick(model, root, {
-		name = "TinyTonguePixel",
-		size = Vector3.new(0.12, 0.08, 0.06),
-		offset = Vector3.new(0, 1.14, faceZ - 0.05),
+		name = "TinyMouthShine",
+		size = Vector3.new(0.2, 0.08, 0.075),
+		offset = Vector3.new(0, 1.18, faceZ - 0.12),
 		color = Color3.fromRGB(255, 118, 147),
 		material = Enum.Material.SmoothPlastic,
 	}, scale)

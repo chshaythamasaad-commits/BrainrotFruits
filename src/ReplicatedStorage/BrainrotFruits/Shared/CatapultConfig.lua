@@ -27,6 +27,7 @@ CatapultConfig.CrateLifetimeSeconds = 18
 
 CatapultConfig.WorldFolderName = "BrainrotMap"
 CatapultConfig.PlotsFolderName = "Plots"
+CatapultConfig.SharedLaunchAreaName = "SharedLaunchArea"
 CatapultConfig.CatapultName = "Catapult"
 CatapultConfig.InteractZoneName = "InteractZone"
 CatapultConfig.ActiveCratesFolderName = "ActiveCrates"

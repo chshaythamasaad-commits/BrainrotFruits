@@ -119,19 +119,12 @@ end
 
 local function getInteractZone()
 	local map = Workspace:FindFirstChild(CatapultConfig.WorldFolderName)
-	local plots = map and map:FindFirstChild(CatapultConfig.PlotsFolderName)
-	if not plots then
+	local launchArea = map and map:FindFirstChild(CatapultConfig.SharedLaunchAreaName)
+	local catapult = launchArea and launchArea:FindFirstChild(CatapultConfig.CatapultName)
+	if not catapult then
 		return nil
 	end
-
-	for _, plot in ipairs(plots:GetChildren()) do
-		if plot:GetAttribute("OwnerUserId") == player.UserId then
-			local catapult = plot:FindFirstChild(CatapultConfig.CatapultName)
-			return catapult and catapult:FindFirstChild(CatapultConfig.InteractZoneName)
-		end
-	end
-
-	return nil
+	return catapult:FindFirstChild(CatapultConfig.InteractZoneName)
 end
 
 local function isNearCatapult()
@@ -175,7 +168,7 @@ local function beginCharge()
 	end
 
 	if not isNearCatapult() then
-		setStatus("Move closer to the catapult")
+		setStatus("Move closer to the shared catapult")
 		return
 	end
 
@@ -232,8 +225,6 @@ launchResultRemote.OnClientEvent:Connect(function(payload)
 			setStatus(`Cooldown {math.ceil(payload.cooldownRemaining or CatapultConfig.CooldownSeconds)}s`)
 		elseif payload.reason == "TooFarFromCatapult" then
 			setStatus("Step into the catapult zone")
-		elseif payload.reason == "WrongPlot" then
-			setStatus("Use your own plot catapult")
 		else
 			setStatus(`Launch failed: {payload.reason or "Unknown"}`)
 		end

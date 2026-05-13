@@ -2,19 +2,23 @@
 
 ## Current Status
 
-The Strawberita + Catapult slice now runs inside a generated 6-player simulator-style map on `feature/strawberita-catapult-slice`.
+The Strawberita + Catapult slice now runs inside a generated 6-player simulator-style map with one shared central launch area on `feature/strawberita-catapult-slice`.
 
 This repository is a fresh BrainrotFruits side project. Do not run Reverend Ru recovery logic here.
 
 ## What Was Implemented
 
 - Clean Rojo layout for BrainrotFruits services.
-- Procedural blocky Strawberita factory with five variants: Normal, Shiny, Golden, Galaxy, and Diamond.
+- Procedural blocky Strawberita factory with variants including Base, Shiny, Golden, Galaxy, and Diamond.
 - Central hub under `Workspace.BrainrotMap.CentralHub` with a Brainrot Fruits sign and preview lineup.
 - Six generated player plots under `Workspace.BrainrotMap.Plots`.
-- Each plot has an owner sign, spawn pad, baseplate, colored borders, catapult station, launch lane, distance markers, landing/reward zone, and ten fruit display slots.
+- Each plot has an owner sign, spawn pad, baseplate, colored borders, path access, and ten fruit display slots.
+- One shared central launch area under `Workspace.BrainrotMap.SharedLaunchArea`.
+- Shared launch lane with distance markers and a shared reveal zone.
+- Shop, Upgrades, Sell, and Index stands around the hub.
+- Central rare Strawberita showcase statue on a pedestal.
 - Server-side plot assignment for up to six players.
-- Per-plot catapult binding so players launch only from their own catapult.
+- Shared catapult binding so any assigned player can use the central catapult.
 - Server-authoritative launch validation, cooldowns, crate physics, landing distance, rarity roll, and reveal.
 - Revealed Strawberita rewards are auto-placed on the player’s next open fruit slot as placeholder claim behavior.
 - Mobile-conscious charge HUD, cooldown feedback, reveal banner, and burst effects.
@@ -25,7 +29,7 @@ This repository is a fresh BrainrotFruits side project. Do not run Reverend Ru r
 Strawberita must stay in a chunky voxel / block-built Roblox simulator collectible style.
 
 - Main body is stacked red cuboids and wedge taper blocks.
-- Face is a flat front panel with square eyes and simple pixel smile parts.
+- Face is a larger flat front panel with symmetrical framed eyes, centered pupils, tiny highlights, square cheeks, and a simple small mouth.
 - Seeds are small block accents, not dots on a smooth surface.
 - Leaf top is a chunky layered block crown.
 - Arms, legs, shoes, and accessories are rectangular block parts.
@@ -63,18 +67,17 @@ Strawberita must stay in a chunky voxel / block-built Roblox simulator collectib
 - The player is teleported to their assigned plot spawn pad on character spawn.
 - When a player leaves, the plot is freed, owner attributes are reset, runtime folders are cleared, and fruit slot attributes are reset.
 
-## Catapult Binding
+## Shared Catapult Binding
 
-- `MapBuilder` creates one catapult model per plot.
-- Each catapult has an `InteractZone` with:
-  - `PlotId`
-  - `OwnerUserId`
-  - `OwnerName`
+- `MapBuilder` creates one shared catapult model in `Workspace.BrainrotMap.SharedLaunchArea`.
+- The shared catapult has an `InteractZone` with:
+  - `SharedLaunch`
   - `LaunchOrigin`
   - `LaunchDirection`
-- `CatapultBinder` adds a prompt to each plot catapult.
-- `CatapultService` ignores client plot choice and resolves the launch zone from `PlotService.getPlayerCatapultZone(player)`.
-- Launches fail if the player is too far from their own catapult or if the zone owner does not match the player.
+- `CatapultBinder` adds a prompt to the shared catapult.
+- `CatapultService` ignores client plot choice and resolves the launch zone from `PlotService.getSharedCatapultZone()`.
+- Launches fail if the player has no assigned plot, is too far from the shared catapult, or is still on cooldown.
+- Rewards still route to the launching player's assigned plot through `PlotService`.
 
 ## Fruit Slot Placement
 
@@ -97,17 +100,17 @@ Strawberita must stay in a chunky voxel / block-built Roblox simulator collectib
 6. Confirm `Workspace.BrainrotMap` contains:
    - `CentralHub`
    - `Plots/Plot1` through `Plots/Plot6`
-7. Walk near your assigned plot’s catapult.
+7. Walk to the shared central launch area.
 8. Hold `E`, `Space`, mouse click, or the mobile `Launch` action to charge.
 9. Release to launch the crate down your lane.
-10. Watch it reveal a Strawberita, place onto your next fruit slot, and spawn the Wobble Blob placeholder.
+10. Watch it reveal a Strawberita, place onto your plot's next fruit slot, and spawn the Wobble Blob placeholder.
 
 ## Multi-Player Studio Test
 
 1. In Roblox Studio, use Test > Start with at least 2 players.
 2. Each player should spawn at a different plot.
 3. Each plot sign should show the assigned player name.
-4. Player A should only be able to launch from Player A’s own catapult.
+4. Multiple players should be able to use the shared central catapult, each with their own cooldown.
 5. Rewards should place onto the launching player’s own fruit slots.
 6. Leaving the server should reset that player’s plot to unclaimed.
 

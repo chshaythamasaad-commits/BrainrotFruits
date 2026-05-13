@@ -167,14 +167,9 @@ requestLaunchRemote.OnServerEvent:Connect(function(player, payload)
 
 	local plot = PlotService.getPlayerPlot(player) or PlotService.assignPlayer(player)
 	local root = getPlayerRoot(player)
-	local zone = PlotService.getPlayerCatapultZone(player)
+	local zone = PlotService.getSharedCatapultZone()
 	if not plot or not root or not zone then
 		fireFailure(player, "CatapultNotReady")
-		return
-	end
-
-	if zone:GetAttribute("OwnerUserId") ~= player.UserId then
-		fireFailure(player, "WrongPlot")
 		return
 	end
 

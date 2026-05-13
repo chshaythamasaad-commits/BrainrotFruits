@@ -34,4 +34,26 @@ function CatapultBinder.bindAll(plotsFolder)
 	end
 end
 
+function CatapultBinder.bindSharedLaunchArea(map)
+	local launchArea = map:FindFirstChild(CatapultConfig.SharedLaunchAreaName)
+	local catapult = launchArea and launchArea:FindFirstChild(CatapultConfig.CatapultName)
+	local zone = catapult and catapult:FindFirstChild(CatapultConfig.InteractZoneName)
+	if not zone then
+		return nil
+	end
+
+	if not zone:FindFirstChild("CatapultPrompt") then
+		local prompt = Instance.new("ProximityPrompt")
+		prompt.Name = "CatapultPrompt"
+		prompt.ActionText = "Charge Launch"
+		prompt.ObjectText = "Shared Catapult"
+		prompt.HoldDuration = 0
+		prompt.MaxActivationDistance = CatapultConfig.InteractRange
+		prompt.KeyboardKeyCode = Enum.KeyCode.E
+		prompt.Parent = zone
+	end
+
+	return zone
+end
+
 return CatapultBinder

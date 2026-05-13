@@ -86,3 +86,19 @@ Commit: this documentation pass.
 - Removed smooth Ball-part body/face/seed/foot language from Strawberita.
 - The character now uses stacked cuboids, wedge taper blocks, flat face parts, square eyes, block seeds, chunky leaves, rectangular limbs, square shoes, and a blocky sash/badge accessory.
 - Variants keep the same base block structure and only change colors, materials, particles, glow, and accessory finish.
+
+## Focused Polish Pass
+
+### Map polish - shared central launch
+
+- Reworked the playable map into a central safe hub with one shared launch area instead of per-plot catapults.
+- Player plots now focus on ownership, fruit slots, spawn markers, borders, and paths back to the hub.
+- Added Shop, Upgrades, Sell, and Index stands around the hub.
+- Added a central showcase pedestal for the rarest Strawberita statue.
+- Catapult launches now use the shared central catapult while rewards still route to the launching player's assigned plot.
+
+### Strawberita polish - cleaner collectible face
+
+- Simplified the face into a flatter, cleaner, more icon-like block composition.
+- Added larger symmetrical framed eyes, centered pupils, small highlights, square cheeks, and a tiny open mouth.
+- Enlarged the flat face panel and moved seed accents away from the face so the expression reads clearly from distance.

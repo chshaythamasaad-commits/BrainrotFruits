@@ -89,7 +89,7 @@ function PlotService.init()
 
 	map = MapBuilder.build()
 	plotsFolder = map:WaitForChild("Plots")
-	CatapultBinder.bindAll(plotsFolder)
+	CatapultBinder.bindSharedLaunchArea(map)
 
 	for _, player in ipairs(Players:GetPlayers()) do
 		task.defer(function()
@@ -146,12 +146,6 @@ function PlotService.assignPlayer(player)
 			plot:SetAttribute("Status", "Claimed")
 			playerPlots[player.UserId] = plot
 
-			local zone = PlotService.getPlayerCatapultZone(player)
-			if zone then
-				zone:SetAttribute("OwnerUserId", player.UserId)
-				zone:SetAttribute("OwnerName", player.Name)
-			end
-
 			updateOwnerSign(plot)
 			teleportCharacterToPlot(player, plot)
 			print(`[BrainrotFruits] Assigned {player.Name} to Plot {plot:GetAttribute("PlotId")}.`)
@@ -175,21 +169,20 @@ function PlotService.releasePlayer(player)
 	resetPlotSlots(plot)
 	clearPlotRuntimeFolders(plot)
 
-	local zone = PlotService.getPlayerCatapultZone(player)
-	if zone then
-		zone:SetAttribute("OwnerUserId", 0)
-		zone:SetAttribute("OwnerName", "")
-	end
-
 	playerPlots[player.UserId] = nil
 	updateOwnerSign(plot)
 	print(`[BrainrotFruits] Freed Plot {plot:GetAttribute("PlotId")} from {player.Name}.`)
 end
 
-function PlotService.getPlayerCatapultZone(player)
-	local plot = PlotService.getPlayerPlot(player)
-	local catapult = plot and plot:FindFirstChild("Catapult")
+function PlotService.getSharedCatapultZone()
+	PlotService.init()
+	local launchArea = map:FindFirstChild("SharedLaunchArea")
+	local catapult = launchArea and launchArea:FindFirstChild("Catapult")
 	return catapult and catapult:FindFirstChild("InteractZone")
+end
+
+function PlotService.getPlayerCatapultZone()
+	return PlotService.getSharedCatapultZone()
 end
 
 function PlotService.getPlayerCratesFolder(player)
