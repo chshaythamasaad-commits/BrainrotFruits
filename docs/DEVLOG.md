@@ -6,13 +6,17 @@ Branch: `feature/strawberita-catapult-slice`
 
 ### Pass 9 - Approved base Strawberita reference integration
 
-Commit: this pass - `chore: integrate base strawberita reference model`
+Commits:
+
+- `f55d72e` - `chore: integrate base strawberita reference model`
+- `c223880` - `feat: add strawberita variants and preview lineup`
 
 - Replaced the obsolete tracked Strawberita source image with the approved blocky front/angle/side/back reference sheet from the original workspace snapshot.
 - Added `BaseStrawberita`, a canonical runtime template module that encodes the approved model-sheet silhouette, face layout, bow, leaf crown, mini berry badge, belt studs, socks, and red shoes.
 - Refactored `StrawberitaFactory` so every reward and preview variant clones the same base template first, then applies variant colors/materials/effects without changing proportions.
 - Updated the central preview lineup to show Normal, Shiny, Golden, Galaxy, and Diamond together.
 - No serialized `.rbxm`, `.rbxmx`, or placed Studio model was found in the repo or workspace snapshot, so the handoff now treats the approved model sheet plus `BaseStrawberita` as the canonical base source.
+- Push attempts for these commits were blocked by missing GitHub HTTPS credentials in this environment.
 
 ### Pass 1 - Project setup and structure
 

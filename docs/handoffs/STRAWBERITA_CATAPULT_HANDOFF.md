@@ -6,6 +6,13 @@ The Strawberita + Catapult slice now runs inside a generated 6-player simulator-
 
 This repository is a fresh BrainrotFruits side project. Do not run Reverend Ru recovery logic here.
 
+## Git State
+
+- Working branch: `feature/strawberita-catapult-slice`
+- Latest local implementation commit before this docs pass: `c223880` - `feat: add strawberita variants and preview lineup`
+- Previous local implementation commit: `f55d72e` - `chore: integrate base strawberita reference model`
+- Remote status at handoff: local branch is ahead of `origin/feature/strawberita-catapult-slice`; push attempts were blocked because this environment has no GitHub HTTPS credentials.
+
 ## What Was Implemented
 
 - Clean Rojo layout for BrainrotFruits services.
@@ -53,6 +60,9 @@ Strawberita must stay anchored to the approved chunky voxel / block-built Roblox
 - `docs/asset_research/blocky_style_references.md`
 - `docs/asset_research/mesh_candidates.md`
 - `docs/handoffs/STRAWBERITA_CATAPULT_HANDOFF.md`
+- `references/references/Strawberita/strawberita_source_reference.png`
+- `src/ReplicatedStorage/BrainrotFruits/Configs/BrainrotFruitConfig.lua`
+- `src/ReplicatedStorage/BrainrotFruits/Models/StrawberitaFactory.lua`
 - `src/ReplicatedStorage/BrainrotFruits/Shared/CatapultConfig.lua`
 - `src/ReplicatedStorage/BrainrotFruits/Models/Strawberita/BaseStrawberita.lua`
 - `src/ServerScriptService/BrainrotFruits/CatapultService.server.lua`
@@ -129,8 +139,10 @@ Strawberita must stay anchored to the approved chunky voxel / block-built Roblox
 
 ## Known Issues
 
-- The local workspace contains an unreadable legacy `.git` folder. Git operations in this session used an external metadata directory outside the project root.
-- Rojo structure validates with `rojo sourcemap`, but this was not play-tested inside Roblox Studio from Codex.
+- The requested initial cwd, `M:\Games\BrainrotFruits-main`, was a source snapshot without `.git`; implementation work was done in the real clone at `M:\Games\BrainrotFruits`.
+- GitHub push is not complete from this environment. `git push` was attempted after stable commits, but HTTPS auth failed with `could not read Username for 'https://github.com': terminal prompts disabled`.
+- No serialized approved `.rbxm`/`.rbxmx` base model was found. The canonical base is the approved blocky model-sheet PNG plus the runtime `BaseStrawberita` template module.
+- Rojo structure validates with `rojo build default.project.json`, but this was not play-tested inside Roblox Studio from Codex.
 - Spawn pads teleport players by script; dedicated Roblox `SpawnLocation` team logic is not implemented yet.
 - Fruit claiming is placeholder auto-placement, not a real claim button or inventory.
 - The Wobble Blob is placeholder logic only; it marks a bonk but does not yet drive a real claim/fail economy.
