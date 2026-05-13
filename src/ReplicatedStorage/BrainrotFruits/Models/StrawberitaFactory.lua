@@ -4,10 +4,12 @@ local BaseStrawberita = require(script.Parent.Strawberita.BaseStrawberita)
 local StrawberitaFactory = {}
 
 local templateCache = {}
+local DEFAULT_COLLECTIBLE_SCALE = 0.92
 
 local BODY_ROLES = {
 	Body = true,
 	BodyDark = true,
+	BodyShade = true,
 	Bow = true,
 	BerryIcon = true,
 	Shoe = true,
@@ -58,6 +60,8 @@ local function getRoleColor(role, variant)
 		return variant.bodyColor
 	elseif role == "BodyDark" then
 		return variant.bodyDarkColor or getDarker(variant.bodyColor, 0.14)
+	elseif role == "BodyShade" then
+		return variant.bodyShadeColor or variant.bodyDarkColor or getDarker(variant.bodyColor, 0.22)
 	elseif role == "FacePanel" then
 		return variant.facePanelColor or variant.skinColor or BaseStrawberita.Palette.FacePanel
 	elseif role == "Skin" then
@@ -217,7 +221,7 @@ function StrawberitaFactory.create(variantName, options)
 	options = options or {}
 
 	local variant = getVariant(variantName)
-	local scale = options.scale or 1
+	local scale = options.scale or DEFAULT_COLLECTIBLE_SCALE
 	local pivot = options.pivot or CFrame.new()
 
 	local model = getTemplate(scale):Clone()
