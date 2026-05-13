@@ -2,7 +2,7 @@
 
 ## Status
 
-Pass 6 complete: launch/reveal feedback has a simple HUD and replicated burst effects.
+Pass 7 complete: a PG Wobble Blob placeholder appears after reveals and bonks the reward.
 
 ## Implemented
 
@@ -16,6 +16,7 @@ Pass 6 complete: launch/reveal feedback has a simple HUD and replicated burst ef
 - Server-owned rarity rolls, crate opening pieces, and Strawberita reveal spawns.
 - Landing, crate-open, and reveal burst effects.
 - Mobile-conscious charge HUD and rarity-colored reveal banner.
+- PG Wobble Blob placeholder hazard for the future survive/claim system.
 
 ## How to Test in Roblox Studio
 
@@ -29,12 +30,12 @@ Pass 6 complete: launch/reveal feedback has a simple HUD and replicated burst ef
 
 ## Known Issues
 
-- UI is functional and intentionally simple; full art/audio polish is still future work.
+- The hazard is deliberately placeholder logic. It marks a bonk and prints debug output, but it does not yet drive a real claim/fail economy.
 - Local workspace contains an unreadable legacy `.git` folder, so this session is using an external Git metadata directory.
 
 ## Next Suggested Tasks
 
-- Add a PG chaos hazard placeholder after reveals.
+- Finalize documentation and handoff notes.
 
 ## Notes for Future Codex Sessions
 

@@ -37,3 +37,9 @@
 - Added server-replicated burst effects for landing, crate opening, and reveal moments.
 - Improved the catapult HUD with mobile-friendly sizing, charge color feedback, cooldown color feedback, and a reveal banner.
 - Added rarity-colored reveal text with distance and band name.
+
+### Pass 7 - PG chaos hazard placeholder
+
+- Added a non-violent Wobble Blob placeholder hazard.
+- The placeholder spawns after a Strawberita reveal, drifts toward the reward, and marks the sequence as bonked.
+- Added attributes and debug output that clearly mark this as future survive/claim placeholder logic.
