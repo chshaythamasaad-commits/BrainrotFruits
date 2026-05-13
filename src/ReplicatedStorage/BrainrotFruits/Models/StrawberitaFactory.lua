@@ -263,7 +263,7 @@ function StrawberitaFactory.createPreviewLineup(parent, variantOrder, origin)
 
 	local created = {}
 	for index, variantName in ipairs(variantOrder) do
-		local offset = CFrame.new((index - 1) * 8, 0, 0)
+		local offset = CFrame.new((index - 1) * 10, 0, 0)
 		local model = StrawberitaFactory.create(variantName, {
 			anchored = true,
 			label = true,

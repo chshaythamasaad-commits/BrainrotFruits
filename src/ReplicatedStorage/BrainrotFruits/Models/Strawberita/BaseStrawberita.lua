@@ -3,7 +3,7 @@ local BaseStrawberita = {}
 BaseStrawberita.TemplateName = "BaseStrawberita"
 BaseStrawberita.ReferencePath = "art/references/Strawberita/strawberita_voxel_reference.png"
 BaseStrawberita.ReferenceDescription = "Approved 4-view voxel Strawberita reference sheet"
-BaseStrawberita.TemplateVersion = "VoxelReferenceRebuild_V2"
+BaseStrawberita.TemplateVersion = "VoxelReferenceRebuild_V3"
 BaseStrawberita.EstimatedHeightStuds = 6.49
 
 local ZERO = Vector3.new(0, 0, 0)
@@ -51,31 +51,35 @@ local function part(name, role, size, offset, color, material, rotation, classNa
 end
 
 local function frontSeed(name, x, y)
-	return part(name, "Seed", Vector3.new(0.24, 0.24, 0.14), Vector3.new(x, y, -1.63), BaseStrawberita.Palette.Seed)
+	return part(name, "Seed", Vector3.new(0.3, 0.3, 0.16), Vector3.new(x, y, -1.66), BaseStrawberita.Palette.Seed)
 end
 
 local function sideSeed(name, x, y, z)
-	return part(name, "Seed", Vector3.new(0.14, 0.24, 0.24), Vector3.new(x, y, z), BaseStrawberita.Palette.Seed)
+	return part(name, "Seed", Vector3.new(0.16, 0.3, 0.3), Vector3.new(x, y, z), BaseStrawberita.Palette.Seed)
 end
 
 local function backSeed(name, x, y)
-	return part(name, "Seed", Vector3.new(0.24, 0.24, 0.14), Vector3.new(x, y, 1.64), BaseStrawberita.Palette.Seed)
+	return part(name, "Seed", Vector3.new(0.3, 0.3, 0.16), Vector3.new(x, y, 1.66), BaseStrawberita.Palette.Seed)
 end
 
 BaseStrawberita.Parts = {
 	-- Large voxel strawberry costume/head, built as stepped cuboids with real side and back depth.
-	part("HeadRowBottom", "Body", Vector3.new(3.25, 0.52, 2.55), Vector3.new(0, 0.25, 0), BaseStrawberita.Palette.Body),
-	part("HeadRowLower", "Body", Vector3.new(4.05, 0.72, 2.85), Vector3.new(0, 0.82, 0), BaseStrawberita.Palette.Body),
-	part("HeadRowMiddle", "Body", Vector3.new(4.45, 1.02, 3.08), Vector3.new(0, 1.55, 0), BaseStrawberita.Palette.Body),
-	part("HeadRowUpper", "Body", Vector3.new(4.05, 0.82, 2.88), Vector3.new(0, 2.44, 0), BaseStrawberita.Palette.Body),
-	part("HeadRowTop", "Body", Vector3.new(3.28, 0.48, 2.48), Vector3.new(0, 3.03, 0), BaseStrawberita.Palette.Body),
-	part("LeftHeadSideMass", "BodyDark", Vector3.new(0.46, 2.05, 2.5), Vector3.new(-2.32, 1.58, 0.04), BaseStrawberita.Palette.BodyDark),
-	part("RightHeadSideMass", "BodyDark", Vector3.new(0.46, 2.05, 2.5), Vector3.new(2.32, 1.58, 0.04), BaseStrawberita.Palette.BodyDark),
-	part("LeftHeadUpperStep", "Body", Vector3.new(0.56, 0.62, 2.28), Vector3.new(-1.9, 2.75, 0.02), BaseStrawberita.Palette.Body),
-	part("RightHeadUpperStep", "Body", Vector3.new(0.56, 0.62, 2.28), Vector3.new(1.9, 2.75, 0.02), BaseStrawberita.Palette.Body),
-	part("LeftHeadLowerTaper", "BodyShade", Vector3.new(0.52, 0.92, 2.34), Vector3.new(-1.82, 0.48, 0), BaseStrawberita.Palette.BodyShade, nil, angles(0, 0, 180), "WedgePart"),
-	part("RightHeadLowerTaper", "BodyShade", Vector3.new(0.52, 0.92, 2.34), Vector3.new(1.82, 0.48, 0), BaseStrawberita.Palette.BodyShade, nil, nil, "WedgePart"),
-	part("BackStrawberryPlate", "Body", Vector3.new(3.55, 2.34, 0.34), Vector3.new(0, 1.64, 1.56), BaseStrawberita.Palette.Body),
+	part("HeadRowBottom", "Body", Vector3.new(3.15, 0.48, 2.52), Vector3.new(0, 0.25, 0), BaseStrawberita.Palette.Body),
+	part("HeadRowLower", "Body", Vector3.new(4.1, 0.7, 2.88), Vector3.new(0, 0.8, 0), BaseStrawberita.Palette.Body),
+	part("HeadRowMiddle", "Body", Vector3.new(4.62, 1.06, 3.18), Vector3.new(0, 1.55, 0), BaseStrawberita.Palette.Body),
+	part("HeadRowUpper", "Body", Vector3.new(4.2, 0.82, 2.98), Vector3.new(0, 2.45, 0), BaseStrawberita.Palette.Body),
+	part("HeadRowTop", "Body", Vector3.new(3.24, 0.5, 2.48), Vector3.new(0, 3.04, 0), BaseStrawberita.Palette.Body),
+	part("LeftHeadSideMass", "BodyDark", Vector3.new(0.56, 2.02, 2.62), Vector3.new(-2.42, 1.58, 0.04), BaseStrawberita.Palette.BodyDark),
+	part("RightHeadSideMass", "BodyDark", Vector3.new(0.56, 2.02, 2.62), Vector3.new(2.42, 1.58, 0.04), BaseStrawberita.Palette.BodyDark),
+	part("LeftHeadUpperStep", "Body", Vector3.new(0.7, 0.64, 2.36), Vector3.new(-1.95, 2.78, 0.02), BaseStrawberita.Palette.Body),
+	part("RightHeadUpperStep", "Body", Vector3.new(0.7, 0.64, 2.36), Vector3.new(1.95, 2.78, 0.02), BaseStrawberita.Palette.Body),
+	part("LeftFrontStrawberryStep", "Body", Vector3.new(0.42, 0.92, 0.42), Vector3.new(-2.26, 2.04, -1.7), BaseStrawberita.Palette.Body),
+	part("RightFrontStrawberryStep", "Body", Vector3.new(0.42, 0.92, 0.42), Vector3.new(2.26, 2.04, -1.7), BaseStrawberita.Palette.Body),
+	part("LeftBackStrawberryStep", "BodyDark", Vector3.new(0.42, 0.92, 0.42), Vector3.new(-2.26, 2.04, 1.7), BaseStrawberita.Palette.BodyDark),
+	part("RightBackStrawberryStep", "BodyDark", Vector3.new(0.42, 0.92, 0.42), Vector3.new(2.26, 2.04, 1.7), BaseStrawberita.Palette.BodyDark),
+	part("LeftHeadLowerTaper", "BodyShade", Vector3.new(0.62, 0.96, 2.38), Vector3.new(-1.88, 0.48, 0), BaseStrawberita.Palette.BodyShade, nil, angles(0, 0, 180), "WedgePart"),
+	part("RightHeadLowerTaper", "BodyShade", Vector3.new(0.62, 0.96, 2.38), Vector3.new(1.88, 0.48, 0), BaseStrawberita.Palette.BodyShade, nil, nil, "WedgePart"),
+	part("BackStrawberryPlate", "Body", Vector3.new(3.78, 2.38, 0.38), Vector3.new(0, 1.64, 1.62), BaseStrawberita.Palette.Body),
 
 	-- Smaller red dress/body underneath the huge strawberry costume, matching the toy-like reference proportions.
 	part("DressUpperBlock", "Body", Vector3.new(2.4, 0.72, 1.72), Vector3.new(0, -0.43, 0), BaseStrawberita.Palette.Body),
@@ -84,23 +88,23 @@ BaseStrawberita.Parts = {
 	part("DressRightSide", "BodyDark", Vector3.new(0.28, 0.84, 1.5), Vector3.new(1.52, -0.62, 0), BaseStrawberita.Palette.BodyDark),
 
 	-- Big flat peach face panel: about 70% of body width and easy to read from avatar height.
-	part("FacePanelLarge", "FacePanel", Vector3.new(3.12, 1.58, 0.16), Vector3.new(0, 1.5, -1.64), BaseStrawberita.Palette.FacePanel),
-	part("FacePanelBottomLip", "FacePanel", Vector3.new(2.9, 0.18, 0.14), Vector3.new(0, 0.62, -1.63), BaseStrawberita.Palette.FacePanel),
-	part("FacePanelLeftLip", "FacePanel", Vector3.new(0.18, 1.32, 0.14), Vector3.new(-1.66, 1.42, -1.63), BaseStrawberita.Palette.FacePanel),
-	part("FacePanelRightLip", "FacePanel", Vector3.new(0.18, 1.32, 0.14), Vector3.new(1.66, 1.42, -1.63), BaseStrawberita.Palette.FacePanel),
+	part("FacePanelLarge", "FacePanel", Vector3.new(3.42, 1.84, 0.2), Vector3.new(0, 1.42, -1.76), BaseStrawberita.Palette.FacePanel),
+	part("FacePanelBottomLip", "FacePanel", Vector3.new(3.18, 0.22, 0.18), Vector3.new(0, 0.42, -1.75), BaseStrawberita.Palette.FacePanel),
+	part("FacePanelLeftLip", "FacePanel", Vector3.new(0.22, 1.56, 0.18), Vector3.new(-1.82, 1.33, -1.75), BaseStrawberita.Palette.FacePanel),
+	part("FacePanelRightLip", "FacePanel", Vector3.new(0.22, 1.56, 0.18), Vector3.new(1.82, 1.33, -1.75), BaseStrawberita.Palette.FacePanel),
 
 	-- Cute symmetric voxel eyes: black block base, one white highlight, one green lower accent.
-	part("LeftEyeBlackBase", "EyeFrame", Vector3.new(0.54, 0.72, 0.1), Vector3.new(-0.74, 1.66, -1.75), BaseStrawberita.Palette.EyeFrame),
-	part("RightEyeBlackBase", "EyeFrame", Vector3.new(0.54, 0.72, 0.1), Vector3.new(0.74, 1.66, -1.75), BaseStrawberita.Palette.EyeFrame),
-	part("LeftEyeWhiteSquare", "EyeWhite", Vector3.new(0.18, 0.18, 0.11), Vector3.new(-0.88, 1.92, -1.82), BaseStrawberita.Palette.EyeWhite),
-	part("RightEyeWhiteSquare", "EyeWhite", Vector3.new(0.18, 0.18, 0.11), Vector3.new(0.6, 1.92, -1.82), BaseStrawberita.Palette.EyeWhite),
-	part("LeftEyeGreenLower", "EyePupil", Vector3.new(0.18, 0.2, 0.11), Vector3.new(-0.62, 1.34, -1.82), BaseStrawberita.Palette.EyePupil),
-	part("RightEyeGreenLower", "EyePupil", Vector3.new(0.18, 0.2, 0.11), Vector3.new(0.86, 1.34, -1.82), BaseStrawberita.Palette.EyePupil),
-	part("LeftCheekBlock", "Cheek", Vector3.new(0.34, 0.18, 0.1), Vector3.new(-1.2, 1.04, -1.76), BaseStrawberita.Palette.Cheek),
-	part("RightCheekBlock", "Cheek", Vector3.new(0.34, 0.18, 0.1), Vector3.new(1.2, 1.04, -1.76), BaseStrawberita.Palette.Cheek),
-	part("SmileCenter", "Smile", Vector3.new(0.34, 0.07, 0.11), Vector3.new(0, 0.94, -1.82), BaseStrawberita.Palette.Smile),
-	part("SmileLeftCorner", "Smile", Vector3.new(0.08, 0.15, 0.11), Vector3.new(-0.24, 1.0, -1.82), BaseStrawberita.Palette.Smile),
-	part("SmileRightCorner", "Smile", Vector3.new(0.08, 0.15, 0.11), Vector3.new(0.24, 1.0, -1.82), BaseStrawberita.Palette.Smile),
+	part("LeftEyeBlackBase", "EyeFrame", Vector3.new(0.74, 0.9, 0.14), Vector3.new(-0.9, 1.66, -1.92), BaseStrawberita.Palette.EyeFrame),
+	part("RightEyeBlackBase", "EyeFrame", Vector3.new(0.74, 0.9, 0.14), Vector3.new(0.9, 1.66, -1.92), BaseStrawberita.Palette.EyeFrame),
+	part("LeftEyeWhiteSquare", "EyeWhite", Vector3.new(0.22, 0.22, 0.15), Vector3.new(-1.1, 1.98, -2.01), BaseStrawberita.Palette.EyeWhite),
+	part("RightEyeWhiteSquare", "EyeWhite", Vector3.new(0.22, 0.22, 0.15), Vector3.new(0.7, 1.98, -2.01), BaseStrawberita.Palette.EyeWhite),
+	part("LeftEyeGreenLower", "EyePupil", Vector3.new(0.26, 0.24, 0.15), Vector3.new(-0.76, 1.28, -2.01), BaseStrawberita.Palette.EyePupil),
+	part("RightEyeGreenLower", "EyePupil", Vector3.new(0.26, 0.24, 0.15), Vector3.new(1.04, 1.28, -2.01), BaseStrawberita.Palette.EyePupil),
+	part("LeftCheekBlock", "Cheek", Vector3.new(0.42, 0.22, 0.14), Vector3.new(-1.35, 0.88, -1.95), BaseStrawberita.Palette.Cheek),
+	part("RightCheekBlock", "Cheek", Vector3.new(0.42, 0.22, 0.14), Vector3.new(1.35, 0.88, -1.95), BaseStrawberita.Palette.Cheek),
+	part("SmileCenter", "Smile", Vector3.new(0.38, 0.08, 0.15), Vector3.new(0, 0.78, -2.02), BaseStrawberita.Palette.Smile),
+	part("SmileLeftCorner", "Smile", Vector3.new(0.1, 0.16, 0.15), Vector3.new(-0.28, 0.84, -2.02), BaseStrawberita.Palette.Smile),
+	part("SmileRightCorner", "Smile", Vector3.new(0.1, 0.16, 0.15), Vector3.new(0.28, 0.84, -2.02), BaseStrawberita.Palette.Smile),
 
 	-- Yellow cube seeds placed across the visible costume, sides, and back.
 	frontSeed("FrontSeedTopLeft", -1.34, 2.64),
@@ -125,22 +129,22 @@ BaseStrawberita.Parts = {
 	backSeed("BackSeedLowerRight", 1.1, 0.54),
 
 	-- Layered chunky strawberry leaf crown with front, sides, and back coverage.
-	part("LeafBackShelf", "LeafShadow", Vector3.new(3.6, 0.34, 1.34), Vector3.new(0, 3.26, 0.54), BaseStrawberita.Palette.LeafShadow),
-	part("LeafFrontShelf", "Leaf", Vector3.new(3.28, 0.38, 1.22), Vector3.new(0, 3.28, -0.54), BaseStrawberita.Palette.Leaf),
-	part("LeafCenterFrontBlock", "Leaf", Vector3.new(0.92, 0.5, 1.24), Vector3.new(0, 3.48, -1.02), BaseStrawberita.Palette.Leaf, nil, angles(-6, 0, 0), "WedgePart"),
-	part("LeafLeftFrontBlock", "Leaf", Vector3.new(0.88, 0.42, 1.14), Vector3.new(-0.92, 3.42, -0.8), BaseStrawberita.Palette.Leaf, nil, angles(-6, -22, 0), "WedgePart"),
-	part("LeafRightFrontBlock", "Leaf", Vector3.new(0.88, 0.42, 1.14), Vector3.new(0.92, 3.42, -0.8), BaseStrawberita.Palette.Leaf, nil, angles(-6, 22, 0), "WedgePart"),
-	part("LeafLeftWideBlock", "LeafShadow", Vector3.new(0.9, 0.38, 1.2), Vector3.new(-1.7, 3.32, -0.04), BaseStrawberita.Palette.LeafShadow, nil, angles(-4, -40, 0), "WedgePart"),
-	part("LeafRightWideBlock", "LeafShadow", Vector3.new(0.9, 0.38, 1.2), Vector3.new(1.7, 3.32, -0.04), BaseStrawberita.Palette.LeafShadow, nil, angles(-4, 40, 0), "WedgePart"),
-	part("LeafBackBlock", "LeafShadow", Vector3.new(0.9, 0.38, 1.1), Vector3.new(0, 3.34, 1.08), BaseStrawberita.Palette.LeafShadow, nil, angles(4, 180, 0), "WedgePart"),
-	part("StemBlock", "Stem", Vector3.new(0.46, 0.62, 0.46), Vector3.new(0, 3.92, 0.05), BaseStrawberita.Palette.Stem, Enum.Material.Wood),
+	part("LeafBackShelf", "LeafShadow", Vector3.new(3.9, 0.38, 1.42), Vector3.new(0, 3.25, 0.56), BaseStrawberita.Palette.LeafShadow),
+	part("LeafFrontShelf", "Leaf", Vector3.new(3.58, 0.42, 1.32), Vector3.new(0, 3.28, -0.58), BaseStrawberita.Palette.Leaf),
+	part("LeafCenterFrontBlock", "Leaf", Vector3.new(1.0, 0.56, 1.34), Vector3.new(0, 3.5, -1.08), BaseStrawberita.Palette.Leaf, nil, angles(-6, 0, 0), "WedgePart"),
+	part("LeafLeftFrontBlock", "Leaf", Vector3.new(0.98, 0.48, 1.22), Vector3.new(-1.0, 3.44, -0.86), BaseStrawberita.Palette.Leaf, nil, angles(-6, -22, 0), "WedgePart"),
+	part("LeafRightFrontBlock", "Leaf", Vector3.new(0.98, 0.48, 1.22), Vector3.new(1.0, 3.44, -0.86), BaseStrawberita.Palette.Leaf, nil, angles(-6, 22, 0), "WedgePart"),
+	part("LeafLeftWideBlock", "LeafShadow", Vector3.new(1.02, 0.44, 1.3), Vector3.new(-1.82, 3.32, -0.04), BaseStrawberita.Palette.LeafShadow, nil, angles(-4, -40, 0), "WedgePart"),
+	part("LeafRightWideBlock", "LeafShadow", Vector3.new(1.02, 0.44, 1.3), Vector3.new(1.82, 3.32, -0.04), BaseStrawberita.Palette.LeafShadow, nil, angles(-4, 40, 0), "WedgePart"),
+	part("LeafBackBlock", "LeafShadow", Vector3.new(1.02, 0.42, 1.2), Vector3.new(0, 3.34, 1.14), BaseStrawberita.Palette.LeafShadow, nil, angles(4, 180, 0), "WedgePart"),
+	part("StemBlock", "Stem", Vector3.new(0.52, 0.68, 0.52), Vector3.new(0, 3.98, 0.05), BaseStrawberita.Palette.Stem, Enum.Material.Wood),
 
 	-- Pink bow mounted on upper-left strawberry, large enough to read like the reference.
-	part("BowKnot", "Bow", Vector3.new(0.34, 0.34, 0.16), Vector3.new(-1.55, 2.72, -1.82), BaseStrawberita.Palette.Bow),
-	part("BowLeftLoop", "Bow", Vector3.new(0.56, 0.48, 0.15), Vector3.new(-1.95, 2.72, -1.8), BaseStrawberita.Palette.Bow, nil, angles(0, 0, 10)),
-	part("BowRightLoop", "Bow", Vector3.new(0.56, 0.48, 0.15), Vector3.new(-1.15, 2.72, -1.8), BaseStrawberita.Palette.Bow, nil, angles(0, 0, -10)),
-	part("BowLeftTail", "Bow", Vector3.new(0.24, 0.34, 0.14), Vector3.new(-1.74, 2.34, -1.79), BaseStrawberita.Palette.Bow, nil, angles(0, 0, -10)),
-	part("BowRightTail", "Bow", Vector3.new(0.24, 0.34, 0.14), Vector3.new(-1.36, 2.34, -1.79), BaseStrawberita.Palette.Bow, nil, angles(0, 0, 10)),
+	part("BowKnot", "Bow", Vector3.new(0.38, 0.38, 0.18), Vector3.new(-1.62, 2.76, -1.9), BaseStrawberita.Palette.Bow),
+	part("BowLeftLoop", "Bow", Vector3.new(0.66, 0.54, 0.18), Vector3.new(-2.08, 2.78, -1.88), BaseStrawberita.Palette.Bow, nil, angles(0, 0, 10)),
+	part("BowRightLoop", "Bow", Vector3.new(0.66, 0.54, 0.18), Vector3.new(-1.16, 2.78, -1.88), BaseStrawberita.Palette.Bow, nil, angles(0, 0, -10)),
+	part("BowLeftTail", "Bow", Vector3.new(0.28, 0.38, 0.16), Vector3.new(-1.84, 2.36, -1.87), BaseStrawberita.Palette.Bow, nil, angles(0, 0, -10)),
+	part("BowRightTail", "Bow", Vector3.new(0.28, 0.38, 0.16), Vector3.new(-1.4, 2.36, -1.87), BaseStrawberita.Palette.Bow, nil, angles(0, 0, 10)),
 
 	-- Chest berry emblem and skirt/band trim.
 	part("ChestBerryBlock", "BerryIcon", Vector3.new(0.48, 0.48, 0.13), Vector3.new(0, -0.42, -1.02), BaseStrawberita.Palette.BerryIcon),
