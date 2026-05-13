@@ -9,7 +9,7 @@ This repository is a fresh BrainrotFruits side project. Do not run Reverend Ru r
 ## What Was Implemented
 
 - Clean Rojo layout for BrainrotFruits services.
-- Procedural blocky Strawberita factory with variants including Base, Shiny, Golden, Galaxy, and Diamond.
+- Canonical base-template Strawberita factory with variants including Normal, Shiny, Golden, Galaxy, and Diamond.
 - Central hub under `Workspace.BrainrotMap.CentralHub` with a Brainrot Fruits sign and preview lineup.
 - Six generated player plots under `Workspace.BrainrotMap.Plots`.
 - Each plot has an owner sign, spawn pad, baseplate, colored borders, path access, and ten fruit display slots.
@@ -24,9 +24,19 @@ This repository is a fresh BrainrotFruits side project. Do not run Reverend Ru r
 - Mobile-conscious charge HUD, cooldown feedback, reveal banner, and burst effects.
 - PG Wobble Blob placeholder hazard for future survive/claim gameplay.
 
+## Base Strawberita Reference Used
+
+The approved base visual anchor is the blocky front/angle/side/back Strawberita reference sheet now stored at `references/references/Strawberita/strawberita_source_reference.png`.
+
+Inspection note: no serialized `.rbxm`, `.rbxmx`, `.rbxl`, `.rbxlx`, mesh, or manually placed Studio model was found in the Git repo or the provided local snapshot. The newer approved reference was found only as the blocky model-sheet PNG in `M:\Games\BrainrotFruits-main\references\references\Strawberita\strawberita_source_reference.png`, then copied into the Git repo to replace the obsolete older image.
+
+Runtime source: `src/ReplicatedStorage/BrainrotFruits/Models/Strawberita/BaseStrawberita.lua` encodes the approved reference silhouette into one cloneable base template named `BaseStrawberita`. It creates a transparent `Root` PrimaryPart, welded Roblox `Part` / `WedgePart` descendants, visual-role attributes, and canonical reference attributes.
+
+Variant rule: `StrawberitaFactory` clones `BaseStrawberita` first, then applies variant colors, materials, highlights, lights, and particles. Variants must not add a new silhouette or unrelated character body.
+
 ## Strawberita Style Rule
 
-Strawberita must stay in a chunky voxel / block-built Roblox simulator collectible style.
+Strawberita must stay anchored to the approved chunky voxel / block-built Roblox simulator collectible style from the base reference sheet.
 
 - Main body is stacked red cuboids and wedge taper blocks.
 - Face is a larger flat front panel with symmetrical framed eyes, centered pupils, one small highlight per eye, square cheeks, and a tiny pixel smile.
@@ -34,7 +44,7 @@ Strawberita must stay in a chunky voxel / block-built Roblox simulator collectib
 - Leaf top is a chunky layered block crown.
 - Arms, legs, shoes, and accessories are rectangular block parts. Accessories should stay above or beside the face instead of crossing it.
 - Do not return Strawberita to smooth fruit blob, Ball body, organic mascot, or Pixar-like shapes.
-- Golden, Diamond, and Galaxy variants must keep the same base block structure and only change colors, materials, particles, glow, and accessory finish.
+- Normal, Shiny, Golden, Diamond, and Galaxy variants must keep the same base block structure and only change colors, materials, particles, glow, and accessory finish.
 
 ## Files Created or Edited
 
@@ -44,6 +54,7 @@ Strawberita must stay in a chunky voxel / block-built Roblox simulator collectib
 - `docs/asset_research/mesh_candidates.md`
 - `docs/handoffs/STRAWBERITA_CATAPULT_HANDOFF.md`
 - `src/ReplicatedStorage/BrainrotFruits/Shared/CatapultConfig.lua`
+- `src/ReplicatedStorage/BrainrotFruits/Models/Strawberita/BaseStrawberita.lua`
 - `src/ServerScriptService/BrainrotFruits/CatapultService.server.lua`
 - `src/ServerScriptService/BrainrotFruits/ChaosHazardService.lua`
 - `src/ServerScriptService/BrainrotFruits/RewardService.lua`
