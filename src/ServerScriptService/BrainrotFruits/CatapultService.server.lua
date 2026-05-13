@@ -4,6 +4,7 @@ local Workspace = game:GetService("Workspace")
 
 local brainrotFruits = ReplicatedStorage:WaitForChild("BrainrotFruits")
 local CatapultConfig = require(brainrotFruits.Shared.CatapultConfig)
+local RewardService = require(script.Parent.RewardService)
 
 local rng = Random.new()
 local lastLaunchByUserId = {}
@@ -31,6 +32,8 @@ end
 local remoteFolder = getOrCreateFolder(brainrotFruits, CatapultConfig.RemoteFolderName)
 local requestLaunchRemote = getOrCreateRemote(remoteFolder, CatapultConfig.Remotes.RequestLaunch)
 local launchResultRemote = getOrCreateRemote(remoteFolder, CatapultConfig.Remotes.LaunchResult)
+getOrCreateRemote(remoteFolder, CatapultConfig.Remotes.RequestReveal)
+local revealResultRemote = getOrCreateRemote(remoteFolder, CatapultConfig.Remotes.RevealResult)
 
 local function getTestWorld()
 	return getOrCreateFolder(Workspace, CatapultConfig.WorldFolderName)
@@ -169,6 +172,23 @@ local function trackLanding(player, crate, launchOrigin)
 		crateName = crate.Name,
 		position = landedPosition,
 	})
+
+	task.wait(0.35)
+
+	if crate.Parent then
+		local reveal = RewardService.revealCrate(player, crate, landedPosition, distance)
+		revealResultRemote:FireClient(player, {
+			ok = true,
+			status = "Revealed",
+			variantName = reveal.variantName,
+			displayName = reveal.displayName,
+			rarity = reveal.rarity,
+			bandName = reveal.bandName,
+			distance = reveal.distance,
+			position = reveal.position,
+			modelName = reveal.modelName,
+		})
+	end
 end
 
 requestLaunchRemote.OnServerEvent:Connect(function(player, payload)

@@ -2,7 +2,7 @@
 
 ## Status
 
-Pass 4 complete: players can charge and launch a crate from the catapult.
+Pass 5 complete: launched crates reveal distance-based Strawberita variants after landing.
 
 ## Implemented
 
@@ -13,6 +13,7 @@ Pass 4 complete: players can charge and launch a crate from the catapult.
 - Runtime test world under `Workspace/BrainrotFruitsTest/TestArea` with catapult, lane, markers, and landing zone.
 - Server-owned launch remotes, cooldown validation, crate physics, and landing distance measurement.
 - Client charge controls for keyboard, mouse, and touch.
+- Server-owned rarity rolls, crate opening pieces, and Strawberita reveal spawns.
 
 ## How to Test in Roblox Studio
 
@@ -26,12 +27,12 @@ Pass 4 complete: players can charge and launch a crate from the catapult.
 
 ## Known Issues
 
-- Rewards are not revealed yet; landings currently report distance only.
+- Reveal effects are functional but simple; stronger UI and landing burst feedback are next.
 - Local workspace contains an unreadable legacy `.git` folder, so this session is using an external Git metadata directory.
 
 ## Next Suggested Tasks
 
-- Add distance-based rarity selection and Strawberita reveal after crate landing.
+- Add polished UI, reveal text styling, landing burst, and crate opening feedback.
 
 ## Notes for Future Codex Sessions
 

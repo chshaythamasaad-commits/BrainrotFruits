@@ -25,3 +25,9 @@
 - Added shared catapult config and remote names.
 - Added server-authoritative launch validation, cooldowns, crate spawning, physics launch, and landing distance measurement.
 - Added a client charge input loop with keyboard, mouse, and touch action support plus a temporary charge HUD.
+
+### Pass 5 - Distance-based rarity and reveal
+
+- Added distance bands and weighted variant rolls.
+- Added server-side reward reveal that opens the crate and spawns the matching Strawberita variant.
+- Added reveal remotes and debug prints for landed distance, band, rarity, and variant.

@@ -11,6 +11,7 @@ local CatapultConfig = require(brainrotFruits.Shared.CatapultConfig)
 local remotes = brainrotFruits:WaitForChild(CatapultConfig.RemoteFolderName)
 local requestLaunchRemote = remotes:WaitForChild(CatapultConfig.Remotes.RequestLaunch)
 local launchResultRemote = remotes:WaitForChild(CatapultConfig.Remotes.LaunchResult)
+local revealResultRemote = remotes:WaitForChild(CatapultConfig.Remotes.RevealResult)
 
 local actionName = "BrainrotFruitsChargeCatapult"
 local charging = false
@@ -172,6 +173,14 @@ launchResultRemote.OnClientEvent:Connect(function(payload)
 		latestDistance = payload.distance
 		setStatus(`Landed: {math.floor(payload.distance or 0)} studs`)
 	end
+end)
+
+revealResultRemote.OnClientEvent:Connect(function(payload)
+	if typeof(payload) ~= "table" or not payload.ok then
+		return
+	end
+
+	setStatus(`Revealed {payload.displayName or "Strawberita"}!`)
 end)
 
 RunService.RenderStepped:Connect(function()
