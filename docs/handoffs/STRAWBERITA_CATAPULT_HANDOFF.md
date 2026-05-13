@@ -2,7 +2,7 @@
 
 ## Status
 
-Pass 3 complete: test lane and catapult model are generated at runtime.
+Pass 4 complete: players can charge and launch a crate from the catapult.
 
 ## Implemented
 
@@ -11,6 +11,8 @@ Pass 3 complete: test lane and catapult model are generated at runtime.
 - Procedural Strawberita factory with Normal, Shiny, Golden, Galaxy, and Diamond variants.
 - Runtime preview lineup under `Workspace/BrainrotFruitsTest/PreviewModels`.
 - Runtime test world under `Workspace/BrainrotFruitsTest/TestArea` with catapult, lane, markers, and landing zone.
+- Server-owned launch remotes, cooldown validation, crate physics, and landing distance measurement.
+- Client charge controls for keyboard, mouse, and touch.
 
 ## How to Test in Roblox Studio
 
@@ -24,12 +26,12 @@ Pass 3 complete: test lane and catapult model are generated at runtime.
 
 ## Known Issues
 
-- Playable catapult logic is not implemented yet, but the catapult has an `InteractZone` for it.
+- Rewards are not revealed yet; landings currently report distance only.
 - Local workspace contains an unreadable legacy `.git` folder, so this session is using an external Git metadata directory.
 
 ## Next Suggested Tasks
 
-- Implement server-authoritative launch, client charge controls, and remotes.
+- Add distance-based rarity selection and Strawberita reveal after crate landing.
 
 ## Notes for Future Codex Sessions
 
