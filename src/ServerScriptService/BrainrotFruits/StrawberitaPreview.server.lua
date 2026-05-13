@@ -38,6 +38,6 @@ end
 
 strawberitaFactory.createPreviewLineup(
 	previewFolder,
-	{ "Normal", "Golden", "Diamond", "Galaxy" },
-	CFrame.new(-10, 2.25, 21) * CFrame.Angles(0, math.rad(180), 0)
+	{ "Normal", "Shiny", "Golden", "Galaxy", "Diamond" },
+	CFrame.new(-10.2, 2.25, 21) * CFrame.Angles(0, math.rad(180), 0)
 )
