@@ -77,3 +77,12 @@ Commit: this documentation pass.
 - Refactored catapult launch validation to use the player's own plot catapult instead of a single global test catapult.
 - Refactored reward placement so revealed Strawberita models are placed onto the player's next open fruit display slot.
 - Moved preview models into the central hub and disabled the legacy single-lane test builder.
+
+## Strawberita Art Direction Correction
+
+### Style pass - blocky collectible Strawberita
+
+- Rebuilt `StrawberitaFactory` to match a chunky voxel/block-built simulator collectible style.
+- Removed smooth Ball-part body/face/seed/foot language from Strawberita.
+- The character now uses stacked cuboids, wedge taper blocks, flat face parts, square eyes, block seeds, chunky leaves, rectangular limbs, square shoes, and a blocky sash/badge accessory.
+- Variants keep the same base block structure and only change colors, materials, particles, glow, and accessory finish.

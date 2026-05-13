@@ -9,7 +9,7 @@ This repository is a fresh BrainrotFruits side project. Do not run Reverend Ru r
 ## What Was Implemented
 
 - Clean Rojo layout for BrainrotFruits services.
-- Procedural Strawberita factory with five variants: Normal, Shiny, Golden, Galaxy, and Diamond.
+- Procedural blocky Strawberita factory with five variants: Normal, Shiny, Golden, Galaxy, and Diamond.
 - Central hub under `Workspace.BrainrotMap.CentralHub` with a Brainrot Fruits sign and preview lineup.
 - Six generated player plots under `Workspace.BrainrotMap.Plots`.
 - Each plot has an owner sign, spawn pad, baseplate, colored borders, catapult station, launch lane, distance markers, landing/reward zone, and ten fruit display slots.
@@ -19,6 +19,18 @@ This repository is a fresh BrainrotFruits side project. Do not run Reverend Ru r
 - Revealed Strawberita rewards are auto-placed on the player’s next open fruit slot as placeholder claim behavior.
 - Mobile-conscious charge HUD, cooldown feedback, reveal banner, and burst effects.
 - PG Wobble Blob placeholder hazard for future survive/claim gameplay.
+
+## Strawberita Style Rule
+
+Strawberita must stay in a chunky voxel / block-built Roblox simulator collectible style.
+
+- Main body is stacked red cuboids and wedge taper blocks.
+- Face is a flat front panel with square eyes and simple pixel smile parts.
+- Seeds are small block accents, not dots on a smooth surface.
+- Leaf top is a chunky layered block crown.
+- Arms, legs, shoes, and accessories are rectangular block parts.
+- Do not return Strawberita to smooth fruit blob, Ball body, organic mascot, or Pixar-like shapes.
+- Golden, Diamond, and Galaxy variants must keep the same base block structure and only change colors, materials, particles, glow, and accessory finish.
 
 ## Files Created or Edited
 
