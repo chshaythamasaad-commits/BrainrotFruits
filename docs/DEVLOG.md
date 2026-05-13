@@ -102,3 +102,12 @@ Commit: this documentation pass.
 - Simplified the face into a flatter, cleaner, more icon-like block composition.
 - Added larger symmetrical framed eyes, centered pupils, small highlights, square cheeks, and a tiny open mouth.
 - Enlarged the flat face panel and moved seed accents away from the face so the expression reads clearly from distance.
+
+## Strawberita Visual Research Pass
+
+### Style research - blocky collectible references
+
+- Added Creator Store / Toolbox style research for generic cube pets, voxel characters, toy-like faces, and blocky fruit props.
+- Recorded useful references, script risk, IP concerns, and design lessons in `docs/asset_research/blocky_style_references.md`.
+- Reworked Strawberita's face again using the research lessons: clearer face tile, calmer square eyes, one highlight per eye, tiny pixel smile, and no accessory crossing the expression.
+- Replaced the front sash with a small block bow near the top of the body and widened the stacked strawberry body slightly for a chunkier collectible silhouette.

@@ -29,10 +29,10 @@ This repository is a fresh BrainrotFruits side project. Do not run Reverend Ru r
 Strawberita must stay in a chunky voxel / block-built Roblox simulator collectible style.
 
 - Main body is stacked red cuboids and wedge taper blocks.
-- Face is a larger flat front panel with symmetrical framed eyes, centered pupils, tiny highlights, square cheeks, and a simple small mouth.
+- Face is a larger flat front panel with symmetrical framed eyes, centered pupils, one small highlight per eye, square cheeks, and a tiny pixel smile.
 - Seeds are small block accents, not dots on a smooth surface.
 - Leaf top is a chunky layered block crown.
-- Arms, legs, shoes, and accessories are rectangular block parts.
+- Arms, legs, shoes, and accessories are rectangular block parts. Accessories should stay above or beside the face instead of crossing it.
 - Do not return Strawberita to smooth fruit blob, Ball body, organic mascot, or Pixar-like shapes.
 - Golden, Diamond, and Galaxy variants must keep the same base block structure and only change colors, materials, particles, glow, and accessory finish.
 
@@ -40,6 +40,8 @@ Strawberita must stay in a chunky voxel / block-built Roblox simulator collectib
 
 - `default.project.json`
 - `docs/DEVLOG.md`
+- `docs/asset_research/blocky_style_references.md`
+- `docs/asset_research/mesh_candidates.md`
 - `docs/handoffs/STRAWBERITA_CATAPULT_HANDOFF.md`
 - `src/ReplicatedStorage/BrainrotFruits/Shared/CatapultConfig.lua`
 - `src/ServerScriptService/BrainrotFruits/CatapultService.server.lua`

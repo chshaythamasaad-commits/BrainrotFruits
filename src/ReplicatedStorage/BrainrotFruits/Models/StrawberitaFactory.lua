@@ -57,9 +57,10 @@ end
 local function addLabel(root, displayName)
 	local billboard = Instance.new("BillboardGui")
 	billboard.Name = "PreviewLabel"
-	billboard.Size = UDim2.fromOffset(220, 48)
-	billboard.StudsOffset = Vector3.new(0, 4.2, 0)
+	billboard.Size = UDim2.fromOffset(180, 34)
+	billboard.StudsOffset = Vector3.new(0, 3.85, 0)
 	billboard.AlwaysOnTop = true
+	billboard.MaxDistance = 85
 	billboard.Parent = root
 
 	local label = Instance.new("TextLabel")
@@ -69,6 +70,7 @@ local function addLabel(root, displayName)
 	label.TextColor3 = Color3.fromRGB(255, 255, 255)
 	label.TextScaled = true
 	label.TextStrokeTransparency = 0.35
+	label.TextWrapped = true
 	label.Size = UDim2.fromScale(1, 1)
 	label.Parent = billboard
 end
@@ -136,28 +138,28 @@ local function buildBlockyBody(model, root, variant, scale)
 
 	createBrick(model, root, {
 		name = `VoxelBodyBottom_{variant.id}`,
-		size = Vector3.new(1.55, 0.52, 1.15),
+		size = Vector3.new(1.68, 0.5, 1.16),
 		offset = Vector3.new(0, 0.55, 0),
 		color = variant.bodyColor,
 		material = bodyMaterial,
 	}, scale)
 	createBrick(model, root, {
 		name = `VoxelBodyMiddle_{variant.id}`,
-		size = Vector3.new(2.35, 0.82, 1.22),
+		size = Vector3.new(2.48, 0.78, 1.24),
 		offset = Vector3.new(0, 1.2, 0),
 		color = variant.bodyColor,
 		material = bodyMaterial,
 	}, scale)
 	createBrick(model, root, {
 		name = `VoxelBodyUpper_{variant.id}`,
-		size = Vector3.new(2.05, 0.72, 1.16),
+		size = Vector3.new(2.14, 0.7, 1.18),
 		offset = Vector3.new(0, 1.98, 0),
 		color = variant.bodyColor,
 		material = bodyMaterial,
 	}, scale)
 	createBrick(model, root, {
 		name = `VoxelBodyCap_{variant.id}`,
-		size = Vector3.new(1.32, 0.45, 1.05),
+		size = Vector3.new(1.36, 0.43, 1.05),
 		offset = Vector3.new(0, 2.56, 0),
 		color = variant.bodyColor,
 		material = bodyMaterial,
@@ -183,9 +185,9 @@ local function buildBlockyBody(model, root, variant, scale)
 
 	createBrick(model, root, {
 		name = "FlatFacePanel",
-		size = Vector3.new(1.82, 1.22, 0.09),
-		offset = Vector3.new(0, 1.56, -0.68),
-		color = variant.bellyColor,
+		size = Vector3.new(1.92, 1.32, 0.1),
+		offset = Vector3.new(0, 1.56, -0.69),
+		color = variant.facePanelColor or variant.bellyColor,
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 
@@ -202,92 +204,102 @@ local function buildBlockyBody(model, root, variant, scale)
 end
 
 local function buildFace(model, root, variant, scale)
-	local faceZ = -0.79
+	local faceZ = -0.805
+	local eyeFrameColor = Color3.fromRGB(38, 32, 38)
+	local eyeWhiteColor = Color3.fromRGB(255, 255, 255)
+	local eyeShineColor = Color3.fromRGB(177, 244, 255)
 
 	createBrick(model, root, {
 		name = "LeftEyeFrame",
-		size = Vector3.new(0.58, 0.62, 0.06),
-		offset = Vector3.new(-0.45, 1.75, faceZ),
-		color = Color3.fromRGB(39, 31, 39),
+		size = Vector3.new(0.56, 0.58, 0.055),
+		offset = Vector3.new(-0.43, 1.74, faceZ),
+		color = eyeFrameColor,
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 	createBrick(model, root, {
 		name = "RightEyeFrame",
-		size = Vector3.new(0.58, 0.62, 0.06),
-		offset = Vector3.new(0.45, 1.75, faceZ),
-		color = Color3.fromRGB(39, 31, 39),
+		size = Vector3.new(0.56, 0.58, 0.055),
+		offset = Vector3.new(0.43, 1.74, faceZ),
+		color = eyeFrameColor,
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 	createBrick(model, root, {
 		name = "LeftEyeWhite",
-		size = Vector3.new(0.42, 0.46, 0.065),
-		offset = Vector3.new(-0.45, 1.75, faceZ - 0.035),
-		color = Color3.fromRGB(255, 255, 255),
+		size = Vector3.new(0.42, 0.44, 0.06),
+		offset = Vector3.new(-0.43, 1.75, faceZ - 0.035),
+		color = eyeWhiteColor,
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 	createBrick(model, root, {
 		name = "RightEyeWhite",
-		size = Vector3.new(0.42, 0.46, 0.065),
-		offset = Vector3.new(0.45, 1.75, faceZ - 0.035),
-		color = Color3.fromRGB(255, 255, 255),
+		size = Vector3.new(0.42, 0.44, 0.06),
+		offset = Vector3.new(0.43, 1.75, faceZ - 0.035),
+		color = eyeWhiteColor,
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 	createBrick(model, root, {
 		name = "LeftPixelPupil",
-		size = Vector3.new(0.18, 0.22, 0.07),
-		offset = Vector3.new(-0.45, 1.69, faceZ - 0.08),
+		size = Vector3.new(0.18, 0.22, 0.065),
+		offset = Vector3.new(-0.43, 1.7, faceZ - 0.08),
 		color = Color3.fromRGB(31, 27, 32),
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 	createBrick(model, root, {
 		name = "RightPixelPupil",
-		size = Vector3.new(0.18, 0.22, 0.07),
-		offset = Vector3.new(0.45, 1.69, faceZ - 0.08),
+		size = Vector3.new(0.18, 0.22, 0.065),
+		offset = Vector3.new(0.43, 1.7, faceZ - 0.08),
 		color = Color3.fromRGB(31, 27, 32),
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 	createBrick(model, root, {
 		name = "LeftEyeHighlight",
-		size = Vector3.new(0.1, 0.1, 0.075),
-		offset = Vector3.new(-0.54, 1.87, faceZ - 0.12),
-		color = Color3.fromRGB(164, 238, 255),
+		size = Vector3.new(0.08, 0.08, 0.07),
+		offset = Vector3.new(-0.53, 1.88, faceZ - 0.12),
+		color = eyeShineColor,
 		material = Enum.Material.Neon,
 	}, scale)
 	createBrick(model, root, {
 		name = "RightEyeHighlight",
-		size = Vector3.new(0.1, 0.1, 0.075),
-		offset = Vector3.new(0.36, 1.87, faceZ - 0.12),
-		color = Color3.fromRGB(164, 238, 255),
+		size = Vector3.new(0.08, 0.08, 0.07),
+		offset = Vector3.new(0.33, 1.88, faceZ - 0.12),
+		color = eyeShineColor,
 		material = Enum.Material.Neon,
 	}, scale)
 
 	createBrick(model, root, {
 		name = "LeftBlockCheek",
-		size = Vector3.new(0.28, 0.18, 0.06),
-		offset = Vector3.new(-0.72, 1.33, faceZ - 0.04),
+		size = Vector3.new(0.24, 0.16, 0.055),
+		offset = Vector3.new(-0.72, 1.34, faceZ - 0.045),
 		color = variant.cheekColor,
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 	createBrick(model, root, {
 		name = "RightBlockCheek",
-		size = Vector3.new(0.28, 0.18, 0.06),
-		offset = Vector3.new(0.72, 1.33, faceZ - 0.04),
+		size = Vector3.new(0.24, 0.16, 0.055),
+		offset = Vector3.new(0.72, 1.34, faceZ - 0.045),
 		color = variant.cheekColor,
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 
 	createBrick(model, root, {
-		name = "TinyOpenMouth",
-		size = Vector3.new(0.34, 0.22, 0.07),
-		offset = Vector3.new(0, 1.25, faceZ - 0.08),
+		name = "SmileCenterPixel",
+		size = Vector3.new(0.26, 0.08, 0.065),
+		offset = Vector3.new(0, 1.19, faceZ - 0.09),
 		color = Color3.fromRGB(45, 32, 40),
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 	createBrick(model, root, {
-		name = "TinyMouthShine",
-		size = Vector3.new(0.2, 0.08, 0.075),
-		offset = Vector3.new(0, 1.18, faceZ - 0.12),
-		color = Color3.fromRGB(255, 118, 147),
+		name = "SmileLeftPixel",
+		size = Vector3.new(0.08, 0.16, 0.065),
+		offset = Vector3.new(-0.18, 1.25, faceZ - 0.09),
+		color = Color3.fromRGB(45, 32, 40),
+		material = Enum.Material.SmoothPlastic,
+	}, scale)
+	createBrick(model, root, {
+		name = "SmileRightPixel",
+		size = Vector3.new(0.08, 0.16, 0.065),
+		offset = Vector3.new(0.18, 1.25, faceZ - 0.09),
+		color = Color3.fromRGB(45, 32, 40),
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 end
@@ -341,31 +353,31 @@ end
 local function buildLimbs(model, root, variant, scale)
 	createBrick(model, root, {
 		name = "LeftBlockArm",
-		size = Vector3.new(0.32, 0.72, 0.34),
-		offset = Vector3.new(-1.48, 1.35, -0.02),
-		rotation = CFrame.Angles(0, 0, math.rad(-18)),
+		size = Vector3.new(0.34, 0.56, 0.34),
+		offset = Vector3.new(-1.44, 1.28, -0.02),
+		rotation = CFrame.Angles(0, 0, math.rad(-12)),
 		color = variant.bellyColor,
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 	createBrick(model, root, {
 		name = "RightBlockArm",
-		size = Vector3.new(0.32, 0.72, 0.34),
-		offset = Vector3.new(1.48, 1.35, -0.02),
-		rotation = CFrame.Angles(0, 0, math.rad(18)),
+		size = Vector3.new(0.34, 0.56, 0.34),
+		offset = Vector3.new(1.44, 1.28, -0.02),
+		rotation = CFrame.Angles(0, 0, math.rad(12)),
 		color = variant.bellyColor,
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 	createBrick(model, root, {
 		name = "LeftBlockHand",
-		size = Vector3.new(0.38, 0.28, 0.36),
-		offset = Vector3.new(-1.62, 0.92, -0.04),
+		size = Vector3.new(0.38, 0.3, 0.36),
+		offset = Vector3.new(-1.52, 0.99, -0.04),
 		color = variant.cheekColor,
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
 	createBrick(model, root, {
 		name = "RightBlockHand",
-		size = Vector3.new(0.38, 0.28, 0.36),
-		offset = Vector3.new(1.62, 0.92, -0.04),
+		size = Vector3.new(0.38, 0.3, 0.36),
+		offset = Vector3.new(1.52, 0.99, -0.04),
 		color = variant.cheekColor,
 		material = Enum.Material.SmoothPlastic,
 	}, scale)
@@ -405,33 +417,40 @@ local function buildAccessory(model, root, variant, scale)
 	local accessoryMaterial = variant.seedMaterial or Enum.Material.SmoothPlastic
 
 	createBrick(model, root, {
-		name = "BlockySashTop",
-		size = Vector3.new(0.68, 0.14, 0.075),
-		offset = Vector3.new(-0.46, 2.02, -0.75),
-		rotation = CFrame.Angles(0, 0, math.rad(-24)),
+		name = "BlockBowKnot",
+		size = Vector3.new(0.22, 0.22, 0.085),
+		offset = Vector3.new(-0.68, 2.69, -0.79),
 		color = accessoryColor,
 		material = accessoryMaterial,
 	}, scale)
 	createBrick(model, root, {
-		name = "BlockySashMid",
-		size = Vector3.new(0.72, 0.14, 0.075),
-		offset = Vector3.new(0.02, 1.73, -0.77),
-		rotation = CFrame.Angles(0, 0, math.rad(-24)),
+		name = "BlockBowLeftWing",
+		size = Vector3.new(0.3, 0.24, 0.08),
+		offset = Vector3.new(-0.93, 2.68, -0.78),
+		rotation = CFrame.Angles(0, 0, math.rad(8)),
 		color = accessoryColor,
 		material = accessoryMaterial,
 	}, scale)
 	createBrick(model, root, {
-		name = "BlockySashBottom",
-		size = Vector3.new(0.64, 0.14, 0.075),
-		offset = Vector3.new(0.48, 1.45, -0.75),
-		rotation = CFrame.Angles(0, 0, math.rad(-24)),
+		name = "BlockBowRightWing",
+		size = Vector3.new(0.3, 0.24, 0.08),
+		offset = Vector3.new(-0.43, 2.68, -0.78),
+		rotation = CFrame.Angles(0, 0, math.rad(-8)),
 		color = accessoryColor,
 		material = accessoryMaterial,
 	}, scale)
 	createBrick(model, root, {
-		name = "TinySquareBadge",
-		size = Vector3.new(0.26, 0.26, 0.085),
-		offset = Vector3.new(0.62, 1.35, -0.8),
+		name = "BowLeftTail",
+		size = Vector3.new(0.16, 0.22, 0.075),
+		offset = Vector3.new(-0.82, 2.48, -0.78),
+		rotation = CFrame.Angles(0, 0, math.rad(-10)),
+		color = accessoryColor,
+		material = accessoryMaterial,
+	}, scale)
+	createBrick(model, root, {
+		name = "TinyCollectorBadge",
+		size = Vector3.new(0.24, 0.24, 0.08),
+		offset = Vector3.new(0.84, 2.42, -0.79),
 		color = variant.seedColor,
 		material = accessoryMaterial,
 	}, scale)
@@ -483,7 +502,7 @@ function StrawberitaFactory.createPreviewLineup(parent, variantOrder, origin)
 
 	local created = {}
 	for index, variantName in ipairs(variantOrder) do
-		local offset = CFrame.new((index - 1) * 4.5, 0, 0)
+		local offset = CFrame.new((index - 1) * 5.1, 0, 0)
 		local model = StrawberitaFactory.create(variantName, {
 			anchored = true,
 			label = true,
