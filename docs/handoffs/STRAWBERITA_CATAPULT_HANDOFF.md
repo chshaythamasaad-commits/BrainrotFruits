@@ -2,7 +2,7 @@
 
 ## Status
 
-Pass 2 complete: Strawberita variants can be generated procedurally and previewed in the test world.
+Pass 3 complete: test lane and catapult model are generated at runtime.
 
 ## Implemented
 
@@ -10,6 +10,7 @@ Pass 2 complete: Strawberita variants can be generated procedurally and previewe
 - Public-repo ignore rules for logs, temporary files, cache folders, and local duplicate reference exports.
 - Procedural Strawberita factory with Normal, Shiny, Golden, Galaxy, and Diamond variants.
 - Runtime preview lineup under `Workspace/BrainrotFruitsTest/PreviewModels`.
+- Runtime test world under `Workspace/BrainrotFruitsTest/TestArea` with catapult, lane, markers, and landing zone.
 
 ## How to Test in Roblox Studio
 
@@ -23,12 +24,12 @@ Pass 2 complete: Strawberita variants can be generated procedurally and previewe
 
 ## Known Issues
 
-- Playable catapult logic is not implemented yet.
+- Playable catapult logic is not implemented yet, but the catapult has an `InteractZone` for it.
 - Local workspace contains an unreadable legacy `.git` folder, so this session is using an external Git metadata directory.
 
 ## Next Suggested Tasks
 
-- Build the test lane and catapult model.
+- Implement server-authoritative launch, client charge controls, and remotes.
 
 ## Notes for Future Codex Sessions
 
