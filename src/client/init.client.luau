@@ -1,0 +1,1 @@
+print("BrainrotFruits client loaded")

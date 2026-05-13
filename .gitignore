@@ -1,0 +1,30 @@
+# Logs
+*.log
+rojo-server.log
+rojo-server.err.log
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+~$*
+
+# Cache/build output
+.cache/
+cache/
+tmp/
+temp/
+build/
+dist/
+
+# Local tool/cache folders
+.aftman/
+.foreman/
+.wally/
+Packages/
