@@ -17,11 +17,11 @@ else
 	showcaseFolder:ClearAllChildren()
 end
 
-local statue = strawberitaFactory.create("Diamond", {
+local statue = strawberitaFactory.create("Galaxy", {
 	anchored = true,
 	label = false,
-	scale = 2.15,
-	pivot = CFrame.new(0, 5.05, -8) * CFrame.Angles(0, math.rad(180), 0),
+	scale = 2.35,
+	pivot = CFrame.new(0, 7.25, -8) * CFrame.Angles(0, math.rad(180), 0),
 })
 statue.Name = "MythicStrawberitaShowcase"
 statue:SetAttribute("Showcase", true)
@@ -38,6 +38,6 @@ end
 
 strawberitaFactory.createPreviewLineup(
 	previewFolder,
-	{ "Normal", "Shiny", "Golden", "Galaxy", "Diamond" },
-	CFrame.new(-10.2, 2.25, 21) * CFrame.Angles(0, math.rad(180), 0)
+	{ "Normal", "Golden", "Diamond", "Galaxy" },
+	CFrame.new(-12, 2.25, 21) * CFrame.Angles(0, math.rad(180), 0)
 )

@@ -113,7 +113,7 @@ function RewardService.revealCrate(player, crate, landingPosition, distance)
 	local model = StrawberitaFactory.create(reward.variantName, {
 		anchored = true,
 		label = true,
-		pivot = CFrame.new(landingPosition + Vector3.new(0, 1.25, 0)) * CFrame.Angles(0, math.rad(180), 0),
+		pivot = CFrame.new(landingPosition + Vector3.new(0, 1.75, 0)) * CFrame.Angles(0, math.rad(180), 0),
 	})
 	model.Name = reward.displayName
 	model:SetAttribute("OwnerUserId", player.UserId)

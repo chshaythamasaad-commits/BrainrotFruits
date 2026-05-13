@@ -33,11 +33,11 @@ This repository is a fresh BrainrotFruits side project. Do not run Reverend Ru r
 
 ## Base Strawberita Reference Used
 
-The approved base visual anchor is the blocky front/angle/side/back Strawberita reference sheet now stored at `references/references/Strawberita/strawberita_source_reference.png`.
+The approved base visual anchor is the blocky front/angle/side/back Strawberita reference sheet now stored at `art/references/Strawberita/strawberita_voxel_reference.png`.
 
 Inspection note: no serialized `.rbxm`, `.rbxmx`, `.rbxl`, `.rbxlx`, mesh, or manually placed Studio model was found in the Git repo or the provided local snapshot. The newer approved reference was found only as the blocky model-sheet PNG in `M:\Games\BrainrotFruits-main\references\references\Strawberita\strawberita_source_reference.png`, then copied into the Git repo to replace the obsolete older image.
 
-Runtime source: `src/ReplicatedStorage/BrainrotFruits/Models/Strawberita/BaseStrawberita.lua` encodes the approved reference silhouette into one cloneable base template named `BaseStrawberita`. It creates a transparent `Root` PrimaryPart, welded Roblox `Part` / `WedgePart` descendants, visual-role attributes, and canonical reference attributes.
+Runtime source: `src/ReplicatedStorage/BrainrotFruits/Models/Strawberita/BaseStrawberita.lua` encodes the approved reference silhouette into one cloneable base template named `BaseStrawberita`. It creates a transparent `Root` PrimaryPart, welded Roblox `Part` / `WedgePart` descendants, visual-role attributes, canonical reference attributes, and an estimated normal collectible height of about 6.05 studs.
 
 Variant rule: `StrawberitaFactory` clones `BaseStrawberita` first, then applies variant colors, materials, highlights, lights, and particles. Variants must not add a new silhouette or unrelated character body.
 
@@ -45,11 +45,11 @@ Variant rule: `StrawberitaFactory` clones `BaseStrawberita` first, then applies 
 
 Strawberita must stay anchored to the approved chunky voxel / block-built Roblox simulator collectible style from the base reference sheet.
 
-- Main body is stacked red cuboids and wedge taper blocks.
-- Face is a larger flat front panel with symmetrical framed eyes, centered pupils, one small highlight per eye, square cheeks, and a tiny pixel smile.
-- Seeds are small block accents, not dots on a smooth surface.
-- Leaf top is a chunky layered block crown.
-- Arms, legs, shoes, and accessories are rectangular block parts. Accessories should stay above or beside the face instead of crossing it.
+- Main body is a large rounded-square strawberry costume built from stacked red cuboids, side depth blocks, back fill, and lower wedge taper blocks.
+- Face is a large peach rectangular front panel with symmetrical black pixel eyes, one white square highlight per eye, one green lower accent per eye, square cheeks, and a tiny pixel smile.
+- Seeds are small block/cube accents on the front, sides, and back, not tiny dots.
+- Leaf top is a layered chunky block crown with front, side, and back leaf plates plus a small stem.
+- Arms, legs, shoes, bow, chest emblem, skirt band, and white accents are rectangular block parts. Accessories should stay above or beside the face instead of crossing it.
 - Do not return Strawberita to smooth fruit blob, Ball body, organic mascot, or Pixar-like shapes.
 - Normal, Shiny, Golden, Diamond, and Galaxy variants must keep the same base block structure and only change colors, materials, particles, glow, and accessory finish.
 
@@ -60,6 +60,7 @@ Strawberita must stay anchored to the approved chunky voxel / block-built Roblox
 - `docs/asset_research/blocky_style_references.md`
 - `docs/asset_research/mesh_candidates.md`
 - `docs/handoffs/STRAWBERITA_CATAPULT_HANDOFF.md`
+- `art/references/Strawberita/strawberita_voxel_reference.png`
 - `references/references/Strawberita/strawberita_source_reference.png`
 - `src/ReplicatedStorage/BrainrotFruits/Configs/BrainrotFruitConfig.lua`
 - `src/ReplicatedStorage/BrainrotFruits/Models/StrawberitaFactory.lua`
@@ -113,6 +114,16 @@ Strawberita must stay anchored to the approved chunky voxel / block-built Roblox
   - `FruitDisplayName`
 - This is placeholder auto-claim behavior until a real claim/inventory system exists.
 
+## Latest Voxel Rebuild Notes
+
+- Body shape: rebuilt into a 6-stud-tall, deeper 3D strawberry costume with stacked red cuboids, side depth, back fill, lower taper wedges, and cube seeds on front, sides, and back.
+- Face: replaced with a larger peach rectangle, simple black pixel eyes, white square highlights, green lower accents, pink cheeks, and a tiny smile.
+- Leaf crown: rebuilt as layered chunky green plates and wedges visible from front, side, and back, with a small stem block.
+- Accessories: added a larger upper-left block bow, chest strawberry emblem, skirt/bottom band, white square trim accents, socks, and red square boots.
+- Variants: Golden, Diamond, and Galaxy use the same improved base geometry and only change colors, materials, sparkles, glow, and finish.
+- Preview spacing: central hub preview now shows Base, Golden, Diamond, and Galaxy with wider 8-stud spacing and compact name/rarity labels.
+- Central statue: showcase uses the improved Galaxy geometry scaled to 2.35x, landing around 14 studs tall on the hub pedestal.
+
 ## How to Test in Roblox Studio
 
 1. Run `aftman install`.
@@ -141,7 +152,7 @@ Strawberita must stay anchored to the approved chunky voxel / block-built Roblox
 
 - The requested initial cwd, `M:\Games\BrainrotFruits-main`, was a source snapshot without `.git`; implementation work was done in the real clone at `M:\Games\BrainrotFruits`.
 - GitHub push is not complete from this environment. `git push` was attempted after stable commits, but HTTPS auth failed with `could not read Username for 'https://github.com': terminal prompts disabled`.
-- No serialized approved `.rbxm`/`.rbxmx` base model was found. The canonical base is the approved blocky model-sheet PNG plus the runtime `BaseStrawberita` template module.
+- No serialized approved `.rbxm`/`.rbxmx` base model was found. The canonical base is the approved voxel model-sheet PNG at `art/references/Strawberita/strawberita_voxel_reference.png` plus the runtime `BaseStrawberita` template module.
 - Rojo structure validates with `rojo build default.project.json`, but this was not play-tested inside Roblox Studio from Codex.
 - Spawn pads teleport players by script; dedicated Roblox `SpawnLocation` team logic is not implemented yet.
 - Fruit claiming is placeholder auto-placement, not a real claim button or inventory.

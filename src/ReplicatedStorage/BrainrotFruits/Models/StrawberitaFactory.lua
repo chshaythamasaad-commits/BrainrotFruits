@@ -101,11 +101,11 @@ local function getRoleColor(role, variant)
 	return nil
 end
 
-local function addLabel(root, displayName)
+local function addLabel(root, displayName, rarity, scale)
 	local billboard = Instance.new("BillboardGui")
 	billboard.Name = "PreviewLabel"
-	billboard.Size = UDim2.fromOffset(180, 34)
-	billboard.StudsOffset = Vector3.new(0, 3.95, 0)
+	billboard.Size = UDim2.fromOffset(170, 48)
+	billboard.StudsOffset = Vector3.new(0, 5.15 * (scale or 1), 0)
 	billboard.AlwaysOnTop = true
 	billboard.MaxDistance = 85
 	billboard.Parent = root
@@ -113,7 +113,7 @@ local function addLabel(root, displayName)
 	local label = Instance.new("TextLabel")
 	label.BackgroundTransparency = 1
 	label.Font = Enum.Font.GothamBold
-	label.Text = displayName
+	label.Text = `{displayName}\n{rarity or "Common"}`
 	label.TextColor3 = Color3.fromRGB(255, 255, 255)
 	label.TextScaled = true
 	label.TextStrokeTransparency = 0.35
@@ -225,11 +225,12 @@ function StrawberitaFactory.create(variantName, options)
 	model:SetAttribute("VariantId", variant.id)
 	model:SetAttribute("DisplayName", variant.displayName)
 	model:SetAttribute("Rarity", variant.rarity)
-	model:SetAttribute("Style", "ApprovedBlockyStrawberita")
+	model:SetAttribute("Style", "VoxelStrawberryMascot")
 	model:SetAttribute("CanonicalBaseName", BaseStrawberita.TemplateName)
 	model:SetAttribute("CanonicalBaseVersion", BaseStrawberita.TemplateVersion)
 	model:SetAttribute("CanonicalReferencePath", BaseStrawberita.ReferencePath)
 	model:SetAttribute("VariantDerivedFromBase", true)
+	model:SetAttribute("EstimatedHeightStuds", (BaseStrawberita.EstimatedHeightStuds or 6.05) * scale)
 
 	local root = BaseStrawberita.ensurePrimaryPart(model)
 	if not root then
@@ -242,7 +243,7 @@ function StrawberitaFactory.create(variantName, options)
 	model:PivotTo(pivot)
 
 	if options.label then
-		addLabel(root, variant.displayName)
+		addLabel(root, variant.displayName, variant.rarity, scale)
 	end
 
 	return model
@@ -258,7 +259,7 @@ function StrawberitaFactory.createPreviewLineup(parent, variantOrder, origin)
 
 	local created = {}
 	for index, variantName in ipairs(variantOrder) do
-		local offset = CFrame.new((index - 1) * 5.1, 0, 0)
+		local offset = CFrame.new((index - 1) * 8, 0, 0)
 		local model = StrawberitaFactory.create(variantName, {
 			anchored = true,
 			label = true,

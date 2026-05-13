@@ -4,6 +4,18 @@
 
 Branch: `feature/strawberita-catapult-slice`
 
+### Pass 10 - Voxel reference geometry rebuild
+
+Commit: this pass - `feat: rebuild strawberita voxel reference geometry`
+
+- Rebuilt `BaseStrawberita` around the direct voxel 4-view reference at `art/references/Strawberita/strawberita_voxel_reference.png`.
+- Enlarged the normal collectible to an estimated 6.05 studs tall and changed the central showcase to a 2.35x Galaxy statue, about 14.2 studs tall.
+- Reworked the body into a deeper chunky 3D strawberry mass with stacked cuboids, rounded side blocks, lower taper wedges, and seeds on the front, sides, and back.
+- Replaced the awkward face with a large peach rectangular face panel, two simple black pixel eyes, white square highlights, green lower accents, a tiny smile, and pink cheek blocks.
+- Rebuilt the leaf crown as layered green voxel plates/wedges with a small stem, then tightened the bow, chest berry emblem, skirt band, white square accents, socks, and red boot details.
+- Kept Golden, Diamond, and Galaxy on the exact same base geometry and limited variant differences to colors, materials, particles, glow, and finish.
+- Updated preview display to show Base, Golden, Diamond, and Galaxy with wider spacing and compact two-line labels for name and rarity.
+
 ### Pass 9 - Approved base Strawberita reference integration
 
 Commits:

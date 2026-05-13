@@ -13,7 +13,7 @@ BrainrotFruitConfig.VariantOrder = {
 BrainrotFruitConfig.StrawberitaVariants = {
 	Normal = {
 		id = "Normal",
-		displayName = "Normal Strawberita",
+		displayName = "Base Strawberita",
 		rarity = "Common",
 		bodyColor = Color3.fromRGB(239, 52, 61),
 		bodyDarkColor = Color3.fromRGB(207, 39, 49),
@@ -81,6 +81,7 @@ BrainrotFruitConfig.StrawberitaVariants = {
 		effects = {
 			highlight = Color3.fromRGB(255, 231, 94),
 			light = Color3.fromRGB(255, 210, 82),
+			sparkles = Color3.fromRGB(255, 232, 95),
 		},
 	},
 	Galaxy = {
