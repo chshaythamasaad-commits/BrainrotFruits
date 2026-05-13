@@ -31,3 +31,9 @@
 - Added distance bands and weighted variant rolls.
 - Added server-side reward reveal that opens the crate and spawns the matching Strawberita variant.
 - Added reveal remotes and debug prints for landed distance, band, rarity, and variant.
+
+### Pass 6 - UI and effects
+
+- Added server-replicated burst effects for landing, crate opening, and reveal moments.
+- Improved the catapult HUD with mobile-friendly sizing, charge color feedback, cooldown color feedback, and a reveal banner.
+- Added rarity-colored reveal text with distance and band name.

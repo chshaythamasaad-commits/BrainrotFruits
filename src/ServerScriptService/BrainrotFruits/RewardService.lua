@@ -4,6 +4,7 @@ local brainrotFruits = ReplicatedStorage:WaitForChild("BrainrotFruits")
 local RarityConfig = require(brainrotFruits.Shared.RarityConfig)
 local FruitConfig = require(brainrotFruits.Configs.BrainrotFruitConfig)
 local StrawberitaFactory = require(brainrotFruits.Models.StrawberitaFactory)
+local FXService = require(script.Parent.FXService)
 
 local RewardService = {}
 
@@ -105,6 +106,7 @@ function RewardService.revealCrate(player, crate, landingPosition, distance)
 	local rewardFolder = getOrCreateFolder(crate.Parent.Parent, "RevealedRewards")
 
 	openCrate(crate, landingPosition)
+	FXService.emitBurst(crate.Parent, landingPosition + Vector3.new(0, 1.8, 0), Color3.fromRGB(255, 112, 168), "CrateOpenBurst", 34)
 
 	local model = StrawberitaFactory.create(reward.variantName, {
 		anchored = true,
@@ -116,6 +118,7 @@ function RewardService.revealCrate(player, crate, landingPosition, distance)
 	model:SetAttribute("Distance", distance)
 	model:SetAttribute("BandName", reward.bandName)
 	model.Parent = rewardFolder
+	FXService.emitBurst(rewardFolder, landingPosition + Vector3.new(0, 2.2, 0), Color3.fromRGB(255, 231, 120), "RevealBurst", 46)
 
 	print(
 		`[BrainrotFruits] Reveal for {player.Name}: {reward.displayName} ({reward.rarity}) at {math.floor(distance)} studs in {reward.bandName}.`

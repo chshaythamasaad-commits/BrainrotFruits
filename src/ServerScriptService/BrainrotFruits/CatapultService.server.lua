@@ -4,6 +4,7 @@ local Workspace = game:GetService("Workspace")
 
 local brainrotFruits = ReplicatedStorage:WaitForChild("BrainrotFruits")
 local CatapultConfig = require(brainrotFruits.Shared.CatapultConfig)
+local FXService = require(script.Parent.FXService)
 local RewardService = require(script.Parent.RewardService)
 
 local rng = Random.new()
@@ -162,6 +163,7 @@ local function trackLanding(player, crate, launchOrigin)
 	local distance = flatDistance(launchOrigin, landedPosition)
 	crate:SetAttribute("HasLanded", true)
 	crate:SetAttribute("LandingDistance", distance)
+	FXService.emitBurst(crate.Parent, landedPosition + Vector3.new(0, 1.2, 0), Color3.fromRGB(255, 238, 145), "LandingBurst", 22)
 
 	print(`[BrainrotFruits] {player.Name} launched a crate {math.floor(distance)} studs.`)
 

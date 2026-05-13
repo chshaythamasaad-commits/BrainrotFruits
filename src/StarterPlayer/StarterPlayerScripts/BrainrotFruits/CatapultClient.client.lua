@@ -18,6 +18,15 @@ local charging = false
 local chargeStartedAt = 0
 local cooldownUntil = 0
 local latestDistance = nil
+local revealMessageUntil = 0
+
+local rarityColors = {
+	Common = Color3.fromRGB(255, 255, 255),
+	Uncommon = Color3.fromRGB(128, 255, 163),
+	Rare = Color3.fromRGB(255, 223, 92),
+	Epic = Color3.fromRGB(182, 118, 255),
+	Legendary = Color3.fromRGB(130, 239, 255),
+}
 
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "BrainrotFruitsCatapultHud"
@@ -28,11 +37,16 @@ local frame = Instance.new("Frame")
 frame.Name = "ChargePanel"
 frame.AnchorPoint = Vector2.new(0.5, 1)
 frame.Position = UDim2.fromScale(0.5, 0.92)
-frame.Size = UDim2.fromOffset(320, 84)
+frame.Size = UDim2.new(0.86, 0, 0, 84)
 frame.BackgroundColor3 = Color3.fromRGB(25, 30, 38)
 frame.BackgroundTransparency = 0.12
 frame.BorderSizePixel = 0
 frame.Parent = screenGui
+
+local frameSize = Instance.new("UISizeConstraint")
+frameSize.MinSize = Vector2.new(260, 84)
+frameSize.MaxSize = Vector2.new(360, 84)
+frameSize.Parent = frame
 
 local title = Instance.new("TextLabel")
 title.Name = "Status"
@@ -59,6 +73,44 @@ meterFill.BackgroundColor3 = Color3.fromRGB(255, 91, 129)
 meterFill.BorderSizePixel = 0
 meterFill.Size = UDim2.fromScale(0, 1)
 meterFill.Parent = meterBack
+
+local revealFrame = Instance.new("Frame")
+revealFrame.Name = "RevealPanel"
+revealFrame.AnchorPoint = Vector2.new(0.5, 0)
+revealFrame.Position = UDim2.fromScale(0.5, 0.12)
+revealFrame.Size = UDim2.new(0.9, 0, 0, 86)
+revealFrame.BackgroundColor3 = Color3.fromRGB(25, 30, 38)
+revealFrame.BackgroundTransparency = 0.1
+revealFrame.BorderSizePixel = 0
+revealFrame.Visible = false
+revealFrame.Parent = screenGui
+
+local revealSize = Instance.new("UISizeConstraint")
+revealSize.MinSize = Vector2.new(280, 86)
+revealSize.MaxSize = Vector2.new(520, 86)
+revealSize.Parent = revealFrame
+
+local revealTitle = Instance.new("TextLabel")
+revealTitle.Name = "RevealTitle"
+revealTitle.BackgroundTransparency = 1
+revealTitle.Font = Enum.Font.GothamBlack
+revealTitle.Text = "Revealed!"
+revealTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+revealTitle.TextScaled = true
+revealTitle.Size = UDim2.new(1, -24, 0, 40)
+revealTitle.Position = UDim2.fromOffset(12, 8)
+revealTitle.Parent = revealFrame
+
+local revealSubtitle = Instance.new("TextLabel")
+revealSubtitle.Name = "RevealSubtitle"
+revealSubtitle.BackgroundTransparency = 1
+revealSubtitle.Font = Enum.Font.GothamBold
+revealSubtitle.Text = ""
+revealSubtitle.TextColor3 = Color3.fromRGB(219, 232, 255)
+revealSubtitle.TextScaled = true
+revealSubtitle.Size = UDim2.new(1, -24, 0, 28)
+revealSubtitle.Position = UDim2.fromOffset(12, 50)
+revealSubtitle.Parent = revealFrame
 
 local function getCharacterRoot()
 	local character = player.Character
@@ -90,6 +142,16 @@ end
 
 local function setStatus(message)
 	title.Text = message
+end
+
+local function showReveal(payload)
+	local rarity = payload.rarity or "Common"
+	local distance = math.floor(payload.distance or 0)
+	revealTitle.Text = payload.displayName or "Strawberita"
+	revealTitle.TextColor3 = rarityColors[rarity] or Color3.fromRGB(255, 255, 255)
+	revealSubtitle.Text = `{rarity} - {distance} studs - {payload.bandName or "Launch"}`
+	revealFrame.Visible = true
+	revealMessageUntil = os.clock() + 4
 end
 
 local function beginCharge()
@@ -181,6 +243,7 @@ revealResultRemote.OnClientEvent:Connect(function(payload)
 	end
 
 	setStatus(`Revealed {payload.displayName or "Strawberita"}!`)
+	showReveal(payload)
 end)
 
 RunService.RenderStepped:Connect(function()
@@ -190,17 +253,24 @@ RunService.RenderStepped:Connect(function()
 	if charging then
 		local alpha = getChargeAlpha()
 		meterFill.Size = UDim2.fromScale(alpha, 1)
+		meterFill.BackgroundColor3 = Color3.fromRGB(255, math.floor(91 + 120 * alpha), 129)
 		if alpha >= 1 then
 			setStatus("Max power! Release!")
 		end
 		return
 	end
 
+	if revealFrame.Visible and os.clock() > revealMessageUntil then
+		revealFrame.Visible = false
+	end
+
 	if now < cooldownUntil then
 		meterFill.Size = UDim2.fromScale(math.max(0, (cooldownUntil - now) / CatapultConfig.CooldownSeconds), 1)
+		meterFill.BackgroundColor3 = Color3.fromRGB(120, 175, 255)
 		setStatus(`Cooldown {math.ceil(cooldownUntil - now)}s`)
 	elseif nearCatapult then
 		meterFill.Size = UDim2.fromScale(0, 1)
+		meterFill.BackgroundColor3 = Color3.fromRGB(255, 91, 129)
 		if latestDistance then
 			setStatus(`Ready - last launch {math.floor(latestDistance)} studs`)
 		else

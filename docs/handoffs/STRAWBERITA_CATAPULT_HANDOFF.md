@@ -2,7 +2,7 @@
 
 ## Status
 
-Pass 5 complete: launched crates reveal distance-based Strawberita variants after landing.
+Pass 6 complete: launch/reveal feedback has a simple HUD and replicated burst effects.
 
 ## Implemented
 
@@ -14,6 +14,8 @@ Pass 5 complete: launched crates reveal distance-based Strawberita variants afte
 - Server-owned launch remotes, cooldown validation, crate physics, and landing distance measurement.
 - Client charge controls for keyboard, mouse, and touch.
 - Server-owned rarity rolls, crate opening pieces, and Strawberita reveal spawns.
+- Landing, crate-open, and reveal burst effects.
+- Mobile-conscious charge HUD and rarity-colored reveal banner.
 
 ## How to Test in Roblox Studio
 
@@ -27,12 +29,12 @@ Pass 5 complete: launched crates reveal distance-based Strawberita variants afte
 
 ## Known Issues
 
-- Reveal effects are functional but simple; stronger UI and landing burst feedback are next.
+- UI is functional and intentionally simple; full art/audio polish is still future work.
 - Local workspace contains an unreadable legacy `.git` folder, so this session is using an external Git metadata directory.
 
 ## Next Suggested Tasks
 
-- Add polished UI, reveal text styling, landing burst, and crate opening feedback.
+- Add a PG chaos hazard placeholder after reveals.
 
 ## Notes for Future Codex Sessions
 
