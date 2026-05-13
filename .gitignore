@@ -28,3 +28,6 @@ dist/
 .foreman/
 .wally/
 Packages/
+
+# Local duplicate export/reference scratch folder
+/BrainrotFruits/
