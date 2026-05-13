@@ -2,12 +2,14 @@
 
 ## Status
 
-Pass 1 complete: project structure is being established for the Strawberita + Catapult vertical slice.
+Pass 2 complete: Strawberita variants can be generated procedurally and previewed in the test world.
 
 ## Implemented
 
 - Rojo service layout for shared code, server scripts, client scripts, starter UI, and test workspace content.
 - Public-repo ignore rules for logs, temporary files, cache folders, and local duplicate reference exports.
+- Procedural Strawberita factory with Normal, Shiny, Golden, Galaxy, and Diamond variants.
+- Runtime preview lineup under `Workspace/BrainrotFruitsTest/PreviewModels`.
 
 ## How to Test in Roblox Studio
 
@@ -26,7 +28,7 @@ Pass 1 complete: project structure is being established for the Strawberita + Ca
 
 ## Next Suggested Tasks
 
-- Add the Strawberita procedural model factory and preview lineup.
+- Build the test lane and catapult model.
 
 ## Notes for Future Codex Sessions
 
