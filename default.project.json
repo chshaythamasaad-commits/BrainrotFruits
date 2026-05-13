@@ -25,8 +25,8 @@
       }
     },
     "Workspace": {
-      "BrainrotFruitsTest": {
-        "$path": "src/Workspace/BrainrotFruitsTest"
+      "BrainrotMap": {
+        "$path": "src/Workspace/BrainrotMap"
       }
     }
   }

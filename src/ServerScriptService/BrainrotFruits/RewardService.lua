@@ -6,6 +6,7 @@ local FruitConfig = require(brainrotFruits.Configs.BrainrotFruitConfig)
 local StrawberitaFactory = require(brainrotFruits.Models.StrawberitaFactory)
 local ChaosHazardService = require(script.Parent.ChaosHazardService)
 local FXService = require(script.Parent.FXService)
+local PlotService = require(script.Parent.Map.PlotService)
 
 local RewardService = {}
 
@@ -104,7 +105,7 @@ end
 
 function RewardService.revealCrate(player, crate, landingPosition, distance)
 	local reward = RewardService.rollVariant(distance)
-	local rewardFolder = getOrCreateFolder(crate.Parent.Parent, "RevealedRewards")
+	local rewardFolder = PlotService.getPlayerRewardsFolder(player)
 
 	openCrate(crate, landingPosition)
 	FXService.emitBurst(crate.Parent, landingPosition + Vector3.new(0, 1.8, 0), Color3.fromRGB(255, 112, 168), "CrateOpenBurst", 34)
@@ -118,8 +119,16 @@ function RewardService.revealCrate(player, crate, landingPosition, distance)
 	model:SetAttribute("OwnerUserId", player.UserId)
 	model:SetAttribute("Distance", distance)
 	model:SetAttribute("BandName", reward.bandName)
+	model:SetAttribute("ClaimState", "AutoPlacedPrototype")
 	model.Parent = rewardFolder
 	FXService.emitBurst(rewardFolder, landingPosition + Vector3.new(0, 2.2, 0), Color3.fromRGB(255, 231, 120), "RevealBurst", 46)
+
+	local placedSlot = PlotService.placeRewardOnSlot(player, model, reward)
+	if placedSlot then
+		print(`[BrainrotFruits] Placed {reward.displayName} on Plot {placedSlot:GetAttribute("PlotId")} Slot {placedSlot:GetAttribute("SlotIndex")}.`)
+	else
+		warn(`[BrainrotFruits] No open fruit slot for {player.Name}; reward remains near the landing zone.`)
+	end
 
 	task.delay(1.25, function()
 		if model.Parent then
@@ -138,6 +147,8 @@ function RewardService.revealCrate(player, crate, landingPosition, distance)
 		bandName = reward.bandName,
 		distance = distance,
 		position = landingPosition,
+		plotId = crate:GetAttribute("PlotId"),
+		slotIndex = placedSlot and placedSlot:GetAttribute("SlotIndex") or nil,
 		modelName = model.Name,
 	}
 end

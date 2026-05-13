@@ -25,10 +25,12 @@ CatapultConfig.RestingSpeed = 7
 CatapultConfig.MaxValidDistance = 130
 CatapultConfig.CrateLifetimeSeconds = 18
 
-CatapultConfig.WorldFolderName = "BrainrotFruitsTest"
-CatapultConfig.TestAreaFolderName = "TestArea"
+CatapultConfig.WorldFolderName = "BrainrotMap"
+CatapultConfig.PlotsFolderName = "Plots"
 CatapultConfig.CatapultName = "Catapult"
 CatapultConfig.InteractZoneName = "InteractZone"
 CatapultConfig.ActiveCratesFolderName = "ActiveCrates"
+CatapultConfig.RevealedRewardsFolderName = "RevealedRewards"
+CatapultConfig.ChaosHazardsFolderName = "ChaosHazards"
 
 return CatapultConfig

@@ -66,3 +66,14 @@ Commit: this documentation pass.
 
 - Expanded devlog and handoff notes for future Codex sessions.
 - Documented test steps, created/edited files, known issues, and recommended next work.
+
+## Six-Player Playable Map Layout
+
+### Map pass - 6-player simulator layout
+
+- Replaced the synced empty test workspace with `Workspace.BrainrotMap`.
+- Added generated central hub, paths, six separated plots, plot signs, spawn pads, catapult stations, launch lanes, reward zones, and ten fruit slots per plot.
+- Added server-side plot assignment, owner attributes, plot cleanup on player leave, and spawn teleporting to the assigned plot.
+- Refactored catapult launch validation to use the player's own plot catapult instead of a single global test catapult.
+- Refactored reward placement so revealed Strawberita models are placed onto the player's next open fruit display slot.
+- Moved preview models into the central hub and disabled the legacy single-lane test builder.

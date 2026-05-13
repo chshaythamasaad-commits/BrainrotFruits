@@ -1,6 +1,7 @@
 local Workspace = game:GetService("Workspace")
 
 local FXService = require(script.Parent.FXService)
+local PlotService = require(script.Parent.Map.PlotService)
 
 local ChaosHazardService = {}
 
@@ -19,8 +20,8 @@ local function getOrCreateFolder(parent, name)
 end
 
 local function getHazardFolder()
-	local testWorld = getOrCreateFolder(Workspace, "BrainrotFruitsTest")
-	return getOrCreateFolder(testWorld, "ChaosHazards")
+	local map = PlotService.getMap()
+	return getOrCreateFolder(map or Workspace, "ChaosHazards")
 end
 
 local function makeBlobPart(model, root, name, size, cframe, color, material)
@@ -88,7 +89,7 @@ local function addBonkLabel(rewardModel)
 	label.Parent = billboard
 end
 
-local function createWobbleBlob(position)
+local function createWobbleBlob(position, parent)
 	local model = Instance.new("Model")
 	model.Name = "WobbleBlobPlaceholder"
 	model:SetAttribute("PlaceholderSystem", "Future survive/claim hazard")
@@ -112,7 +113,7 @@ local function createWobbleBlob(position)
 	makeBlobPart(model, root, "TopWobble", Vector3.new(0.85, 0.5, 0.85), CFrame.new(0.18, 0.88, 0), Color3.fromRGB(114, 237, 203))
 
 	addBlobLabel(root)
-	model.Parent = getHazardFolder()
+	model.Parent = parent or getHazardFolder()
 
 	return model
 end
@@ -134,7 +135,7 @@ function ChaosHazardService.spawnWobbleBlob(player, rewardModel)
 
 	local rewardPosition = rewardModel:GetPivot().Position
 	local spawnPosition = rewardPosition + Vector3.new(10, 1.1, -8)
-	local hazard = createWobbleBlob(spawnPosition)
+	local hazard = createWobbleBlob(spawnPosition, PlotService.getPlayerHazardsFolder(player))
 	local startedAt = os.clock()
 
 	task.spawn(function()

@@ -118,10 +118,20 @@ local function getCharacterRoot()
 end
 
 local function getInteractZone()
-	local testWorld = Workspace:FindFirstChild(CatapultConfig.WorldFolderName)
-	local testArea = testWorld and testWorld:FindFirstChild(CatapultConfig.TestAreaFolderName)
-	local catapult = testArea and testArea:FindFirstChild(CatapultConfig.CatapultName)
-	return catapult and catapult:FindFirstChild(CatapultConfig.InteractZoneName)
+	local map = Workspace:FindFirstChild(CatapultConfig.WorldFolderName)
+	local plots = map and map:FindFirstChild(CatapultConfig.PlotsFolderName)
+	if not plots then
+		return nil
+	end
+
+	for _, plot in ipairs(plots:GetChildren()) do
+		if plot:GetAttribute("OwnerUserId") == player.UserId then
+			local catapult = plot:FindFirstChild(CatapultConfig.CatapultName)
+			return catapult and catapult:FindFirstChild(CatapultConfig.InteractZoneName)
+		end
+	end
+
+	return nil
 end
 
 local function isNearCatapult()
@@ -222,6 +232,8 @@ launchResultRemote.OnClientEvent:Connect(function(payload)
 			setStatus(`Cooldown {math.ceil(payload.cooldownRemaining or CatapultConfig.CooldownSeconds)}s`)
 		elseif payload.reason == "TooFarFromCatapult" then
 			setStatus("Step into the catapult zone")
+		elseif payload.reason == "WrongPlot" then
+			setStatus("Use your own plot catapult")
 		else
 			setStatus(`Launch failed: {payload.reason or "Unknown"}`)
 		end

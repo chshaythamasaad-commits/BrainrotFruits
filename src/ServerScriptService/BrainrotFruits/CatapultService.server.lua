@@ -1,14 +1,16 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Workspace = game:GetService("Workspace")
 
 local brainrotFruits = ReplicatedStorage:WaitForChild("BrainrotFruits")
 local CatapultConfig = require(brainrotFruits.Shared.CatapultConfig)
 local FXService = require(script.Parent.FXService)
+local PlotService = require(script.Parent.Map.PlotService)
 local RewardService = require(script.Parent.RewardService)
 
 local rng = Random.new()
 local lastLaunchByUserId = {}
+
+PlotService.init()
 
 local function getOrCreateFolder(parent, name)
 	local folder = parent:FindFirstChild(name)
@@ -36,21 +38,6 @@ local launchResultRemote = getOrCreateRemote(remoteFolder, CatapultConfig.Remote
 getOrCreateRemote(remoteFolder, CatapultConfig.Remotes.RequestReveal)
 local revealResultRemote = getOrCreateRemote(remoteFolder, CatapultConfig.Remotes.RevealResult)
 
-local function getTestWorld()
-	return getOrCreateFolder(Workspace, CatapultConfig.WorldFolderName)
-end
-
-local function getActiveCratesFolder()
-	return getOrCreateFolder(getTestWorld(), CatapultConfig.ActiveCratesFolderName)
-end
-
-local function getInteractZone()
-	local testWorld = Workspace:FindFirstChild(CatapultConfig.WorldFolderName)
-	local testArea = testWorld and testWorld:FindFirstChild(CatapultConfig.TestAreaFolderName)
-	local catapult = testArea and testArea:FindFirstChild(CatapultConfig.CatapultName)
-	return catapult and catapult:FindFirstChild(CatapultConfig.InteractZoneName)
-end
-
 local function getPlayerRoot(player)
 	local character = player.Character
 	return character and character:FindFirstChild("HumanoidRootPart")
@@ -70,7 +57,7 @@ local function flatDistance(fromPosition, toPosition)
 	return math.clamp(delta.Magnitude, 0, CatapultConfig.MaxValidDistance)
 end
 
-local function makeCrate(origin, player, powerAlpha)
+local function makeCrate(origin, player, powerAlpha, plot)
 	local crate = Instance.new("Part")
 	crate.Name = `FruitCrate_{player.UserId}`
 	crate.Size = Vector3.new(2.4, 2.1, 2.4)
@@ -79,9 +66,11 @@ local function makeCrate(origin, player, powerAlpha)
 	crate.Material = Enum.Material.WoodPlanks
 	crate.CustomPhysicalProperties = PhysicalProperties.new(0.8, 0.45, 0.35)
 	crate:SetAttribute("OwnerUserId", player.UserId)
+	crate:SetAttribute("OwnerName", player.Name)
+	crate:SetAttribute("PlotId", plot:GetAttribute("PlotId"))
 	crate:SetAttribute("LaunchPower", powerAlpha)
 	crate:SetAttribute("HasLanded", false)
-	crate.Parent = getActiveCratesFolder()
+	crate.Parent = PlotService.getPlayerCratesFolder(player)
 
 	local corner = Instance.new("Part")
 	corner.Name = "BrightSticker"
@@ -109,32 +98,6 @@ local function makeCrate(origin, player, powerAlpha)
 	end)
 
 	return crate
-end
-
-local function addPromptWhenReady()
-	task.spawn(function()
-		local zone
-		for _ = 1, 120 do
-			zone = getInteractZone()
-			if zone then
-				break
-			end
-			task.wait(0.25)
-		end
-
-		if not zone or zone:FindFirstChild("CatapultPrompt") then
-			return
-		end
-
-		local prompt = Instance.new("ProximityPrompt")
-		prompt.Name = "CatapultPrompt"
-		prompt.ActionText = "Charge Launch"
-		prompt.ObjectText = "Strawberita Catapult"
-		prompt.HoldDuration = 0
-		prompt.MaxActivationDistance = CatapultConfig.InteractRange
-		prompt.KeyboardKeyCode = Enum.KeyCode.E
-		prompt.Parent = zone
-	end)
 end
 
 local function fireFailure(player, reason, extra)
@@ -165,13 +128,14 @@ local function trackLanding(player, crate, launchOrigin)
 	crate:SetAttribute("LandingDistance", distance)
 	FXService.emitBurst(crate.Parent, landedPosition + Vector3.new(0, 1.2, 0), Color3.fromRGB(255, 238, 145), "LandingBurst", 22)
 
-	print(`[BrainrotFruits] {player.Name} launched a crate {math.floor(distance)} studs.`)
+	print(`[BrainrotFruits] {player.Name} launched a crate {math.floor(distance)} studs on Plot {crate:GetAttribute("PlotId")}.`)
 
 	launchResultRemote:FireClient(player, {
 		ok = true,
 		status = "Landed",
 		distance = distance,
 		crateName = crate.Name,
+		plotId = crate:GetAttribute("PlotId"),
 		position = landedPosition,
 	})
 
@@ -187,6 +151,8 @@ local function trackLanding(player, crate, launchOrigin)
 			rarity = reveal.rarity,
 			bandName = reveal.bandName,
 			distance = reveal.distance,
+			plotId = reveal.plotId,
+			slotIndex = reveal.slotIndex,
 			position = reveal.position,
 			modelName = reveal.modelName,
 		})
@@ -199,10 +165,16 @@ requestLaunchRemote.OnServerEvent:Connect(function(player, payload)
 		return
 	end
 
+	local plot = PlotService.getPlayerPlot(player) or PlotService.assignPlayer(player)
 	local root = getPlayerRoot(player)
-	local zone = getInteractZone()
-	if not root or not zone then
+	local zone = PlotService.getPlayerCatapultZone(player)
+	if not plot or not root or not zone then
 		fireFailure(player, "CatapultNotReady")
+		return
+	end
+
+	if zone:GetAttribute("OwnerUserId") ~= player.UserId then
+		fireFailure(player, "WrongPlot")
 		return
 	end
 
@@ -234,9 +206,13 @@ requestLaunchRemote.OnServerEvent:Connect(function(player, payload)
 	if typeof(launchDirection) ~= "Vector3" or launchDirection.Magnitude < 0.1 then
 		launchDirection = Vector3.new(0, 0, 1)
 	end
-	launchDirection = Vector3.new(launchDirection.X, 0, launchDirection.Z).Unit
+	local flatLaunchDirection = Vector3.new(launchDirection.X, 0, launchDirection.Z)
+	if flatLaunchDirection.Magnitude < 0.1 then
+		flatLaunchDirection = Vector3.new(0, 0, 1)
+	end
+	launchDirection = flatLaunchDirection.Unit
 
-	local crate = makeCrate(launchOrigin + Vector3.new(rng:NextNumber(-0.15, 0.15), 0, 0), player, powerAlpha)
+	local crate = makeCrate(launchOrigin + Vector3.new(rng:NextNumber(-0.15, 0.15), 0, 0), player, powerAlpha, plot)
 	local horizontalSpeed = lerp(CatapultConfig.MinHorizontalSpeed, CatapultConfig.MaxHorizontalSpeed, powerAlpha)
 	local upwardSpeed = lerp(CatapultConfig.MinUpwardSpeed, CatapultConfig.MaxUpwardSpeed, powerAlpha)
 	crate.AssemblyLinearVelocity = launchDirection * horizontalSpeed + Vector3.new(0, upwardSpeed, 0)
@@ -248,6 +224,7 @@ requestLaunchRemote.OnServerEvent:Connect(function(player, payload)
 		power = powerAlpha,
 		cooldownSeconds = CatapultConfig.CooldownSeconds,
 		crateName = crate.Name,
+		plotId = plot:GetAttribute("PlotId"),
 	})
 
 	task.spawn(trackLanding, player, crate, launchOrigin)
@@ -256,5 +233,3 @@ end)
 Players.PlayerRemoving:Connect(function(player)
 	lastLaunchByUserId[player.UserId] = nil
 end)
-
-addPromptWhenReady()
