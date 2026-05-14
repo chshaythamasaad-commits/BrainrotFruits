@@ -160,3 +160,12 @@ Commit: this documentation pass.
 - Shrunk per-plot catapults into decorative statue-style pieces with `CatapultVersion = "BlockyCatapult_Statue_V1"`.
 - Added `StrawberitaTransformService` so the launched player is visually represented by the voxel Strawberita during flight and return run.
 - On successful base return, `RewardService` now grants a Strawberita reward Tool into the player's Backpack while preserving existing plot-slot display placement.
+
+### Cleanup polish - kid-friendly UI and debug sign removal
+
+- Marked the generated map with `VisualPolishVersion = "CleanKidFriendlyUI_V1"`.
+- Hid the large runtime verification signs in normal play, including the voxel-active preview marker and the map-active sign.
+- Reworked the reward HUD into a smaller top reward card and compact bottom return task bar with a time-progress fill.
+- Reduced billboard label sizes/distances for previews, hazards, and return markers; plot ownership now relies on the physical sign surface.
+- Added more decorative trees, bushes, flowers, crates, small fruit statues, and reveal-zone sparkles to fill empty grass without blocking paths.
+- Kept the working Strawberita transform stable and added only lightweight return-run sparkle particles for movement polish.

@@ -19,10 +19,16 @@ end
 
 local function updateOwnerSign(plot)
 	local sign = plot:FindFirstChild("OwnerSignPost")
+	local surface = sign and sign:FindFirstChild("SurfaceText")
+	local surfaceText = surface and surface:FindFirstChild("Text")
 	local billboard = sign and sign:FindFirstChild("OwnerBillboard")
 	local text = billboard and billboard:FindFirstChild("Text")
+	local ownerText = `Plot {plot:GetAttribute("PlotId")}\n{getOwnerText(plot)}`
+	if surfaceText and surfaceText:IsA("TextLabel") then
+		surfaceText.Text = ownerText
+	end
 	if text and text:IsA("TextLabel") then
-		text.Text = `Plot {plot:GetAttribute("PlotId")}\n{getOwnerText(plot)}`
+		text.Text = ownerText
 	end
 end
 

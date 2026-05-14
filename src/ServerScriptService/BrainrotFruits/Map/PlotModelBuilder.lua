@@ -298,7 +298,6 @@ local function createOwnerSign(plot, plotFrame, plotId, theme, ownerName)
 	sign.CanCollide = false
 	sign:SetAttribute("Role", "OwnerSign")
 	addSurfaceText(sign, `PLOT {plotId}\n{ownerName or "Unclaimed Plot"}`, Enum.NormalId.Front, COLORS.White, COLORS.Black, 34)
-	addSmallBillboard(sign, "OwnerBillboard", `Plot {plotId}\n{ownerName or "Unclaimed Plot"}`, UDim2.fromOffset(145, 42), Vector3.new(0, 2.35, 0), 54)
 end
 
 local function createSpawnPad(plot, plotFrame, plotId, theme)

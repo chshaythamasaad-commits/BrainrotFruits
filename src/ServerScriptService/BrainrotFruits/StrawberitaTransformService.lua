@@ -11,7 +11,7 @@ local printedVersion = false
 
 local function printVersion()
 	if not printedVersion then
-		print("[BrainrotFruits] StrawberitaTransform_V1 active")
+		print("[BrainrotFruits] StrawberitaTransform_Fixed_V1 active")
 		printedVersion = true
 	end
 end
@@ -40,19 +40,43 @@ local function flatDirectionFromVelocity(velocity, fallback)
 	return Vector3.new(0, 0, 1)
 end
 
-local function pivotVisual(state, position, direction)
+local function getFlightCFrame(crate)
+	local position = crate.Position + Vector3.new(0, 1.8, 0)
+	local targetDirection = flatDirectionFromVelocity(crate.AssemblyLinearVelocity, Vector3.new(0, 0, 1))
+	return CFrame.lookAt(position, position + targetDirection)
+end
+
+local function addReturnRunSparkles(state)
 	local visualModel = state.visualModel
-	if not visualModel or not visualModel.Parent then
+	local root = visualModel and visualModel.PrimaryPart
+	if not root or root:FindFirstChild("ReturnRunSparkleAttachment") then
 		return
 	end
 
-	local targetDirection = flatDirectionFromVelocity(direction or Vector3.zero, Vector3.new(0, 0, 1))
-	visualModel:PivotTo(CFrame.lookAt(position, position + targetDirection))
+	local attachment = Instance.new("Attachment")
+	attachment.Name = "ReturnRunSparkleAttachment"
+	attachment.Position = Vector3.new(0, -1.4, 0.35)
+	attachment.Parent = root
+
+	local emitter = Instance.new("ParticleEmitter")
+	emitter.Name = "CuteReturnRunSparkles"
+	emitter.Color = ColorSequence.new(Color3.fromRGB(255, 244, 184), Color3.fromRGB(255, 128, 170))
+	emitter.LightEmission = 0.45
+	emitter.Rate = 10
+	emitter.Lifetime = NumberRange.new(0.35, 0.7)
+	emitter.Speed = NumberRange.new(0.25, 0.85)
+	emitter.SpreadAngle = Vector2.new(45, 45)
+	emitter.Size = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 0.14),
+		NumberSequenceKeypoint.new(0.55, 0.1),
+		NumberSequenceKeypoint.new(1, 0),
+	})
+	emitter.Parent = attachment
 end
 
 local function createVisualModel(player, parent, root)
 	local visualModel = StrawberitaFactory.create("Normal", {
-		anchored = true,
+		anchored = false,
 		label = false,
 		pivot = root.CFrame,
 		scale = 0.92,
@@ -64,13 +88,33 @@ local function createVisualModel(player, parent, root)
 
 	for _, descendant in ipairs(visualModel:GetDescendants()) do
 		if descendant:IsA("BasePart") then
+			descendant.Anchored = false
 			descendant.CanCollide = false
 			descendant.CanTouch = false
 			descendant.CanQuery = false
+			descendant.Massless = true
 		end
 	end
 
 	return visualModel
+end
+
+local function attachVisualToRoot(state)
+	local visualModel = state.visualModel
+	local visualRoot = visualModel and visualModel.PrimaryPart
+	local root = state.root
+	if not visualRoot or not root then
+		return false
+	end
+
+	visualRoot.CFrame = root.CFrame
+	local weld = Instance.new("WeldConstraint")
+	weld.Name = "StrawberitaTransformWeld"
+	weld.Part0 = root
+	weld.Part1 = visualRoot
+	weld.Parent = visualRoot
+	state.visualWeld = weld
+	return true
 end
 
 local function hideFlightCrateProxy(crate)
@@ -116,23 +160,6 @@ local function restoreCharacterVisuals(state)
 	end
 end
 
-local function startReturnFollowLoop(player, state)
-	state.followingReturnRun = true
-	task.spawn(function()
-		while activeByUserId[player.UserId] == state and state.followingReturnRun do
-			local root = getRoot(player)
-			if not root then
-				break
-			end
-
-			local velocity = root.AssemblyLinearVelocity
-			local facing = flatDirectionFromVelocity(velocity, root.CFrame.LookVector)
-			pivotVisual(state, root.Position, facing)
-			task.wait(0.05)
-		end
-	end)
-end
-
 function StrawberitaTransformService.isActive(player)
 	return activeByUserId[player.UserId] ~= nil
 end
@@ -164,18 +191,19 @@ function StrawberitaTransformService.beginFlight(player, crate, parent)
 		platformStand = humanoid.PlatformStand,
 	}
 
-	state.visualModel = createVisualModel(player, parent or crate.Parent, root)
-	activeByUserId[player.UserId] = state
-	hideCharacter(state)
-	hideFlightCrateProxy(crate)
-
 	root.Anchored = true
-	root.CFrame = crate.CFrame + Vector3.new(0, 1.8, 0)
+	root.CFrame = getFlightCFrame(crate)
 	humanoid.WalkSpeed = 0
 	humanoid.JumpPower = 0
 	humanoid.JumpHeight = 0
 	humanoid.AutoRotate = false
 	humanoid.PlatformStand = true
+
+	state.visualModel = createVisualModel(player, parent or crate.Parent, root)
+	activeByUserId[player.UserId] = state
+	hideCharacter(state)
+	hideFlightCrateProxy(crate)
+	attachVisualToRoot(state)
 
 	player:SetAttribute("IsLaunching", true)
 	player:SetAttribute("IsCrate", true)
@@ -183,7 +211,6 @@ function StrawberitaTransformService.beginFlight(player, crate, parent)
 	player:SetAttribute("PendingRewardName", "")
 	player:SetAttribute("ReturnRunActive", false)
 
-	pivotVisual(state, crate.Position + Vector3.new(0, 2.15, 0), crate.AssemblyLinearVelocity)
 	return true
 end
 
@@ -195,10 +222,8 @@ function StrawberitaTransformService.syncToCrate(player, crate)
 
 	local root = getRoot(player)
 	if root then
-		root.CFrame = crate.CFrame + Vector3.new(0, 1.8, 0)
+		root.CFrame = getFlightCFrame(crate)
 	end
-
-	pivotVisual(state, crate.Position + Vector3.new(0, 2.15, 0), crate.AssemblyLinearVelocity)
 end
 
 function StrawberitaTransformService.releaseForReturnRun(player, position)
@@ -225,7 +250,7 @@ function StrawberitaTransformService.releaseForReturnRun(player, position)
 	player:SetAttribute("IsLaunching", false)
 	player:SetAttribute("IsCrate", false)
 	player:SetAttribute("IsTransformedStrawberita", true)
-	startReturnFollowLoop(player, state)
+	addReturnRunSparkles(state)
 	return true
 end
 
@@ -235,7 +260,6 @@ function StrawberitaTransformService.finish(player, restoreMovement, position)
 		return
 	end
 
-	state.followingReturnRun = false
 	restoreCharacterVisuals(state)
 
 	if state.visualModel and state.visualModel.Parent then

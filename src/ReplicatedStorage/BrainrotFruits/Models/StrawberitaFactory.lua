@@ -108,10 +108,10 @@ end
 local function addLabel(root, displayName, rarity, scale)
 	local billboard = Instance.new("BillboardGui")
 	billboard.Name = "PreviewLabel"
-	billboard.Size = UDim2.fromOffset(170, 48)
-	billboard.StudsOffset = Vector3.new(0, 5.15 * (scale or 1), 0)
+	billboard.Size = UDim2.fromOffset(128, 34)
+	billboard.StudsOffset = Vector3.new(0, 4.65 * (scale or 1), 0)
 	billboard.AlwaysOnTop = true
-	billboard.MaxDistance = 85
+	billboard.MaxDistance = 42
 	billboard.Parent = root
 
 	local label = Instance.new("TextLabel")

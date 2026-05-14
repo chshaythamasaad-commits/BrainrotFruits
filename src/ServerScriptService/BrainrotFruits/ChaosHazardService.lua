@@ -49,9 +49,10 @@ end
 local function addBlobLabel(root)
 	local billboard = Instance.new("BillboardGui")
 	billboard.Name = "PlaceholderLabel"
-	billboard.Size = UDim2.fromOffset(240, 46)
-	billboard.StudsOffset = Vector3.new(0, 2.7, 0)
+	billboard.Size = UDim2.fromOffset(130, 30)
+	billboard.StudsOffset = Vector3.new(0, 2.2, 0)
 	billboard.AlwaysOnTop = true
+	billboard.MaxDistance = 48
 	billboard.Parent = root
 
 	local label = Instance.new("TextLabel")
@@ -73,9 +74,10 @@ local function addBonkLabel(rewardModel)
 
 	local billboard = Instance.new("BillboardGui")
 	billboard.Name = "PlaceholderBonkLabel"
-	billboard.Size = UDim2.fromOffset(240, 52)
-	billboard.StudsOffset = Vector3.new(0, 4.55, 0)
+	billboard.Size = UDim2.fromOffset(150, 36)
+	billboard.StudsOffset = Vector3.new(0, 3.6, 0)
 	billboard.AlwaysOnTop = true
+	billboard.MaxDistance = 55
 	billboard.Parent = root
 
 	local label = Instance.new("TextLabel")

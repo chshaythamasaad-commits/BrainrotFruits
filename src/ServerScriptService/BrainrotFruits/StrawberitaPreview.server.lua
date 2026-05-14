@@ -8,6 +8,7 @@ local strawberitaFactory = require(brainrotFruits.Models.StrawberitaFactory)
 
 local map = PlotService.getMap()
 local hub = map:WaitForChild("CentralHub")
+local DEBUG_VISUAL_MARKERS = map:GetAttribute("DebugMode") == true
 
 for _, descendant in ipairs(Workspace:GetDescendants()) do
 	if descendant.Name == "GeneratedBrainrotPreview" then
@@ -83,7 +84,9 @@ previewFolder.Name = "GeneratedBrainrotPreview"
 previewFolder:SetAttribute("StrawberitaVersion", "VoxelReferenceRebuild_V3")
 previewFolder.Parent = hub
 
-addActiveSign(previewFolder, Vector3.new(0, 8.75, 21))
+if DEBUG_VISUAL_MARKERS then
+	addActiveSign(previewFolder, Vector3.new(0, 8.75, 21))
+end
 
 strawberitaFactory.createPreviewLineup(
 	previewFolder,
@@ -91,4 +94,5 @@ strawberitaFactory.createPreviewLineup(
 	CFrame.new(-15, 2.25, 21) * CFrame.Angles(0, math.rad(180), 0)
 )
 
-print("[BrainrotFruits] VOXEL STRAWBERITA ACTIVE - runtime is using rebuilt factory")
+print("[BrainrotFruits] Strawberita preview refreshed from rebuilt factory")
+print("[BrainrotFruits] Debug visual markers hidden in normal mode")

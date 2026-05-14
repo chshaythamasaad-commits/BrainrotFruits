@@ -259,6 +259,21 @@ local function createCrateStack(parent, name, position)
 	return model
 end
 
+local function createFruitStatue(parent, name, position, color, accent)
+	local model = Instance.new("Model")
+	model.Name = name
+	model.Parent = parent
+
+	createPart(model, "Pedestal", Vector3.new(4.2, 0.65, 4.2), CFrame.new(position + Vector3.new(0, 0.33, 0)), COLORS.Stone, Enum.Material.Slate)
+	createPart(model, "FruitBlock", Vector3.new(2.25, 2.15, 2.05), CFrame.new(position + Vector3.new(0, 1.75, 0)), color, Enum.Material.SmoothPlastic)
+	createPart(model, "FruitTop", Vector3.new(1.55, 0.55, 1.35), CFrame.new(position + Vector3.new(0, 3.08, 0)), color:Lerp(COLORS.White, 0.08), Enum.Material.SmoothPlastic)
+	createPart(model, "LeafLeft", Vector3.new(1.15, 0.3, 0.78), CFrame.new(position + Vector3.new(-0.58, 3.45, 0)), accent, Enum.Material.Grass)
+	createPart(model, "LeafRight", Vector3.new(1.15, 0.3, 0.78), CFrame.new(position + Vector3.new(0.58, 3.45, 0)), accent, Enum.Material.Grass)
+	createPart(model, "GlowTile", Vector3.new(3.15, 0.12, 3.15), CFrame.new(position + Vector3.new(0, 0.72, 0)), color, Enum.Material.Neon, 0.55)
+
+	return model
+end
+
 local function createPath(parent, name, size, cframe)
 	local path = createPart(parent, name, size, cframe, COLORS.Path, Enum.Material.Sand)
 	path.CanCollide = false
@@ -430,6 +445,23 @@ local function buildSharedLaunchArea(map)
 	revealPlatform.Material = Enum.Material.Neon
 	revealPlatform.Transparency = 0.12
 	revealPlatform:SetAttribute("Role", "LandingZone")
+	local revealAttachment = Instance.new("Attachment")
+	revealAttachment.Name = "RevealSparkleAttachment"
+	revealAttachment.Parent = revealPlatform
+	local revealSparkles = Instance.new("ParticleEmitter")
+	revealSparkles.Name = "RevealZoneSparkles"
+	revealSparkles.Color = ColorSequence.new(Color3.fromRGB(255, 231, 120), Color3.fromRGB(190, 116, 255))
+	revealSparkles.LightEmission = 0.55
+	revealSparkles.Rate = 8
+	revealSparkles.Lifetime = NumberRange.new(1.2, 2.1)
+	revealSparkles.Speed = NumberRange.new(0.35, 1.2)
+	revealSparkles.SpreadAngle = Vector2.new(180, 180)
+	revealSparkles.Size = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 0.22),
+		NumberSequenceKeypoint.new(0.55, 0.16),
+		NumberSequenceKeypoint.new(1, 0),
+	})
+	revealSparkles.Parent = revealAttachment
 	createFacingSign(lane, "RevealZoneSign", "REVEAL ZONE", CFrame.new(0, 5.4, revealZ - 21) * CFrame.Angles(0, math.rad(180), 0), Color3.fromRGB(111, 61, 197), Vector3.new(19, 4, 0.75))
 
 	for _, position in ipairs({
@@ -473,7 +505,9 @@ local function buildHub(map)
 	createPart(hub, "SafeZoneRingEast", Vector3.new(4, 0.18, 56), CFrame.new(31.5, 0.94, -4), COLORS.Path, Enum.Material.Sand)
 
 	createTopTextPad(hub, "SafeZoneTextPad", "SAFE ZONE", Vector3.new(22, 0.16, 5), CFrame.new(0, 1.06, 20), Color3.fromRGB(57, 160, 71), COLORS.White)
-	createFacingSign(hub, "MapV2ActiveSign", "MAP V2 ACTIVE", CFrame.new(-34, 5, 34) * CFrame.Angles(0, math.rad(145), 0), Color3.fromRGB(44, 151, 94), Vector3.new(12, 3.4, 0.65))
+	if MapBuilder.DebugMode then
+		createFacingSign(hub, "MapV2ActiveSign", "MAP V2 ACTIVE", CFrame.new(-34, 5, 34) * CFrame.Angles(0, math.rad(145), 0), Color3.fromRGB(44, 151, 94), Vector3.new(12, 3.4, 0.65))
+	end
 	createFacingSign(hub, "HubTitleSign", "BRAINROT FRUITS", CFrame.new(0, 7.2, -39), Color3.fromRGB(234, 74, 108), Vector3.new(23, 5.2, 0.8))
 
 	createBooth(hub, "SHOP", Vector3.new(-37, 0.95, -13), 30, Color3.fromRGB(211, 57, 46), Color3.fromRGB(255, 245, 232))
@@ -617,6 +651,59 @@ local function buildWorldDecorations(map)
 	}) do
 		createRock(decor, `IslandRock{index}`, position, 0.9)
 	end
+
+	for index, position in ipairs({
+		Vector3.new(-58, 0.55, -14),
+		Vector3.new(58, 0.55, -14),
+		Vector3.new(-54, 0.55, 24),
+		Vector3.new(54, 0.55, 24),
+		Vector3.new(-18, 0.55, 47),
+		Vector3.new(18, 0.55, 47),
+		Vector3.new(-88, 0.55, 150),
+		Vector3.new(88, 0.55, 150),
+		Vector3.new(-68, 0.55, 320),
+		Vector3.new(68, 0.55, 320),
+		Vector3.new(-72, 0.55, 510),
+		Vector3.new(72, 0.55, 510),
+	}) do
+		local theme = PLOT_THEMES[((index - 1) % #PLOT_THEMES) + 1]
+		createFlowerPatch(decor, `PolishFlowers{index}`, position, theme.accent)
+	end
+
+	for index, position in ipairs({
+		Vector3.new(-74, 0, 58),
+		Vector3.new(74, 0, 58),
+		Vector3.new(-92, 0, -58),
+		Vector3.new(92, 0, -58),
+		Vector3.new(-55, 0, 214),
+		Vector3.new(55, 0, 214),
+		Vector3.new(-58, 0, 420),
+		Vector3.new(58, 0, 420),
+		Vector3.new(-38, 0, 655),
+		Vector3.new(38, 0, 655),
+	}) do
+		createBush(decor, `PolishBush{index}`, position, 0.78, COLORS.GrassLight)
+	end
+
+	for index, position in ipairs({
+		Vector3.new(-25, 0, 57),
+		Vector3.new(25, 0, 57),
+		Vector3.new(-42, 0, 262),
+		Vector3.new(42, 0, 262),
+		Vector3.new(-42, 0, 468),
+		Vector3.new(42, 0, 468),
+	}) do
+		createCrateStack(decor, `PolishCrates{index}`, position)
+	end
+
+	for index, data in ipairs({
+		{ position = Vector3.new(-23, 0, -48), color = Color3.fromRGB(234, 74, 108), accent = Color3.fromRGB(93, 181, 28) },
+		{ position = Vector3.new(23, 0, -48), color = Color3.fromRGB(255, 198, 51), accent = Color3.fromRGB(49, 170, 79) },
+		{ position = Vector3.new(-32, 0, 612), color = Color3.fromRGB(124, 232, 255), accent = Color3.fromRGB(41, 214, 189) },
+		{ position = Vector3.new(32, 0, 612), color = Color3.fromRGB(93, 54, 169), accent = Color3.fromRGB(69, 228, 158) },
+	}) do
+		createFruitStatue(decor, `SmallFruitStatue{index}`, data.position, data.color, data.accent)
+	end
 end
 
 function MapBuilder.build()
@@ -630,6 +717,8 @@ function MapBuilder.build()
 	map:SetAttribute("MapVersion", MapBuilder.MapVersion)
 	map:SetAttribute("GameplayVersion", "StrawberitaReturnTool_V2")
 	map:SetAttribute("LaunchLaneVersion", "ExtendedDecoratedLane_V1")
+	map:SetAttribute("VisualPolishVersion", "CleanKidFriendlyUI_V1")
+	map:SetAttribute("DebugMode", MapBuilder.DebugMode)
 	map.Parent = Workspace
 
 	buildIslandBase(map)
@@ -654,6 +743,10 @@ function MapBuilder.build()
 	print("[BrainrotFruits] InvisibleCenterSpawn_V1 active")
 	print("[BrainrotFruits] Catapult orientation corrected")
 	print("[BrainrotFruits] LaunchLaneExtended_V1 active")
+	print("[BrainrotFruits] CleanKidFriendlyUI_V1 active")
+	print("[BrainrotFruits] Debug visual markers hidden in normal mode")
+	print("[BrainrotFruits] Map decorations polish active")
+	print("[BrainrotFruits] MapPolish_KidFriendly_V1 active")
 
 	return map
 end

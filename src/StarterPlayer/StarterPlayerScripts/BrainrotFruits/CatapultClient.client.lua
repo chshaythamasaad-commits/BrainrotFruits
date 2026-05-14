@@ -2,6 +2,7 @@ local ContextActionService = game:GetService("ContextActionService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
 local Workspace = game:GetService("Workspace")
 
 local player = Players.LocalPlayer
@@ -20,7 +21,10 @@ local chargeStartedAt = 0
 local cooldownUntil = 0
 local latestDistance = nil
 local revealMessageUntil = 0
+local revealHiding = false
 local returnRunActive = false
+local returnRunEndsAt = 0
+local returnRunDuration = 1
 local returnMarker = nil
 
 local rarityColors = {
@@ -39,17 +43,21 @@ screenGui.Parent = player:WaitForChild("PlayerGui")
 local frame = Instance.new("Frame")
 frame.Name = "ChargePanel"
 frame.AnchorPoint = Vector2.new(0.5, 1)
-frame.Position = UDim2.fromScale(0.5, 0.92)
-frame.Size = UDim2.new(0.86, 0, 0, 84)
+frame.Position = UDim2.fromScale(0.5, 0.955)
+frame.Size = UDim2.new(0.72, 0, 0, 62)
 frame.BackgroundColor3 = Color3.fromRGB(25, 30, 38)
-frame.BackgroundTransparency = 0.12
+frame.BackgroundTransparency = 0.18
 frame.BorderSizePixel = 0
 frame.Parent = screenGui
 
 local frameSize = Instance.new("UISizeConstraint")
-frameSize.MinSize = Vector2.new(260, 84)
-frameSize.MaxSize = Vector2.new(360, 84)
+frameSize.MinSize = Vector2.new(230, 62)
+frameSize.MaxSize = Vector2.new(340, 62)
 frameSize.Parent = frame
+
+local frameCorner = Instance.new("UICorner")
+frameCorner.CornerRadius = UDim.new(0, 14)
+frameCorner.Parent = frame
 
 local title = Instance.new("TextLabel")
 title.Name = "Status"
@@ -58,16 +66,16 @@ title.Font = Enum.Font.GothamBold
 title.Text = "Step near the catapult"
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextScaled = true
-title.Size = UDim2.new(1, -24, 0, 32)
-title.Position = UDim2.fromOffset(12, 8)
+title.Size = UDim2.new(1, -24, 0, 24)
+title.Position = UDim2.fromOffset(12, 7)
 title.Parent = frame
 
 local meterBack = Instance.new("Frame")
 meterBack.Name = "MeterBack"
 meterBack.BackgroundColor3 = Color3.fromRGB(55, 64, 74)
 meterBack.BorderSizePixel = 0
-meterBack.Position = UDim2.fromOffset(16, 50)
-meterBack.Size = UDim2.new(1, -32, 0, 18)
+meterBack.Position = UDim2.fromOffset(16, 39)
+meterBack.Size = UDim2.new(1, -32, 0, 12)
 meterBack.Parent = frame
 
 local meterFill = Instance.new("Frame")
@@ -77,21 +85,39 @@ meterFill.BorderSizePixel = 0
 meterFill.Size = UDim2.fromScale(0, 1)
 meterFill.Parent = meterBack
 
+local meterCorner = Instance.new("UICorner")
+meterCorner.CornerRadius = UDim.new(1, 0)
+meterCorner.Parent = meterBack
+
+local meterFillCorner = Instance.new("UICorner")
+meterFillCorner.CornerRadius = UDim.new(1, 0)
+meterFillCorner.Parent = meterFill
+
 local revealFrame = Instance.new("Frame")
 revealFrame.Name = "RevealPanel"
 revealFrame.AnchorPoint = Vector2.new(0.5, 0)
-revealFrame.Position = UDim2.fromScale(0.5, 0.12)
-revealFrame.Size = UDim2.new(0.9, 0, 0, 86)
+revealFrame.Position = UDim2.fromScale(0.5, 0.055)
+revealFrame.Size = UDim2.new(0.52, 0, 0, 76)
 revealFrame.BackgroundColor3 = Color3.fromRGB(25, 30, 38)
-revealFrame.BackgroundTransparency = 0.1
+revealFrame.BackgroundTransparency = 1
 revealFrame.BorderSizePixel = 0
 revealFrame.Visible = false
 revealFrame.Parent = screenGui
 
 local revealSize = Instance.new("UISizeConstraint")
-revealSize.MinSize = Vector2.new(280, 86)
-revealSize.MaxSize = Vector2.new(520, 86)
+revealSize.MinSize = Vector2.new(250, 76)
+revealSize.MaxSize = Vector2.new(420, 76)
 revealSize.Parent = revealFrame
+
+local revealCorner = Instance.new("UICorner")
+revealCorner.CornerRadius = UDim.new(0, 16)
+revealCorner.Parent = revealFrame
+
+local revealStroke = Instance.new("UIStroke")
+revealStroke.Color = Color3.fromRGB(255, 220, 92)
+revealStroke.Thickness = 2
+revealStroke.Transparency = 1
+revealStroke.Parent = revealFrame
 
 local revealTitle = Instance.new("TextLabel")
 revealTitle.Name = "RevealTitle"
@@ -100,8 +126,9 @@ revealTitle.Font = Enum.Font.GothamBlack
 revealTitle.Text = "Revealed!"
 revealTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 revealTitle.TextScaled = true
-revealTitle.Size = UDim2.new(1, -24, 0, 40)
-revealTitle.Position = UDim2.fromOffset(12, 8)
+revealTitle.TextTransparency = 1
+revealTitle.Size = UDim2.new(1, -24, 0, 28)
+revealTitle.Position = UDim2.fromOffset(12, 7)
 revealTitle.Parent = revealFrame
 
 local revealSubtitle = Instance.new("TextLabel")
@@ -111,9 +138,22 @@ revealSubtitle.Font = Enum.Font.GothamBold
 revealSubtitle.Text = ""
 revealSubtitle.TextColor3 = Color3.fromRGB(219, 232, 255)
 revealSubtitle.TextScaled = true
-revealSubtitle.Size = UDim2.new(1, -24, 0, 28)
-revealSubtitle.Position = UDim2.fromOffset(12, 50)
+revealSubtitle.TextTransparency = 1
+revealSubtitle.Size = UDim2.new(1, -24, 0, 20)
+revealSubtitle.Position = UDim2.fromOffset(12, 35)
 revealSubtitle.Parent = revealFrame
+
+local revealHint = Instance.new("TextLabel")
+revealHint.Name = "RevealHint"
+revealHint.BackgroundTransparency = 1
+revealHint.Font = Enum.Font.GothamBold
+revealHint.Text = ""
+revealHint.TextColor3 = Color3.fromRGB(255, 244, 184)
+revealHint.TextScaled = true
+revealHint.TextTransparency = 1
+revealHint.Size = UDim2.new(1, -24, 0, 17)
+revealHint.Position = UDim2.fromOffset(12, 56)
+revealHint.Parent = revealFrame
 
 local function getCharacterRoot()
 	local character = player.Character
@@ -150,6 +190,41 @@ local function setStatus(message)
 	title.Text = message
 end
 
+local function tweenReveal(targetTransparency)
+	TweenService:Create(revealFrame, TweenInfo.new(0.18, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+		BackgroundTransparency = targetTransparency,
+	}):Play()
+	TweenService:Create(revealStroke, TweenInfo.new(0.18, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+		Transparency = math.clamp(targetTransparency + 0.05, 0, 1),
+	}):Play()
+	for _, label in ipairs({ revealTitle, revealSubtitle, revealHint }) do
+		TweenService:Create(label, TweenInfo.new(0.18, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+			TextTransparency = targetTransparency >= 1 and 1 or 0,
+		}):Play()
+	end
+end
+
+local function showRevealPanel(seconds)
+	revealHiding = false
+	revealFrame.Visible = true
+	tweenReveal(0.12)
+	revealMessageUntil = os.clock() + (seconds or 3)
+end
+
+local function hideRevealPanel()
+	if revealHiding then
+		return
+	end
+	revealHiding = true
+	tweenReveal(1)
+	task.delay(0.2, function()
+		if os.clock() > revealMessageUntil then
+			revealFrame.Visible = false
+			revealHiding = false
+		end
+	end)
+end
+
 local function clearReturnMarker()
 	if returnMarker then
 		returnMarker:Destroy()
@@ -170,10 +245,10 @@ local function showReturnMarker(plotId)
 
 	local marker = Instance.new("BillboardGui")
 	marker.Name = "ReturnRunBaseMarker"
-	marker.Size = UDim2.fromOffset(180, 54)
-	marker.StudsOffset = Vector3.new(0, 7, 0)
+	marker.Size = UDim2.fromOffset(132, 38)
+	marker.StudsOffset = Vector3.new(0, 5.4, 0)
 	marker.AlwaysOnTop = true
-	marker.MaxDistance = 260
+	marker.MaxDistance = 140
 	marker.Parent = claimZone
 
 	local label = Instance.new("TextLabel")
@@ -191,12 +266,11 @@ end
 
 local function showReveal(payload)
 	local rarity = payload.rarity or "Common"
-	local distance = math.floor(payload.distance or 0)
 	revealTitle.Text = payload.displayName or "Strawberita"
 	revealTitle.TextColor3 = rarityColors[rarity] or Color3.fromRGB(255, 255, 255)
-	revealSubtitle.Text = `{rarity} - {distance} studs - {payload.bandName or "Launch"}`
-	revealFrame.Visible = true
-	revealMessageUntil = os.clock() + 4
+	revealSubtitle.Text = rarity
+	revealHint.Text = "Run back to your base!"
+	showRevealPanel(3.25)
 end
 
 local function beginCharge()
@@ -281,7 +355,7 @@ launchResultRemote.OnClientEvent:Connect(function(payload)
 
 	if payload.status == "Launched" then
 		cooldownUntil = os.clock() + (payload.cooldownSeconds or CatapultConfig.CooldownSeconds)
-		setStatus("Launch! You are the crate!")
+		setStatus("Launch! Strawberita sprint!")
 	elseif payload.status == "Landed" then
 		latestDistance = payload.distance
 		setStatus("Opening crate...")
@@ -304,28 +378,32 @@ returnRunStatusRemote.OnClientEvent:Connect(function(payload)
 
 	if payload.status == "Started" then
 		returnRunActive = true
+		returnRunDuration = payload.timeoutSeconds or CatapultConfig.ReturnRunTimeoutSeconds or 45
+		returnRunEndsAt = os.clock() + returnRunDuration
 		showReturnMarker(payload.plotId)
-		setStatus(payload.message or "Run back to your base to keep it!")
-		revealSubtitle.Text = "Run back to your base to keep it!"
-		revealMessageUntil = os.clock() + (payload.timeoutSeconds or 8)
+		setStatus("Run Home!")
+		revealHint.Text = "Run back to your base!"
+		showRevealPanel(math.min(returnRunDuration, 5))
 	elseif payload.status == "Secured" then
 		returnRunActive = false
+		returnRunEndsAt = 0
 		clearReturnMarker()
 		setStatus(payload.message or "Reward Secured!")
 		revealTitle.Text = "Reward Secured!"
 		revealTitle.TextColor3 = Color3.fromRGB(103, 255, 139)
 		revealSubtitle.Text = payload.displayName or ""
-		revealFrame.Visible = true
-		revealMessageUntil = os.clock() + 3.5
+		revealHint.Text = "Tool added to Backpack!"
+		showRevealPanel(3)
 	elseif payload.status == "Lost" then
 		returnRunActive = false
+		returnRunEndsAt = 0
 		clearReturnMarker()
 		setStatus(payload.message or "Reward Lost!")
 		revealTitle.Text = payload.message or "Reward Lost!"
 		revealTitle.TextColor3 = Color3.fromRGB(255, 91, 129)
 		revealSubtitle.Text = payload.reason or "Bonked"
-		revealFrame.Visible = true
-		revealMessageUntil = os.clock() + 3.5
+		revealHint.Text = "Try another launch!"
+		showRevealPanel(3)
 	end
 end)
 
@@ -344,7 +422,7 @@ RunService.RenderStepped:Connect(function()
 	end
 
 	if revealFrame.Visible and os.clock() > revealMessageUntil then
-		revealFrame.Visible = false
+		hideRevealPanel()
 	end
 
 	if now < cooldownUntil then
@@ -352,9 +430,11 @@ RunService.RenderStepped:Connect(function()
 		meterFill.BackgroundColor3 = Color3.fromRGB(120, 175, 255)
 		setStatus(`Cooldown {math.ceil(cooldownUntil - now)}s`)
 	elseif returnRunActive then
-		meterFill.Size = UDim2.fromScale(1, 1)
+		local remaining = math.max(0, returnRunEndsAt - now)
+		local alpha = returnRunDuration > 0 and remaining / returnRunDuration or 0
+		meterFill.Size = UDim2.fromScale(alpha, 1)
 		meterFill.BackgroundColor3 = Color3.fromRGB(103, 255, 139)
-		setStatus("Run back to your base to keep it!")
+		setStatus("Run Home!")
 	elseif nearCatapult then
 		meterFill.Size = UDim2.fromScale(0, 1)
 		meterFill.BackgroundColor3 = Color3.fromRGB(255, 91, 129)
