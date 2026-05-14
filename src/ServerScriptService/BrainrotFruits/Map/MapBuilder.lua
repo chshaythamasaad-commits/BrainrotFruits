@@ -1,13 +1,15 @@
 local Workspace = game:GetService("Workspace")
 
+local PlotModelBuilder = require(script.Parent.PlotModelBuilder)
+
 local MapBuilder = {}
 
 MapBuilder.MapName = "BrainrotMap"
 MapBuilder.MapVersion = "IslandReferenceMap_V2"
 MapBuilder.PlotCount = 6
-MapBuilder.PlotSize = Vector3.new(54, 1, 58)
+MapBuilder.PlotSize = PlotModelBuilder.PlotSize
 MapBuilder.SharedLaneLength = 132
-MapBuilder.SlotCount = 10
+MapBuilder.SlotCount = 12
 MapBuilder.DebugMode = false
 
 local COLORS = {
@@ -373,143 +375,21 @@ local function buildSharedLaunchArea(map)
 	return launchArea
 end
 
-local function makeDisplaySlots(plot, plotFrame, plotId, theme)
-	local slotsFolder = Instance.new("Folder")
-	slotsFolder.Name = "FruitSlots"
-	slotsFolder.Parent = plot
-
-	local visualFolder = Instance.new("Folder")
-	visualFolder.Name = "FruitSlotVisuals"
-	visualFolder.Parent = plot
-
-	local slotPositions = {
-		Vector3.new(-18, 1.05, -15),
-		Vector3.new(-9, 1.05, -15),
-		Vector3.new(0, 1.05, -15),
-		Vector3.new(9, 1.05, -15),
-		Vector3.new(18, 1.05, -15),
-		Vector3.new(-18, 1.05, -5),
-		Vector3.new(-9, 1.05, -5),
-		Vector3.new(0, 1.05, -5),
-		Vector3.new(9, 1.05, -5),
-		Vector3.new(18, 1.05, -5),
-	}
-
-	for slotIndex, localPosition in ipairs(slotPositions) do
-		local slotFrame = plotFrame * CFrame.new(localPosition)
-		local slot = createPart(slotsFolder, `Slot{slotIndex}`, Vector3.new(6, 0.38, 6), slotFrame, theme.accent, Enum.Material.SmoothPlastic)
-		slot:SetAttribute("PlotId", plotId)
-		slot:SetAttribute("SlotIndex", slotIndex)
-		slot:SetAttribute("Occupied", false)
-
-		createPart(visualFolder, `Slot{slotIndex}Inset`, Vector3.new(4.1, 0.18, 4.1), slotFrame * CFrame.new(0, 0.31, 0), theme.color, Enum.Material.Neon, 0.14)
-
-		if MapBuilder.DebugMode then
-			addSmallBillboard(slot, "SlotLabel", `Slot {slotIndex}`, UDim2.fromOffset(92, 24), Vector3.new(0, 2, 0), 45)
-		end
-	end
-
-	return slotsFolder
-end
-
-local function makeFence(plot, plotFrame, theme)
-	local fence = Instance.new("Folder")
-	fence.Name = "Borders"
-	fence.Parent = plot
-
-	local halfX = MapBuilder.PlotSize.X / 2
-	local halfZ = MapBuilder.PlotSize.Z / 2
-	local railColor = theme.color:Lerp(COLORS.Wood, 0.42)
-
-	for _, localPosition in ipairs({
-		Vector3.new(-halfX, 0, -halfZ),
-		Vector3.new(halfX, 0, -halfZ),
-		Vector3.new(-halfX, 0, halfZ),
-		Vector3.new(halfX, 0, halfZ),
-		Vector3.new(-halfX, 0, 0),
-		Vector3.new(halfX, 0, 0),
-		Vector3.new(-15, 0, -halfZ),
-		Vector3.new(15, 0, -halfZ),
-	}) do
-		createPart(fence, "FencePost", Vector3.new(0.8, 2.8, 0.8), localToWorld(plotFrame, localPosition.X, 1.85, localPosition.Z), COLORS.WoodDark, Enum.Material.Wood)
-	end
-
-	createPart(fence, "OuterRail", Vector3.new(MapBuilder.PlotSize.X, 0.48, 0.48), localToWorld(plotFrame, 0, 2.2, halfZ), railColor, Enum.Material.Wood)
-	createPart(fence, "LeftRail", Vector3.new(0.48, 0.48, MapBuilder.PlotSize.Z), localToWorld(plotFrame, -halfX, 2.2, 0), railColor, Enum.Material.Wood)
-	createPart(fence, "RightRail", Vector3.new(0.48, 0.48, MapBuilder.PlotSize.Z), localToWorld(plotFrame, halfX, 2.2, 0), railColor, Enum.Material.Wood)
-	createPart(fence, "HubRailLeft", Vector3.new(18, 0.48, 0.48), localToWorld(plotFrame, -18, 2.2, -halfZ), railColor, Enum.Material.Wood)
-	createPart(fence, "HubRailRight", Vector3.new(18, 0.48, 0.48), localToWorld(plotFrame, 18, 2.2, -halfZ), railColor, Enum.Material.Wood)
-end
-
-local function makePlotHouse(plot, plotFrame, theme)
-	local model = Instance.new("Model")
-	model.Name = "DecorHouse"
-	model.Parent = plot
-
-	local frame = plotFrame * CFrame.new(-19, 1.1, 16)
-	createPart(model, "HouseBase", Vector3.new(9, 4.5, 7.5), frame * CFrame.new(0, 2.1, 0), Color3.fromRGB(232, 190, 119), Enum.Material.WoodPlanks)
-	createPart(model, "Door", Vector3.new(2.1, 3.1, 0.32), frame * CFrame.new(0, 1.35, -3.9), COLORS.WoodDark, Enum.Material.Wood)
-	createPart(model, "WindowLeft", Vector3.new(1.35, 1.35, 0.28), frame * CFrame.new(-2.7, 2.6, -3.95), Color3.fromRGB(130, 215, 255), Enum.Material.Glass, 0.1)
-	createPart(model, "WindowRight", Vector3.new(1.35, 1.35, 0.28), frame * CFrame.new(2.7, 2.6, -3.95), Color3.fromRGB(130, 215, 255), Enum.Material.Glass, 0.1)
-	createPart(model, "RoofBlock", Vector3.new(10.5, 1.4, 8.5), frame * CFrame.new(0, 5.1, 0), theme.roof, Enum.Material.SmoothPlastic)
-	createWedge(model, "RoofFrontSlope", Vector3.new(10.6, 2.2, 4.4), frame * CFrame.new(0, 5.45, -2.3) * CFrame.Angles(0, math.rad(180), 0), theme.roof, Enum.Material.SmoothPlastic)
-	createWedge(model, "RoofBackSlope", Vector3.new(10.6, 2.2, 4.4), frame * CFrame.new(0, 5.45, 2.3), theme.roof, Enum.Material.SmoothPlastic)
-
-	return model
-end
-
-local function decoratePlot(plot, plotFrame, theme)
-	createBush(plot, "PlotBushA", (plotFrame * CFrame.new(20, 0.55, 18)).Position, 0.75, theme.accent:Lerp(COLORS.Grass, 0.55))
-	createBush(plot, "PlotBushB", (plotFrame * CFrame.new(-23, 0.55, -21)).Position, 0.68, COLORS.GrassLight)
-	createRock(plot, "PlotRock", (plotFrame * CFrame.new(23, 0.55, -20)).Position, 0.7)
-	createFlowerPatch(plot, "PlotFlowers", (plotFrame * CFrame.new(15, 0.55, 18)).Position, theme.accent)
-	createCrateStack(plot, "PlotCrates", (plotFrame * CFrame.new(22, 0, 10)).Position)
-end
-
 local function makePlot(plotsFolder, plotId)
 	local center = PLOT_LAYOUTS[plotId]
-	local plotFrame = CFrame.lookAt(center, Vector3.new(0, 0, 0))
 	local theme = PLOT_THEMES[plotId]
+	local plotFrame = CFrame.lookAt(center, Vector3.new(0, 0, 0))
 
-	local plot = Instance.new("Model")
-	plot.Name = `Plot{plotId}`
-	plot:SetAttribute("PlotId", plotId)
-	plot:SetAttribute("OwnerUserId", 0)
-	plot:SetAttribute("OwnerName", "")
-	plot:SetAttribute("Status", "Unclaimed")
-	plot:SetAttribute("Theme", theme.name)
-	plot.Parent = plotsFolder
-
-	local base = createPart(plot, "PlotBase", MapBuilder.PlotSize, localToWorld(plotFrame, 0, 0.2, 0), COLORS.GrassLight:Lerp(theme.color, 0.18), Enum.Material.Grass)
-	base:SetAttribute("PlotId", plotId)
-	plot.PrimaryPart = base
-
-	createPart(plot, "PlotDirtInset", Vector3.new(46, 0.16, 42), localToWorld(plotFrame, 0, 0.82, -4), Color3.fromRGB(194, 161, 104), Enum.Material.Ground)
-	createPart(plot, "PlotPathToHub", Vector3.new(12, 0.14, 18), localToWorld(plotFrame, 0, 1, -25), COLORS.Path, Enum.Material.Sand)
-
-	makeFence(plot, plotFrame, theme)
-
-	local sign = createPart(plot, "OwnerSignPost", Vector3.new(10.8, 3.7, 0.6), localToWorld(plotFrame, 0, 3.35, -28.2), theme.color, Enum.Material.SmoothPlastic)
-	sign.CanCollide = false
-	sign:SetAttribute("Role", "OwnerSign")
-	addSurfaceText(sign, `PLOT {plotId}`, Enum.NormalId.Front, COLORS.White, COLORS.Black)
-	addSmallBillboard(sign, "OwnerBillboard", `Plot {plotId}\nUnclaimed Plot`, UDim2.fromOffset(150, 44), Vector3.new(0, 2.55, 0), 62)
-
-	local spawnPad = createTopTextPad(plot, "SpawnPad", "SPAWN", Vector3.new(11, 0.38, 7.4), localToWorld(plotFrame, 0, 0.95, 20), theme.color, COLORS.White)
-	spawnPad.Material = Enum.Material.Neon
-	spawnPad.Transparency = 0.14
-	spawnPad:SetAttribute("PlotId", plotId)
-	spawnPad:SetAttribute("Role", "SpawnPad")
-
-	makeDisplaySlots(plot, plotFrame, plotId, theme)
-	makePlotHouse(plot, plotFrame, theme)
-	decoratePlot(plot, plotFrame, theme)
-
-	getOrCreateFolder(plot, "ActiveCrates")
-	getOrCreateFolder(plot, "RevealedRewards")
-	getOrCreateFolder(plot, "ChaosHazards")
-
-	return plot
+	return PlotModelBuilder.createPlot({
+		parent = plotsFolder,
+		plotId = plotId,
+		position = center,
+		plotFrame = plotFrame,
+		theme = theme,
+		ownerName = nil,
+		ownerUserId = 0,
+		debugMode = MapBuilder.DebugMode,
+	})
 end
 
 local function buildHub(map)
@@ -694,6 +574,7 @@ function MapBuilder.build()
 	getOrCreateFolder(map, "ChaosHazards")
 
 	print("[BrainrotFruits] MAP V2 ACTIVE - island reference layout loaded")
+	print("[BrainrotFruits] POLISHED PLOT V2 ACTIVE - base reference layout loaded")
 
 	return map
 end
