@@ -16,19 +16,11 @@ This branch has multiple people and Codex instances contributing. Treat existing
 - Current playable slice: shared catapult, crate launch, Strawberita reveal, return-run, plot claim, bouncy/studded visual polish.
 - Important handoff file: `docs/handoffs/STRAWBERITA_CATAPULT_HANDOFF.md`.
 
-## Work Added By This Codex Pass
+## Temporary Showcase Removed
 
-- Added `src/ServerScriptService/BrainrotFruits/AssetShowcase.server.lua`.
-- The showcase creates `Workspace.AssetShowcase` during Play.
-- It builds one platform with five labeled pedestals.
-- It clones these builder assets from `ServerStorage` or `ServerStorage.BrainrotFruitAssets`:
-  - `BrainrotCrate`
-  - `Catapult`
-  - `StrawberitaMascot`
-  - `BananitoBonkito`
-  - `AppleliniSlappelini`
-- Missing assets appear as red placeholder cubes and warnings in Output.
-- Updated `docs/handoffs/STRAWBERITA_CATAPULT_HANDOFF.md` with showcase verification steps.
+- The temporary viewing-platform server script was removed after user approval.
+- Do not re-add a standalone viewing platform unless the user explicitly asks for it.
+- Builder assets should be reviewed through the actual map, source-backed model folders, or a specifically requested temporary Studio setup.
 
 ## Model Builder Check
 
@@ -44,6 +36,5 @@ This branch has multiple people and Codex instances contributing. Treat existing
 
 1. Run `rojo serve default.project.json`.
 2. Connect Roblox Studio's Rojo plugin to `localhost:34872`.
-3. Put the five builder models in `ServerStorage` or `ServerStorage.BrainrotFruitAssets`.
-4. Press Play.
-5. Confirm `Workspace.AssetShowcase` shows the five labeled assets.
+3. Press Play.
+4. Test the current playable map and any source-backed models through the normal `Workspace.BrainrotMap` flow.

@@ -311,28 +311,17 @@ Latest multiplayer note: overlapping shared-catapult launches should now fail wi
 6. Confirm invisible spawn pads, `BaseClaimZone`, catapult interact zone, water, neon/glow pads, and signs remain clean/smooth.
 7. Confirm transformed-player Strawberita still uses one welded visual with no follower model and still grants the reward Tool on successful return.
 
-## Latest Asset Showcase Notes
+## Latest Temporary Showcase Removal Notes
 
-- Added `src/ServerScriptService/BrainrotFruits/AssetShowcase.server.lua`.
-- On server start, it creates `Workspace.AssetShowcase` with one long platform and five labeled pedestals.
-- It looks for final builder assets directly under `ServerStorage`, or under `ServerStorage.BrainrotFruitAssets` if the builder groups them there.
-- Expected asset names:
-  - `BrainrotCrate`
-  - `Catapult`
-  - `StrawberitaMascot`
-  - `BananitoBonkito`
-  - `AppleliniSlappelini`
-- Found assets are cloned, anchored, made non-colliding, and placed on the showcase platform for quick Play-test review.
-- Missing assets produce red placeholder cubes and Output warnings so the builder can see naming/import issues immediately.
+- Removed the temporary viewing-platform server script from `src/ServerScriptService/BrainrotFruits`.
+- The temporary viewing platform no longer creates a separate review folder during Play.
+- Asset review should happen through the normal map flow or a newly requested temporary Studio setup.
 
-## Latest Asset Showcase Studio Verification
+## Latest Temporary Showcase Removal Verification
 
-1. Put the five builder models in `ServerStorage`, or in `ServerStorage.BrainrotFruitAssets`.
-2. Press Play in Studio.
-3. Confirm `Workspace.AssetShowcase` exists.
-4. Confirm the showcase platform has five labeled pedestals.
-5. Confirm each model appears above its matching label.
-6. If a red placeholder appears, check Output for `[BrainrotFruits] Missing showcase asset in ServerStorage: ...` and fix the model name/location.
+1. Press Play in Studio.
+2. Confirm no separate temporary asset-review platform appears.
+3. Confirm the normal `Workspace.BrainrotMap` gameplay map still builds.
 
 ## Known Issues
 
