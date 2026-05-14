@@ -1,6 +1,10 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
 local PlotModelBuilder = {}
 
 local CatapultModelBuilder = require(script.Parent.CatapultModelBuilder)
+local brainrotFruits = ReplicatedStorage:WaitForChild("BrainrotFruits")
+local BlockStyle = require(brainrotFruits.Shared.BlockStyle)
 
 PlotModelBuilder.PlotSize = Vector3.new(70, 1, 55)
 PlotModelBuilder.ModelVersion = "BaseReferencePlot_V3"
@@ -35,6 +39,7 @@ local function createPart(parent, name, size, cframe, color, material, transpare
 	part.Anchored = true
 	part.TopSurface = Enum.SurfaceType.Smooth
 	part.BottomSurface = Enum.SurfaceType.Smooth
+	BlockStyle.applyStuddedStyle(part)
 	part.Parent = parent
 	return part
 end
@@ -50,6 +55,7 @@ local function createWedge(parent, name, size, cframe, color, material, transpar
 	wedge.Anchored = true
 	wedge.TopSurface = Enum.SurfaceType.Smooth
 	wedge.BottomSurface = Enum.SurfaceType.Smooth
+	BlockStyle.applyStuddedStyle(wedge)
 	wedge.Parent = parent
 	return wedge
 end

@@ -187,3 +187,12 @@ Commit: this documentation pass.
 - Added visual-only idle bounce, walk bob, leaf wiggle, face pop, launch stretch/puff, return-run trail, secured celebration, and bonked wobble effects.
 - Movement animation is driven by `Humanoid.MoveDirection.Magnitude` and only changes weld offsets, part offsets, and lightweight particles.
 - `ReturnRunService` now calls secured/lost animation hooks before cleaning up the transform, while reward placement and Tool grants remain unchanged.
+
+### Platform idle bounce and studded block style
+
+- Marked the generated map with `StrawberitaPlatformAnimationVersion = "PlatformBounce_V1"` and `BlockStyleVersion = "StuddedBlockStyle_V1"`.
+- Added `Shared/StrawberitaAnimation.lua` for anchored fruit-slot collectibles, starting the platform idle loop from `PlotService.placeRewardOnSlot()`.
+- Platform Strawberitas now get subtle bounce/sway, low-rate rarity sparkles, and optional rarity glow while staying centered on their assigned slot.
+- Added `Shared/BlockStyle.lua` and routed `MapBuilder`, `PlotModelBuilder`, and `CatapultModelBuilder` generated parts through it for classic studded top surfaces where appropriate.
+- Kept invisible zones, water, neon/glow parts, text/sign surfaces, and Strawberita face/eye/mouth pieces smooth for readability.
+- `StrawberitaFactory` now applies studs only to suitable Strawberita body/leaf/seed/accessory blocks, preserving the clean face panel and expression.

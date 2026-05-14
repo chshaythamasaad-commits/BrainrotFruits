@@ -1,7 +1,10 @@
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local MapBuilder = require(script.Parent.MapBuilder)
 local CatapultBinder = require(script.Parent.CatapultBinder)
+local brainrotFruits = ReplicatedStorage:WaitForChild("BrainrotFruits")
+local StrawberitaAnimation = require(brainrotFruits.Shared.StrawberitaAnimation)
 
 local PlotService = {}
 
@@ -275,6 +278,7 @@ function PlotService.placeRewardOnSlot(player, rewardModel, reward)
 	rewardModel:SetAttribute("DisplaySlotIndex", slot:GetAttribute("SlotIndex"))
 	rewardModel:SetAttribute("PlotId", slot:GetAttribute("PlotId"))
 	rewardModel:SetAttribute("FacesPlotCenter", true)
+	StrawberitaAnimation.startPlatformIdle(rewardModel, reward)
 
 	return slot
 end

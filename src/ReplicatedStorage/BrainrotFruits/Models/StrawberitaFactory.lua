@@ -1,5 +1,6 @@
 local Config = require(script.Parent.Parent.Configs.BrainrotFruitConfig)
 local BaseStrawberita = require(script.Parent.Strawberita.BaseStrawberita)
+local BlockStyle = require(script.Parent.Parent.Shared.BlockStyle)
 
 local StrawberitaFactory = {}
 
@@ -13,6 +14,19 @@ local BODY_ROLES = {
 	Bow = true,
 	BerryIcon = true,
 	Shoe = true,
+}
+
+local STRAWBERITA_STUD_ROLES = {
+	Body = true,
+	BodyDark = true,
+	BodyShade = true,
+	BerryIcon = true,
+	Bow = true,
+	Leaf = true,
+	LeafShadow = true,
+	Seed = true,
+	Shoe = true,
+	Stem = true,
 }
 
 local function getVariant(variantName)
@@ -194,6 +208,12 @@ local function applyVariant(model, variant)
 			end
 
 			setPartMaterial(descendant, role, variant)
+			if STRAWBERITA_STUD_ROLES[role] then
+				BlockStyle.applyStuddedStyle(descendant)
+			else
+				descendant.TopSurface = Enum.SurfaceType.Smooth
+				descendant.BottomSurface = Enum.SurfaceType.Smooth
+			end
 		end
 	end
 end

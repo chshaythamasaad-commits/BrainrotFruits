@@ -1,7 +1,10 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
 local CatapultModelBuilder = require(script.Parent.CatapultModelBuilder)
 local PlotModelBuilder = require(script.Parent.PlotModelBuilder)
+local brainrotFruits = ReplicatedStorage:WaitForChild("BrainrotFruits")
+local BlockStyle = require(brainrotFruits.Shared.BlockStyle)
 
 local MapBuilder = {}
 
@@ -68,6 +71,7 @@ local function createPart(parent, name, size, cframe, color, material, transpare
 	part.Anchored = true
 	part.TopSurface = Enum.SurfaceType.Smooth
 	part.BottomSurface = Enum.SurfaceType.Smooth
+	BlockStyle.applyStuddedStyle(part)
 	part.Parent = parent
 	return part
 end
@@ -83,6 +87,7 @@ local function createWedge(parent, name, size, cframe, color, material, transpar
 	wedge.Anchored = true
 	wedge.TopSurface = Enum.SurfaceType.Smooth
 	wedge.BottomSurface = Enum.SurfaceType.Smooth
+	BlockStyle.applyStuddedStyle(wedge)
 	wedge.Parent = parent
 	return wedge
 end
@@ -775,6 +780,8 @@ function MapBuilder.build()
 	map:SetAttribute("IslandLayoutVersion", "CompactSocialIsland_V1")
 	map:SetAttribute("PlotPolishVersion", "InvitingPlots_V2")
 	map:SetAttribute("StrawberitaAnimationVersion", "FunBouncyMotion_V1")
+	map:SetAttribute("StrawberitaPlatformAnimationVersion", "PlatformBounce_V1")
+	map:SetAttribute("BlockStyleVersion", BlockStyle.Version)
 	map:SetAttribute("DebugMode", MapBuilder.DebugMode)
 	map.Parent = Workspace
 
@@ -811,6 +818,8 @@ function MapBuilder.build()
 	print("[BrainrotFruits] StrawberitaFunAnimation_V1 active")
 	print("[BrainrotFruits] Strawberita idle/walk animation active")
 	print("[BrainrotFruits] Strawberita return-run trail active")
+	print("[BrainrotFruits] PlatformIdleBounce_V1 active")
+	print("[BrainrotFruits] StuddedBlockStyle_V1 active")
 
 	return map
 end

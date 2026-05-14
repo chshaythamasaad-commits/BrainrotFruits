@@ -267,6 +267,41 @@ Latest multiplayer note: overlapping shared-catapult launches should now fail wi
 5. Secure the reward at the correct base and confirm the celebration plays, the avatar restores, and the reward Tool still appears in Backpack.
 6. Trigger a bonk/loss path and confirm the short wobble/puff plays before cleanup, with no leftover visual model or particles.
 
+## Latest Platform Idle and Studded Style Notes
+
+- Active platform idle animation module: `src/ReplicatedStorage/BrainrotFruits/Shared/StrawberitaAnimation.lua`.
+- Active platform animation start point: `src/ServerScriptService/BrainrotFruits/Map/PlotService.lua`, function `PlotService.placeRewardOnSlot()`.
+- Active studded style utility: `src/ReplicatedStorage/BrainrotFruits/Shared/BlockStyle.lua`.
+- Active generated-model style callers:
+  - `src/ServerScriptService/BrainrotFruits/Map/MapBuilder.lua`
+  - `src/ServerScriptService/BrainrotFruits/Map/PlotModelBuilder.lua`
+  - `src/ServerScriptService/BrainrotFruits/Map/CatapultModelBuilder.lua`
+  - `src/ReplicatedStorage/BrainrotFruits/Models/StrawberitaFactory.lua`
+- `Workspace.BrainrotMap` now sets:
+  - `StrawberitaPlatformAnimationVersion = PlatformBounce_V1`
+  - `BlockStyleVersion = StuddedBlockStyle_V1`
+- Platform reward models receive:
+  - `PlatformIdleAnimation = Active`
+  - `StrawberitaAnimationVersion = PlatformBounce_V1`
+- Platform idle animation keeps models anchored/non-colliding and uses a lightweight Heartbeat loop to `PivotTo()` a fixed base pivot plus tiny bounce/sway offsets, so the model does not drift from its slot.
+- Platform animation cleanup runs when the model leaves the hierarchy; it disconnects loop/ancestry connections and removes temporary sparkle/glow attachments.
+- Studded style only changes surface types. It preserves CFrame, size, color, material, transparency, anchoring, collision, and gameplay behavior.
+- Studded style intentionally keeps invisible zones, water, neon/glow pieces, triggers, text/sign panels, and Strawberita face/eye/cheek/smile parts smooth.
+
+## Latest Platform Idle and Studded Style Verification
+
+1. Press Play and confirm Output prints:
+   - `[BrainrotFruits] PlatformIdleBounce_V1 active`
+   - `[BrainrotFruits] StuddedBlockStyle_V1 active`
+2. In Explorer, confirm `Workspace.BrainrotMap` has:
+   - `StrawberitaPlatformAnimationVersion = PlatformBounce_V1`
+   - `BlockStyleVersion = StuddedBlockStyle_V1`
+3. Secure a Strawberita reward and confirm the displayed model on the fruit slot has `PlatformIdleAnimation = Active`.
+4. Watch the platform reward for subtle bounce/sway and low-rate rarity sparkles; it should stay centered and not drift.
+5. Confirm plot foundations, fruit slots, catapult wood/stone blocks, paths, and platforms show studded top surfaces where appropriate.
+6. Confirm invisible spawn pads, `BaseClaimZone`, catapult interact zone, water, neon/glow pads, and signs remain clean/smooth.
+7. Confirm transformed-player Strawberita still uses one welded visual with no follower model and still grants the reward Tool on successful return.
+
 ## Known Issues
 
 Latest note: push now works from the active `M:\Games\BrainrotFruits-git` clone; older push-auth warnings below may refer to earlier sessions.

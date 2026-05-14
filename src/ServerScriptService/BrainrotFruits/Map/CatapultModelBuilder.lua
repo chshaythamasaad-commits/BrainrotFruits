@@ -1,4 +1,9 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
 local CatapultModelBuilder = {}
+
+local brainrotFruits = ReplicatedStorage:WaitForChild("BrainrotFruits")
+local BlockStyle = require(brainrotFruits.Shared.BlockStyle)
 
 CatapultModelBuilder.Version = "BlockyCatapult_V1"
 CatapultModelBuilder.StatueVersion = "BlockyCatapult_Statue_V1"
@@ -29,6 +34,7 @@ local function createPart(parent, name, size, cframe, color, material, transpare
 	part.Anchored = true
 	part.TopSurface = Enum.SurfaceType.Smooth
 	part.BottomSurface = Enum.SurfaceType.Smooth
+	BlockStyle.applyStuddedStyle(part)
 	part.Parent = parent
 	return part
 end
@@ -45,6 +51,7 @@ local function createCylinder(parent, name, size, cframe, color, material, trans
 	cylinder.Anchored = true
 	cylinder.TopSurface = Enum.SurfaceType.Smooth
 	cylinder.BottomSurface = Enum.SurfaceType.Smooth
+	BlockStyle.applyStuddedStyle(cylinder)
 	cylinder.Parent = parent
 	return cylinder
 end
@@ -60,6 +67,7 @@ local function createWedge(parent, name, size, cframe, color, material, transpar
 	wedge.Anchored = true
 	wedge.TopSurface = Enum.SurfaceType.Smooth
 	wedge.BottomSurface = Enum.SurfaceType.Smooth
+	BlockStyle.applyStuddedStyle(wedge)
 	wedge.Parent = parent
 	return wedge
 end
