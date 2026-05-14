@@ -279,37 +279,47 @@ Latest multiplayer note: overlapping shared-catapult launches should now fail wi
   - `src/ReplicatedStorage/BrainrotFruits/Models/StrawberitaFactory.lua`
 - `Workspace.BrainrotMap` now sets:
   - `StrawberitaPlatformAnimationVersion = PlatformBounce_V1`
-  - `BlockStyleVersion = StuddedBlockStyle_VISIBLE_V2`
+  - `BlockStyleVersion = CleanClassicSurfaces_NoJitter_V2`
+  - `VisualCleanupVersion = NoZFight_V1`
+  - `ArtificialStudGridRemoved = true`
   - `StuddedPartsStyled = <number of generated visible parts styled>`
-  - `StudGridFallbackParts = <number of visible surfaces with physical stud grids>`
-  - `StudGridFallbackStuds = <number of non-colliding visual studs generated>`
+  - `RemovedJitterFakeStudParts = <number of old artificial stud instances removed>`
+  - `VisualOffsetFixes = <number of layered visual offsets applied>`
 - Platform reward models receive:
   - `PlatformIdleAnimation = Active`
   - `StrawberitaAnimationVersion = PlatformBounce_V1`
 - Platform idle animation keeps models anchored/non-colliding and uses a lightweight Heartbeat loop to `PivotTo()` a fixed base pivot plus tiny bounce/sway offsets, so the model does not drift from its slot.
 - Platform animation cleanup runs when the model leaves the hierarchy; it disconnects loop/ancestry connections and removes temporary sparkle/glow attachments.
-- Studded style still sets classic `TopSurface = Studs` and `BottomSurface = Inlet`, but V2 also adds capped low-profile physical `VisibleStud` grids to major generated floors/platforms because Studio did not make legacy surface studs visible enough on the first pass.
-- V2 intentionally targets plot bases, fruit pad stone bases, central hub/plaza panels, launch lane floors, reveal-zone base platforms, catapult bases, collector bases, hut porches, and path panels.
+- Physical `VisibleStud` grids are retired. The active style pass uses built-in surfaces only because the extra tiny parts created visible jitter/flicker in Studio.
+- The cleanup pass removes old `StudGrid`, `VisibleStud`, `FakeStud`, and fallback stud instances before regenerating the active map.
+- V2 uses safe vertical offsets on plot paths, fruit pad bases/glows, central plaza layers, launch lane markings, reveal-zone panels, showcase glow layers, and decorative catapult caps to reduce z-fighting.
 - Studded style intentionally keeps invisible zones, water, neon/glow pieces, triggers, text/sign panels, and Strawberita face/eye/cheek/smile parts smooth.
 
 ## Latest Platform Idle and Studded Style Verification
 
 1. Press Play and confirm Output prints:
    - `[BrainrotFruits] PlatformIdleBounce_V1 active`
-   - `[BrainrotFruits] StuddedBlockStyle_VISIBLE_V2 active`
+   - `[BrainrotFruits] VisualJitterCleanup_V1 active`
+   - `[BrainrotFruits] Fake stud grid disabled and cleaned`
+   - `[BrainrotFruits] Coplanar surface offsets applied`
+   - `[BrainrotFruits] CleanClassicSurfaces_NoJitter_V2 active`
    - `[BrainrotFruits] Studded parts styled: X`
-   - `[BrainrotFruits] Stud grid fallback parts: Y`
+   - `[BrainrotFruits] Removed jitter/fake-stud parts: X`
+   - `[BrainrotFruits] Applied visual offset fixes: Y`
 2. In Explorer, confirm `Workspace.BrainrotMap` has:
    - `StrawberitaPlatformAnimationVersion = PlatformBounce_V1`
-   - `BlockStyleVersion = StuddedBlockStyle_VISIBLE_V2`
+   - `BlockStyleVersion = CleanClassicSurfaces_NoJitter_V2`
+   - `VisualCleanupVersion = NoZFight_V1`
+   - `ArtificialStudGridRemoved = true`
    - `StuddedPartsStyled`
-   - `StudGridFallbackParts`
-   - `StudGridFallbackStuds`
+   - `RemovedJitterFakeStudParts`
+   - `VisualOffsetFixes`
 3. Secure a Strawberita reward and confirm the displayed model on the fruit slot has `PlatformIdleAnimation = Active`.
 4. Watch the platform reward for subtle bounce/sway and low-rate rarity sparkles; it should stay centered and not drift.
-5. Confirm plot foundations, fruit slot stone bases, central plaza floors, the `MAIN LAUNCH` plaza, launch lane floor, and `RevealZoneBase` show visible raised `VisibleStud` details.
-6. Confirm invisible spawn pads, `BaseClaimZone`, catapult interact zone, water, neon/glow pads, and signs remain clean/smooth.
-7. Confirm transformed-player Strawberita still uses one welded visual with no follower model and still grants the reward Tool on successful return.
+5. Confirm no tiny artificial stud parts are scattered across floors/pads/lane panels.
+6. Confirm plot foundations, fruit slot layers, central plaza floors, the `MAIN LAUNCH` plaza, launch lane markings, reveal-zone platform, signs, and glow panels do not flicker/z-fight.
+7. Confirm invisible spawn pads, `BaseClaimZone`, catapult interact zone, water, neon/glow pads, and signs remain clean/smooth.
+8. Confirm transformed-player Strawberita still uses one welded visual with no follower model and still grants the reward Tool on successful return.
 
 ## Latest Temporary Showcase Removal Notes
 

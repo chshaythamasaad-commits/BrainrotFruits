@@ -71,7 +71,7 @@ local function createPart(parent, name, size, cframe, color, material, transpare
 	part.Anchored = true
 	part.TopSurface = Enum.SurfaceType.Smooth
 	part.BottomSurface = Enum.SurfaceType.Smooth
-	BlockStyle.applyStuddedStyle(part, { allowStudGrid = true })
+	BlockStyle.applyStuddedStyle(part)
 	part.Parent = parent
 	return part
 end
@@ -87,7 +87,7 @@ local function createWedge(parent, name, size, cframe, color, material, transpar
 	wedge.Anchored = true
 	wedge.TopSurface = Enum.SurfaceType.Smooth
 	wedge.BottomSurface = Enum.SurfaceType.Smooth
-	BlockStyle.applyStuddedStyle(wedge, { allowStudGrid = true })
+	BlockStyle.applyStuddedStyle(wedge)
 	wedge.Parent = parent
 	return wedge
 end
@@ -390,13 +390,16 @@ local function buildSharedLaunchArea(map)
 	launchArea:ClearAllChildren()
 
 	createPart(launchArea, "LaunchPlaza", Vector3.new(58, 0.4, 42), CFrame.new(0, 0.46, 48), COLORS.Stone, Enum.Material.Slate)
-	createPart(launchArea, "LaunchPlazaInset", Vector3.new(42, 0.18, 27), CFrame.new(0, 0.78, 48), Color3.fromRGB(84, 94, 104), Enum.Material.SmoothPlastic)
+	BlockStyle.noteOffsetFix()
+	createPart(launchArea, "LaunchPlazaInset", Vector3.new(42, 0.16, 27), CFrame.new(0, 0.82, 48), Color3.fromRGB(84, 94, 104), Enum.Material.SmoothPlastic)
 	createPath(launchArea, "HubToLaunchPath", Vector3.new(14, 0.18, 44), CFrame.new(0, 0.9, 28) * CFrame.Angles(0, math.rad(90), 0))
 	createFacingSign(launchArea, "MainLaunchSign", "MAIN LAUNCH", CFrame.new(0, 7.1, 32) * CFrame.Angles(0, math.rad(180), 0), COLORS.Black, Vector3.new(18, 4.2, 0.7))
-	createPart(launchArea, "MainLaunchGlow", Vector3.new(34, 0.15, 6.5), CFrame.new(0, 1.04, 31.5), Color3.fromRGB(255, 198, 51), Enum.Material.Neon, 0.65)
+	BlockStyle.noteOffsetFix()
+	createPart(launchArea, "MainLaunchGlow", Vector3.new(34, 0.1, 6.5), CFrame.new(0, 1.02, 31.5), Color3.fromRGB(255, 198, 51), Enum.Material.Neon, 0.65)
 
 	buildSharedCatapult(launchArea)
-	createTopTextPad(launchArea, "LaunchDirectionArrow", "LAUNCH >>", Vector3.new(18, 0.16, 4.2), CFrame.new(0, 1.12, 69), Color3.fromRGB(234, 74, 108), COLORS.White)
+	BlockStyle.noteOffsetFix()
+	createTopTextPad(launchArea, "LaunchDirectionArrow", "LAUNCH >>", Vector3.new(18, 0.12, 4.2), CFrame.new(0, 1.18, 69), Color3.fromRGB(234, 74, 108), COLORS.White)
 
 	for _, position in ipairs({
 		Vector3.new(-24, 0, 35),
@@ -421,11 +424,13 @@ local function buildSharedLaunchArea(map)
 	lane:SetAttribute("RevealZoneZ", revealZ)
 
 	createPart(lane, "LaneFloor", Vector3.new(24, 0.32, MapBuilder.SharedLaneLength), CFrame.new(0, 0.62, laneCenterZ), Color3.fromRGB(76, 166, 76), Enum.Material.Grass)
-	createPart(lane, "LaneCenterStripe", Vector3.new(1, 0.08, MapBuilder.SharedLaneLength - 10), CFrame.new(0, 0.84, laneCenterZ), Color3.fromRGB(241, 255, 211), Enum.Material.SmoothPlastic)
+	BlockStyle.noteOffsetFix()
+	createPart(lane, "LaneCenterStripe", Vector3.new(1, 0.05, MapBuilder.SharedLaneLength - 10), CFrame.new(0, 0.88, laneCenterZ), Color3.fromRGB(241, 255, 211), Enum.Material.SmoothPlastic)
 	for stripeIndex = 0, 8 do
 		local stripeZ = laneStartZ + 34 + stripeIndex * 58
 		local stripeColor = stripeIndex % 2 == 0 and Color3.fromRGB(92, 190, 92) or Color3.fromRGB(66, 151, 83)
-		createPart(lane, `LaneProgressStrip{stripeIndex}`, Vector3.new(22.4, 0.05, 7.5), CFrame.new(0, 0.88, stripeZ), stripeColor, Enum.Material.SmoothPlastic, 0.08)
+		BlockStyle.noteOffsetFix()
+		createPart(lane, `LaneProgressStrip{stripeIndex}`, Vector3.new(22.4, 0.04, 7.5), CFrame.new(0, 0.94, stripeZ), stripeColor, Enum.Material.SmoothPlastic, 0.08)
 	end
 	for _, x in ipairs({ -12.6, 12.6 }) do
 		createPart(lane, "LaneStoneCurb", Vector3.new(0.8, 0.65, MapBuilder.SharedLaneLength), CFrame.new(x, 1.05, laneCenterZ), COLORS.StoneDark, Enum.Material.Slate)
@@ -442,8 +447,10 @@ local function buildSharedLaunchArea(map)
 
 	for _, distance in ipairs({ 25, 50, 75, 100, 150, 200, 300, 400, 500 }) do
 		local z = 70 + distance
-		createPart(lane, `DistanceLine_{distance}`, Vector3.new(22, 0.12, 0.42), CFrame.new(0, 0.98, z), COLORS.White, Enum.Material.SmoothPlastic)
-		createTopTextPad(lane, `DistanceMarker_{distance}`, tostring(distance), Vector3.new(7, 0.15, 3.2), CFrame.new(0, 1.08, z + 2.4), Color3.fromRGB(58, 139, 68), COLORS.White):SetAttribute("DistanceStuds", distance)
+		BlockStyle.noteOffsetFix()
+		createPart(lane, `DistanceLine_{distance}`, Vector3.new(22, 0.08, 0.42), CFrame.new(0, 1.02, z), COLORS.White, Enum.Material.SmoothPlastic)
+		BlockStyle.noteOffsetFix()
+		createTopTextPad(lane, `DistanceMarker_{distance}`, tostring(distance), Vector3.new(7, 0.12, 3.2), CFrame.new(0, 1.18, z + 2.4), Color3.fromRGB(58, 139, 68), COLORS.White):SetAttribute("DistanceStuds", distance)
 		if distance == 100 or distance == 200 or distance == 300 or distance == 400 or distance == 500 then
 			createMilestoneArch(lane, distance, z + 8, Color3.fromRGB(255, 181, 70):Lerp(Color3.fromRGB(130, 72, 219), math.clamp(distance / 520, 0, 1)))
 		end
@@ -455,7 +462,8 @@ local function buildSharedLaunchArea(map)
 		createLaneFlag(lane, `LaneFlag{index}`, Vector3.new(0, 0, z), side, color)
 		createLamp(lane, `LaneLamp{index}`, Vector3.new(-side * 20.2, 0, z + 12), 0.72)
 		if index % 3 == 0 then
-			createTopTextPad(lane, `LaneArrow{index}`, ">>", Vector3.new(6.4, 0.13, 3.4), CFrame.new(0, 1.06, z + 24), Color3.fromRGB(234, 74, 108), COLORS.White)
+			BlockStyle.noteOffsetFix()
+			createTopTextPad(lane, `LaneArrow{index}`, ">>", Vector3.new(6.4, 0.1, 3.4), CFrame.new(0, 1.16, z + 24), Color3.fromRGB(234, 74, 108), COLORS.White)
 		end
 	end
 
@@ -478,7 +486,8 @@ local function buildSharedLaunchArea(map)
 	end
 
 	createPart(lane, "RevealZoneBase", Vector3.new(58, 2.6, 46), CFrame.new(0, -0.35, revealZ), COLORS.StoneDark, Enum.Material.Slate)
-	local revealPlatform = createTopTextPad(lane, "LandingZone", "REVEAL ZONE", Vector3.new(49, 0.45, 37), CFrame.new(0, 1.16, revealZ), Color3.fromRGB(137, 78, 222), COLORS.White)
+	BlockStyle.noteOffsetFix()
+	local revealPlatform = createTopTextPad(lane, "LandingZone", "REVEAL ZONE", Vector3.new(49, 0.36, 37), CFrame.new(0, 1.26, revealZ), Color3.fromRGB(137, 78, 222), COLORS.White)
 	revealPlatform.Material = Enum.Material.Neon
 	revealPlatform.Transparency = 0.12
 	revealPlatform:SetAttribute("Role", "LandingZone")
@@ -536,14 +545,20 @@ local function buildHub(map)
 
 	createPart(hub, "HubStonePlaza", Vector3.new(82, 0.45, 76), CFrame.new(0, 0.42, -2), COLORS.Stone, Enum.Material.Slate)
 	createPart(hub, "SafeZoneGrass", Vector3.new(56, 0.2, 50), CFrame.new(0, 0.78, -5), COLORS.Grass, Enum.Material.Grass)
-	createPart(hub, "SafeZoneRingNorth", Vector3.new(58, 0.18, 4), CFrame.new(0, 0.94, -31), COLORS.Path, Enum.Material.Sand)
-	createPart(hub, "SafeZoneRingSouth", Vector3.new(58, 0.18, 4), CFrame.new(0, 0.94, 21), COLORS.Path, Enum.Material.Sand)
-	createPart(hub, "SafeZoneRingWest", Vector3.new(4, 0.18, 52), CFrame.new(-29, 0.94, -5), COLORS.Path, Enum.Material.Sand)
-	createPart(hub, "SafeZoneRingEast", Vector3.new(4, 0.18, 52), CFrame.new(29, 0.94, -5), COLORS.Path, Enum.Material.Sand)
-	createPart(hub, "CenterShowcaseRing", Vector3.new(34, 0.16, 34), CFrame.new(0, 1.02, -8), Color3.fromRGB(255, 224, 91), Enum.Material.Neon, 0.72)
+	BlockStyle.noteOffsetFix()
+	createPart(hub, "SafeZoneRingNorth", Vector3.new(58, 0.14, 4), CFrame.new(0, 1.03, -31), COLORS.Path, Enum.Material.Sand)
+	BlockStyle.noteOffsetFix()
+	createPart(hub, "SafeZoneRingSouth", Vector3.new(58, 0.14, 4), CFrame.new(0, 1.03, 21), COLORS.Path, Enum.Material.Sand)
+	BlockStyle.noteOffsetFix()
+	createPart(hub, "SafeZoneRingWest", Vector3.new(4, 0.14, 52), CFrame.new(-29, 1.03, -5), COLORS.Path, Enum.Material.Sand)
+	BlockStyle.noteOffsetFix()
+	createPart(hub, "SafeZoneRingEast", Vector3.new(4, 0.14, 52), CFrame.new(29, 1.03, -5), COLORS.Path, Enum.Material.Sand)
+	BlockStyle.noteOffsetFix()
+	createPart(hub, "CenterShowcaseRing", Vector3.new(34, 0.08, 34), CFrame.new(0, 1.14, -8), Color3.fromRGB(255, 224, 91), Enum.Material.Neon, 0.72)
 	createPart(hub, "CenterShowcaseWalkRing", Vector3.new(42, 0.14, 42), CFrame.new(0, 0.98, -8), COLORS.Path, Enum.Material.Sand)
 
-	createTopTextPad(hub, "SafeZoneTextPad", "SAFE ZONE", Vector3.new(22, 0.16, 5), CFrame.new(0, 1.06, 20), Color3.fromRGB(57, 160, 71), COLORS.White)
+	BlockStyle.noteOffsetFix()
+	createTopTextPad(hub, "SafeZoneTextPad", "SAFE ZONE", Vector3.new(22, 0.12, 5), CFrame.new(0, 1.22, 20), Color3.fromRGB(57, 160, 71), COLORS.White)
 	if MapBuilder.DebugMode then
 		createFacingSign(hub, "MapV2ActiveSign", "MAP V2 ACTIVE", CFrame.new(-34, 5, 34) * CFrame.Angles(0, math.rad(145), 0), Color3.fromRGB(44, 151, 94), Vector3.new(12, 3.4, 0.65))
 	end
@@ -573,8 +588,10 @@ local function buildHub(map)
 
 	local pedestal = createPart(hub, "ShowcasePedestal", Vector3.new(16, 3.2, 16), CFrame.new(0, 2, -8), Color3.fromRGB(50, 53, 70), Enum.Material.SmoothPlastic)
 	pedestal:SetAttribute("Role", "RarestFruitShowcase")
-	createPart(hub, "ShowcaseGlow", Vector3.new(13, 0.24, 13), CFrame.new(0, 3.72, -8), Color3.fromRGB(153, 86, 255), Enum.Material.Neon, 0.18)
-	createPart(hub, "ShowcaseOuterGlow", Vector3.new(22, 0.14, 22), CFrame.new(0, 3.58, -8), Color3.fromRGB(255, 91, 231), Enum.Material.Neon, 0.75)
+	BlockStyle.noteOffsetFix()
+	createPart(hub, "ShowcaseOuterGlow", Vector3.new(22, 0.08, 22), CFrame.new(0, 3.68, -8), Color3.fromRGB(255, 91, 231), Enum.Material.Neon, 0.75)
+	BlockStyle.noteOffsetFix()
+	createPart(hub, "ShowcaseGlow", Vector3.new(13, 0.12, 13), CFrame.new(0, 3.78, -8), Color3.fromRGB(153, 86, 255), Enum.Material.Neon, 0.18)
 	createFacingSign(hub, "ShowcaseSign", "RAREST FRUIT", CFrame.new(0, 6.1, -23.5), Color3.fromRGB(38, 39, 44), Vector3.new(15, 3.5, 0.7), Color3.fromRGB(255, 235, 79))
 
 	for _, position in ipairs({
@@ -765,8 +782,12 @@ local function buildWorldDecorations(map)
 end
 
 function MapBuilder.build()
+	BlockStyle.resetStats()
+
 	local existingMap = Workspace:FindFirstChild(MapBuilder.MapName)
+	local removedArtificialStuds = 0
 	if existingMap then
+		removedArtificialStuds = BlockStyle.removeArtificialStuds(existingMap)
 		existingMap:Destroy()
 	end
 
@@ -781,10 +802,10 @@ function MapBuilder.build()
 	map:SetAttribute("PlotPolishVersion", "InvitingPlots_V2")
 	map:SetAttribute("StrawberitaAnimationVersion", "FunBouncyMotion_V1")
 	map:SetAttribute("StrawberitaPlatformAnimationVersion", "PlatformBounce_V1")
+	map:SetAttribute("VisualCleanupVersion", "NoZFight_V1")
+	map:SetAttribute("ArtificialStudGridRemoved", true)
 	map:SetAttribute("DebugMode", MapBuilder.DebugMode)
 	map.Parent = Workspace
-
-	BlockStyle.resetStats()
 
 	buildIslandBase(map)
 	buildHub(map)
@@ -806,8 +827,8 @@ function MapBuilder.build()
 	local blockStyleStats = BlockStyle.getStats()
 	map:SetAttribute("BlockStyleVersion", BlockStyle.Version)
 	map:SetAttribute("StuddedPartsStyled", blockStyleStats.styledParts)
-	map:SetAttribute("StudGridFallbackParts", blockStyleStats.gridFallbackParts)
-	map:SetAttribute("StudGridFallbackStuds", blockStyleStats.gridStuds)
+	map:SetAttribute("RemovedJitterFakeStudParts", blockStyleStats.artificialStudsRemoved)
+	map:SetAttribute("VisualOffsetFixes", blockStyleStats.offsetFixes)
 
 	print("[BrainrotFruits] MAP V2 ACTIVE - island reference layout loaded")
 	print("[BrainrotFruits] POLISHED PLOT V2 ACTIVE - base reference layout loaded")
@@ -826,9 +847,13 @@ function MapBuilder.build()
 	print("[BrainrotFruits] Strawberita idle/walk animation active")
 	print("[BrainrotFruits] Strawberita return-run trail active")
 	print("[BrainrotFruits] PlatformIdleBounce_V1 active")
-	print("[BrainrotFruits] StuddedBlockStyle_VISIBLE_V2 active")
+	print("[BrainrotFruits] VisualJitterCleanup_V1 active")
+	print("[BrainrotFruits] Fake stud grid disabled and cleaned")
+	print("[BrainrotFruits] Coplanar surface offsets applied")
+	print("[BrainrotFruits] CleanClassicSurfaces_NoJitter_V2 active")
 	print(`[BrainrotFruits] Studded parts styled: {blockStyleStats.styledParts}`)
-	print(`[BrainrotFruits] Stud grid fallback parts: {blockStyleStats.gridFallbackParts}`)
+	print(`[BrainrotFruits] Removed jitter/fake-stud parts: {removedArtificialStuds}`)
+	print(`[BrainrotFruits] Applied visual offset fixes: {blockStyleStats.offsetFixes}`)
 
 	return map
 end

@@ -39,7 +39,7 @@ local function createPart(parent, name, size, cframe, color, material, transpare
 	part.Anchored = true
 	part.TopSurface = Enum.SurfaceType.Smooth
 	part.BottomSurface = Enum.SurfaceType.Smooth
-	BlockStyle.applyStuddedStyle(part, { allowStudGrid = true })
+	BlockStyle.applyStuddedStyle(part)
 	part.Parent = parent
 	return part
 end
@@ -55,7 +55,7 @@ local function createWedge(parent, name, size, cframe, color, material, transpar
 	wedge.Anchored = true
 	wedge.TopSurface = Enum.SurfaceType.Smooth
 	wedge.BottomSurface = Enum.SurfaceType.Smooth
-	BlockStyle.applyStuddedStyle(wedge, { allowStudGrid = true })
+	BlockStyle.applyStuddedStyle(wedge)
 	wedge.Parent = parent
 	return wedge
 end
@@ -232,10 +232,13 @@ local function createFoundation(plot, plotFrame, plotId, theme)
 	base:SetAttribute("PlotId", plotId)
 
 	createPart(foundation, "GrassInterior", Vector3.new(62, 0.16, 47), localToWorld(plotFrame, 0, 0.8, 1.2), COLORS.Grass, Enum.Material.Grass)
-	createPart(foundation, "CenterPath", Vector3.new(8, 0.18, 42), localToWorld(plotFrame, 0, 0.95, -2.5), COLORS.Path, Enum.Material.Sand)
-	createPart(foundation, "PathGateBridge", Vector3.new(12, 0.18, 12), localToWorld(plotFrame, 0, 0.98, -31.5), COLORS.Path, Enum.Material.Sand)
+	BlockStyle.noteOffsetFix()
+	createPart(foundation, "CenterPath", Vector3.new(8, 0.16, 42), localToWorld(plotFrame, 0, 1.0, -2.5), COLORS.Path, Enum.Material.Sand)
+	BlockStyle.noteOffsetFix()
+	createPart(foundation, "PathGateBridge", Vector3.new(12, 0.16, 12), localToWorld(plotFrame, 0, 1.04, -31.5), COLORS.Path, Enum.Material.Sand)
 	for index, z in ipairs({ -20, -12, -4, 4, 12 }) do
-		createPart(foundation, `CenterPathStone{index}`, Vector3.new(5.6, 0.08, 2.4), localToWorld(plotFrame, 0, 1.08, z), COLORS.PathDark, Enum.Material.SmoothPlastic, 0.12)
+		BlockStyle.noteOffsetFix()
+		createPart(foundation, `CenterPathStone{index}`, Vector3.new(5.6, 0.06, 2.4), localToWorld(plotFrame, 0, 1.16, z), COLORS.PathDark, Enum.Material.SmoothPlastic, 0.12)
 	end
 
 	for _, data in ipairs({
@@ -374,8 +377,10 @@ local function createFruitSlots(plot, plotFrame, plotId, theme, debugMode)
 			slot:SetAttribute("SlotIndex", slotIndex)
 			slot:SetAttribute("Occupied", false)
 
-			createPart(visualsFolder, `Slot{slotIndex}StoneBase`, Vector3.new(8.2, 0.5, 6.4), slotFrame * CFrame.new(0, -0.28, 0), COLORS.Stone, Enum.Material.Slate)
-			createPart(visualsFolder, `Slot{slotIndex}GlowInset`, Vector3.new(5.15, 0.2, 3.55), slotFrame * CFrame.new(0, 0.36, 0), COLORS.GlowYellow:Lerp(theme.color, 0.22), Enum.Material.Neon, 0.05)
+			BlockStyle.noteOffsetFix()
+			createPart(visualsFolder, `Slot{slotIndex}StoneBase`, Vector3.new(8.2, 0.38, 6.4), slotFrame * CFrame.new(0, -0.48, 0), COLORS.Stone, Enum.Material.Slate)
+			BlockStyle.noteOffsetFix()
+			createPart(visualsFolder, `Slot{slotIndex}GlowInset`, Vector3.new(5.15, 0.14, 3.55), slotFrame * CFrame.new(0, 0.44, 0), COLORS.GlowYellow:Lerp(theme.color, 0.22), Enum.Material.Neon, 0.05)
 
 			if debugMode then
 				addSmallBillboard(slot, "SlotLabel", `Slot {slotIndex}`, UDim2.fromOffset(92, 24), Vector3.new(0, 2, 0), 45)

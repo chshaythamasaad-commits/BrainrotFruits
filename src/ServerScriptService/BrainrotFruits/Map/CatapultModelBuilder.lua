@@ -34,7 +34,7 @@ local function createPart(parent, name, size, cframe, color, material, transpare
 	part.Anchored = true
 	part.TopSurface = Enum.SurfaceType.Smooth
 	part.BottomSurface = Enum.SurfaceType.Smooth
-	BlockStyle.applyStuddedStyle(part, { allowStudGrid = true })
+	BlockStyle.applyStuddedStyle(part)
 	part.Parent = parent
 	return part
 end
@@ -51,7 +51,7 @@ local function createCylinder(parent, name, size, cframe, color, material, trans
 	cylinder.Anchored = true
 	cylinder.TopSurface = Enum.SurfaceType.Smooth
 	cylinder.BottomSurface = Enum.SurfaceType.Smooth
-	BlockStyle.applyStuddedStyle(cylinder, { allowStudGrid = true })
+	BlockStyle.applyStuddedStyle(cylinder)
 	cylinder.Parent = parent
 	return cylinder
 end
@@ -67,7 +67,7 @@ local function createWedge(parent, name, size, cframe, color, material, transpar
 	wedge.Anchored = true
 	wedge.TopSurface = Enum.SurfaceType.Smooth
 	wedge.BottomSurface = Enum.SurfaceType.Smooth
-	BlockStyle.applyStuddedStyle(wedge, { allowStudGrid = true })
+	BlockStyle.applyStuddedStyle(wedge)
 	wedge.Parent = parent
 	return wedge
 end
@@ -142,7 +142,8 @@ function CatapultModelBuilder.createCatapult(config)
 
 	if decorative and not isShared then
 		createPart(model, "DisplayPedestal", Vector3.new(15.4, 0.55, 17.2) * scale, localFrame(frame, scale, 0, 0.28, 0), COLORS.Stone, Enum.Material.Slate)
-		createPart(model, "PedestalGlowInset", Vector3.new(12.6, 0.18, 14.2) * scale, localFrame(frame, scale, 0, 0.64, 0), Color3.fromRGB(255, 216, 103), Enum.Material.Neon, 0.45)
+		BlockStyle.noteOffsetFix()
+		createPart(model, "PedestalGlowInset", Vector3.new(12.6, 0.12, 14.2) * scale, localFrame(frame, scale, 0, 0.74, 0), Color3.fromRGB(255, 216, 103), Enum.Material.Neon, 0.45)
 	end
 
 	local base = createPart(model, "BaseFrame", Vector3.new(13.5, 1.1, 15.5) * scale, localFrame(frame, scale, 0, 0.55, 0), COLORS.Wood, Enum.Material.WoodPlanks)
@@ -154,7 +155,8 @@ function CatapultModelBuilder.createCatapult(config)
 	for _, x in ipairs({ -6.4, 6.4 }) do
 		for _, z in ipairs({ -6.6, 6.6 }) do
 			createPart(model, "CornerFoot", Vector3.new(2.4, 1.7, 2.4) * scale, localFrame(frame, scale, x, 0.85, z), COLORS.WoodDark, Enum.Material.WoodPlanks)
-			createPart(model, "CornerMetalPlate", Vector3.new(1.15, 0.16, 1.15) * scale, localFrame(frame, scale, x, 1.76, z), COLORS.Metal, Enum.Material.Metal)
+			BlockStyle.noteOffsetFix()
+			createPart(model, "CornerMetalPlate", Vector3.new(1.15, 0.12, 1.15) * scale, localFrame(frame, scale, x, 1.84, z), COLORS.Metal, Enum.Material.Metal)
 		end
 	end
 

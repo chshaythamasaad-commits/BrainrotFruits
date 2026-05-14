@@ -204,3 +204,11 @@ Commit: this documentation pass.
 - Converted selected floor/path/pad surfaces to classic `Plastic` material while preserving color and gameplay physics, so the Roblox block style reads clearly from a normal camera angle.
 - Kept invisible spawns, claim zones, interaction zones, water, neon/glow centers, signs, and text panels smooth and non-studded.
 - Added map diagnostics: `BlockStyleVersion = "StuddedBlockStyle_VISIBLE_V2"`, `StuddedPartsStyled`, `StudGridFallbackParts`, and `StudGridFallbackStuds`.
+
+### Visual jitter cleanup - no fake studs
+
+- Retired the physical stud-grid fallback because the extra tiny surface parts caused visible flicker/jitter in Studio.
+- Updated `Shared/BlockStyle.lua` to `CleanClassicSurfaces_NoJitter_V2`, which uses built-in `TopSurface = Studs` / `BottomSurface = Inlet` only and does not generate artificial stud parts.
+- Added startup cleanup for old generated `StudGrid`, `VisibleStud`, `FakeStud`, and fallback stud instances before regenerating `Workspace.BrainrotMap`.
+- Added safe vertical separation for common z-fighting layers: launch plaza inset/glow/arrow, lane stripes/markers/arrows, reveal-zone landing pad, safe-zone paths/text, showcase glow layers, plot paths/path stones, fruit slot stone/glow layers, and decorative catapult pedestal/metal caps.
+- Marked the map with `VisualCleanupVersion = "NoZFight_V1"`, `ArtificialStudGridRemoved = true`, and `BlockStyleVersion = "CleanClassicSurfaces_NoJitter_V2"`.
