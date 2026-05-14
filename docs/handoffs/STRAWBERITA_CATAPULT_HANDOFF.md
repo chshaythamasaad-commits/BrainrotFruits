@@ -280,7 +280,7 @@ Latest multiplayer note: overlapping shared-catapult launches should now fail wi
 - `Workspace.BrainrotMap` now sets:
   - `StrawberitaPlatformAnimationVersion = PlatformBounce_V1`
   - `BlockStyleVersion = CleanClassicSurfaces_NoJitter_V2`
-  - `VisualCleanupVersion = NoZFight_V1`
+  - `VisualCleanupVersion = ZFightCleanup_Plots_V1`
   - `ArtificialStudGridRemoved = true`
   - `StuddedPartsStyled = <number of generated visible parts styled>`
   - `RemovedJitterFakeStudParts = <number of old artificial stud instances removed>`
@@ -293,6 +293,7 @@ Latest multiplayer note: overlapping shared-catapult launches should now fail wi
 - Physical `VisibleStud` grids are retired. The active style pass uses built-in surfaces only because the extra tiny parts created visible jitter/flicker in Studio.
 - The cleanup pass removes old `StudGrid`, `VisibleStud`, `FakeStud`, and fallback stud instances before regenerating the active map.
 - V2 uses safe vertical offsets on plot paths, fruit pad bases/glows, central plaza layers, launch lane markings, reveal-zone panels, showcase glow layers, and decorative catapult caps to reduce z-fighting.
+- `ZFightCleanup_Plots_V1` additionally separates the overlapping `IslandBase` floor slabs created in `MapBuilder.buildIslandBase()`: `CoreGrass`, `LeftPlotLobe`, `RightPlotLobe`, `BackLobe`, `LaunchPeninsula`, `ExtendedLaunchCauseway`, and `RevealPlatformIsland` no longer share the same visible top plane.
 - Studded style intentionally keeps invisible zones, water, neon/glow pieces, triggers, text/sign panels, and Strawberita face/eye/cheek/smile parts smooth.
 
 ## Latest Platform Idle and Studded Style Verification
@@ -300,6 +301,8 @@ Latest multiplayer note: overlapping shared-catapult launches should now fail wi
 1. Press Play and confirm Output prints:
    - `[BrainrotFruits] PlatformIdleBounce_V1 active`
    - `[BrainrotFruits] VisualJitterCleanup_V1 active`
+   - `[BrainrotFruits] ZFightCleanup_Plots_V1 active`
+   - `[BrainrotFruits] Visible floor overlaps cleaned`
    - `[BrainrotFruits] Fake stud grid disabled and cleaned`
    - `[BrainrotFruits] Coplanar surface offsets applied`
    - `[BrainrotFruits] CleanClassicSurfaces_NoJitter_V2 active`
@@ -309,7 +312,7 @@ Latest multiplayer note: overlapping shared-catapult launches should now fail wi
 2. In Explorer, confirm `Workspace.BrainrotMap` has:
    - `StrawberitaPlatformAnimationVersion = PlatformBounce_V1`
    - `BlockStyleVersion = CleanClassicSurfaces_NoJitter_V2`
-   - `VisualCleanupVersion = NoZFight_V1`
+   - `VisualCleanupVersion = ZFightCleanup_Plots_V1`
    - `ArtificialStudGridRemoved = true`
    - `StuddedPartsStyled`
    - `RemovedJitterFakeStudParts`

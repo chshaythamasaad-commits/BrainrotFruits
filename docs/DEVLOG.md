@@ -212,3 +212,10 @@ Commit: this documentation pass.
 - Added startup cleanup for old generated `StudGrid`, `VisibleStud`, `FakeStud`, and fallback stud instances before regenerating `Workspace.BrainrotMap`.
 - Added safe vertical separation for common z-fighting layers: launch plaza inset/glow/arrow, lane stripes/markers/arrows, reveal-zone landing pad, safe-zone paths/text, showcase glow layers, plot paths/path stones, fruit slot stone/glow layers, and decorative catapult pedestal/metal caps.
 - Marked the map with `VisualCleanupVersion = "NoZFight_V1"`, `ArtificialStudGridRemoved = true`, and `BlockStyleVersion = "CleanClassicSurfaces_NoJitter_V2"`.
+
+### Plot and island z-fighting cleanup
+
+- Marked the generated map with `VisualCleanupVersion = "ZFightCleanup_Plots_V1"`.
+- Fixed the most visible grass flicker by separating overlapping `IslandBase` slabs in `MapBuilder.buildIslandBase()`.
+- The core grass, plot lobes, back lobe, launch peninsula, extended causeway, and reveal island now use distinct top-plane heights instead of sharing the same visible Y plane.
+- Kept gameplay trigger parts, plot assignment, launch lane logic, reward placement, and transformation systems unchanged.
