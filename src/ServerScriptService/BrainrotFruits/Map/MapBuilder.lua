@@ -774,6 +774,7 @@ function MapBuilder.build()
 	map:SetAttribute("CenterAreaVersion", "MainLaunchHub_V1")
 	map:SetAttribute("IslandLayoutVersion", "CompactSocialIsland_V1")
 	map:SetAttribute("PlotPolishVersion", "InvitingPlots_V2")
+	map:SetAttribute("StrawberitaAnimationVersion", "FunBouncyMotion_V1")
 	map:SetAttribute("DebugMode", MapBuilder.DebugMode)
 	map.Parent = Workspace
 
@@ -807,6 +808,9 @@ function MapBuilder.build()
 	print("[BrainrotFruits] Debug visual markers hidden in normal mode")
 	print("[BrainrotFruits] Map decorations polish active")
 	print("[BrainrotFruits] MapPolish_KidFriendly_V1 active")
+	print("[BrainrotFruits] StrawberitaFunAnimation_V1 active")
+	print("[BrainrotFruits] Strawberita idle/walk animation active")
+	print("[BrainrotFruits] Strawberita return-run trail active")
 
 	return map
 end

@@ -209,7 +209,7 @@ Latest multiplayer note: overlapping shared-catapult launches should now fail wi
 - Visible debug markers are gated by `DebugMode`; normal play keeps Output prints and attributes but hides the giant world signs.
 - Preview labels, hazard labels, and return-base labels now have shorter MaxDistance values to reduce clutter.
 - The plot owner billboard was removed; owner updates write to the physical sign surface instead.
-- Movement polish intentionally avoids bounce animation, anchored followers, or server-pivot jitter; it adds only small return-run sparkle particles to the welded transformed Strawberita visual.
+- Movement polish avoids anchored followers, physics forces, or server-pivot jitter; the transformed Strawberita now uses safe weld-offset bounce, walk bob, leaf wiggle, and lightweight particles.
 - Added kid-friendly decorations around the hub, lane edges, reveal island, and empty grass between plots.
 
 ## Latest Center Area Polish Notes
@@ -243,6 +243,29 @@ Latest multiplayer note: overlapping shared-catapult launches should now fail wi
 4. Confirm the main catapult has `LaunchFacingFixed = true` and still launches players forward along the lane.
 5. Confirm `CentralHub` contains `TopLaunchesLeaderboard`, `TopDistanceLeaderboard`, and the `ShowcasePedestal`.
 6. Confirm each plot keeps `PlotModelVersion = BaseReferencePlot_V3` and now also has `PlotPolishVersion = InvitingPlots_V2`.
+
+## Latest Strawberita Animation Polish Notes
+
+- Active animation code path: `src/ServerScriptService/BrainrotFruits/StrawberitaTransformService.lua`.
+- Active transformation path remains `StrawberitaTransformService.beginFlight()`, `syncToCrate()`, `releaseForReturnRun()`, and `finish()`.
+- Active reward outcome hooks are in `src/ServerScriptService/BrainrotFruits/ReturnRunService.lua`, where success calls `playRewardSecured()` and failure calls `playRewardLost()` before cleanup.
+- `Workspace.BrainrotMap` now sets `StrawberitaAnimationVersion = FunBouncyMotion_V1`.
+- The temporary transform still creates exactly one `TransformedStrawberita_{UserId}` visual and welds it to `HumanoidRootPart`; animation changes only the weld offset and internal part weld offsets.
+- Idle/walk movement detection uses `Humanoid.MoveDirection.Magnitude > 0.08`.
+- Cleanup disconnects the Heartbeat animation connection, disconnects the character-removing cleanup connection, destroys the transformed visual model, restores avatar transparency/movement, and sets `IsTransformedStrawberita = false`.
+- Return-run particles are attached to the transformed visual root and are destroyed with the visual model.
+
+## Latest Strawberita Animation Studio Verification
+
+1. Press Play and confirm Output prints:
+   - `[BrainrotFruits] StrawberitaFunAnimation_V1 active`
+   - `[BrainrotFruits] Strawberita idle/walk animation active`
+   - `[BrainrotFruits] Strawberita return-run trail active`
+2. In Explorer, confirm `Workspace.BrainrotMap` has `StrawberitaAnimationVersion = FunBouncyMotion_V1`.
+3. Launch from `MAIN LAUNCH` and confirm the player becomes a single Strawberita visual, with no second follower model behind the player.
+4. During return run, stand still to see a gentle idle bounce, move to see quicker walk bob/foot puffs, and confirm the sparkle trail follows cleanly.
+5. Secure the reward at the correct base and confirm the celebration plays, the avatar restores, and the reward Tool still appears in Backpack.
+6. Trigger a bonk/loss path and confirm the short wobble/puff plays before cleanup, with no leftover visual model or particles.
 
 ## Known Issues
 

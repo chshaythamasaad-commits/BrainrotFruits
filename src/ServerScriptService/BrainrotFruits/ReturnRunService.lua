@@ -113,6 +113,10 @@ function ReturnRunService.fail(player, reason, shouldRespawn)
 		rewardModel:Destroy()
 	end
 
+	if StrawberitaTransformService.playRewardLost(player) then
+		task.wait(0.35)
+	end
+
 	clearState(player, state)
 	fireStatus(player, {
 		status = "Lost",
@@ -145,6 +149,10 @@ function ReturnRunService.claim(player)
 	end
 
 	FXService.emitBurst(placedSlot.Parent, placedSlot.Position + Vector3.new(0, 3, 0), Color3.fromRGB(103, 255, 139), "RewardSecuredBurst", 34)
+	if StrawberitaTransformService.playRewardSecured(player) then
+		task.wait(0.45)
+	end
+
 	clearState(player, state)
 	fireStatus(player, {
 		status = "Secured",

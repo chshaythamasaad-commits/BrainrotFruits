@@ -179,3 +179,11 @@ Commit: this documentation pass.
 - Polished the rarest-fruit showcase with a cleaner `RAREST FRUIT` sign, glow platform, and central presentation ring.
 - Moved shop/sell/upgrades/index booths out to side placements so they do not block the launch, leaderboards, or showcase.
 - Added plot polish details including nicer gate trim, path stones, hut trim, welcome mats, gate flowers, bushes, and collector-side crates.
+
+### Strawberita animation polish - fun bouncy motion
+
+- Marked the generated map with `StrawberitaAnimationVersion = "FunBouncyMotion_V1"`.
+- Reworked the temporary transformed Strawberita visual to use an adjustable weld offset instead of a fixed `WeldConstraint`, keeping the visual attached to the player's real root without creating a follower model.
+- Added visual-only idle bounce, walk bob, leaf wiggle, face pop, launch stretch/puff, return-run trail, secured celebration, and bonked wobble effects.
+- Movement animation is driven by `Humanoid.MoveDirection.Magnitude` and only changes weld offsets, part offsets, and lightweight particles.
+- `ReturnRunService` now calls secured/lost animation hooks before cleaning up the transform, while reward placement and Tool grants remain unchanged.
