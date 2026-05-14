@@ -39,7 +39,7 @@ local function createPart(parent, name, size, cframe, color, material, transpare
 	part.Anchored = true
 	part.TopSurface = Enum.SurfaceType.Smooth
 	part.BottomSurface = Enum.SurfaceType.Smooth
-	BlockStyle.applyStuddedStyle(part)
+	BlockStyle.applyStuddedStyle(part, { allowStudGrid = true })
 	part.Parent = parent
 	return part
 end
@@ -55,7 +55,7 @@ local function createWedge(parent, name, size, cframe, color, material, transpar
 	wedge.Anchored = true
 	wedge.TopSurface = Enum.SurfaceType.Smooth
 	wedge.BottomSurface = Enum.SurfaceType.Smooth
-	BlockStyle.applyStuddedStyle(wedge)
+	BlockStyle.applyStuddedStyle(wedge, { allowStudGrid = true })
 	wedge.Parent = parent
 	return wedge
 end

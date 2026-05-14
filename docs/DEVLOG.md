@@ -196,3 +196,11 @@ Commit: this documentation pass.
 - Added `Shared/BlockStyle.lua` and routed `MapBuilder`, `PlotModelBuilder`, and `CatapultModelBuilder` generated parts through it for classic studded top surfaces where appropriate.
 - Kept invisible zones, water, neon/glow parts, text/sign surfaces, and Strawberita face/eye/mouth pieces smooth for readability.
 - `StrawberitaFactory` now applies studs only to suitable Strawberita body/leaf/seed/accessory blocks, preserving the clean face panel and expression.
+
+### Visible studded block style fix
+
+- Updated `Shared/BlockStyle.lua` to `StuddedBlockStyle_VISIBLE_V2` after Studio showed that legacy `TopSurface = Studs` was not visually obvious enough on the generated materials.
+- Added capped physical `VisibleStud` grid details on important generated floors and platforms, including plot bases, fruit pad stone bases, central plaza floors, launch plaza panels, lane floors, path panels, catapult bases, collector bases, hut porches, and reveal-zone base platforms.
+- Converted selected floor/path/pad surfaces to classic `Plastic` material while preserving color and gameplay physics, so the Roblox block style reads clearly from a normal camera angle.
+- Kept invisible spawns, claim zones, interaction zones, water, neon/glow centers, signs, and text panels smooth and non-studded.
+- Added map diagnostics: `BlockStyleVersion = "StuddedBlockStyle_VISIBLE_V2"`, `StuddedPartsStyled`, `StudGridFallbackParts`, and `StudGridFallbackStuds`.

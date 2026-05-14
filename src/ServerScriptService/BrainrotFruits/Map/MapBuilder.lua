@@ -71,7 +71,7 @@ local function createPart(parent, name, size, cframe, color, material, transpare
 	part.Anchored = true
 	part.TopSurface = Enum.SurfaceType.Smooth
 	part.BottomSurface = Enum.SurfaceType.Smooth
-	BlockStyle.applyStuddedStyle(part)
+	BlockStyle.applyStuddedStyle(part, { allowStudGrid = true })
 	part.Parent = parent
 	return part
 end
@@ -87,7 +87,7 @@ local function createWedge(parent, name, size, cframe, color, material, transpar
 	wedge.Anchored = true
 	wedge.TopSurface = Enum.SurfaceType.Smooth
 	wedge.BottomSurface = Enum.SurfaceType.Smooth
-	BlockStyle.applyStuddedStyle(wedge)
+	BlockStyle.applyStuddedStyle(wedge, { allowStudGrid = true })
 	wedge.Parent = parent
 	return wedge
 end
@@ -781,9 +781,10 @@ function MapBuilder.build()
 	map:SetAttribute("PlotPolishVersion", "InvitingPlots_V2")
 	map:SetAttribute("StrawberitaAnimationVersion", "FunBouncyMotion_V1")
 	map:SetAttribute("StrawberitaPlatformAnimationVersion", "PlatformBounce_V1")
-	map:SetAttribute("BlockStyleVersion", BlockStyle.Version)
 	map:SetAttribute("DebugMode", MapBuilder.DebugMode)
 	map.Parent = Workspace
+
+	BlockStyle.resetStats()
 
 	buildIslandBase(map)
 	buildHub(map)
@@ -802,6 +803,12 @@ function MapBuilder.build()
 	getOrCreateFolder(map, "RevealedRewards")
 	getOrCreateFolder(map, "ChaosHazards")
 
+	local blockStyleStats = BlockStyle.getStats()
+	map:SetAttribute("BlockStyleVersion", BlockStyle.Version)
+	map:SetAttribute("StuddedPartsStyled", blockStyleStats.styledParts)
+	map:SetAttribute("StudGridFallbackParts", blockStyleStats.gridFallbackParts)
+	map:SetAttribute("StudGridFallbackStuds", blockStyleStats.gridStuds)
+
 	print("[BrainrotFruits] MAP V2 ACTIVE - island reference layout loaded")
 	print("[BrainrotFruits] POLISHED PLOT V2 ACTIVE - base reference layout loaded")
 	print("[BrainrotFruits] InvisibleCenterSpawn_V1 active")
@@ -819,7 +826,9 @@ function MapBuilder.build()
 	print("[BrainrotFruits] Strawberita idle/walk animation active")
 	print("[BrainrotFruits] Strawberita return-run trail active")
 	print("[BrainrotFruits] PlatformIdleBounce_V1 active")
-	print("[BrainrotFruits] StuddedBlockStyle_V1 active")
+	print("[BrainrotFruits] StuddedBlockStyle_VISIBLE_V2 active")
+	print(`[BrainrotFruits] Studded parts styled: {blockStyleStats.styledParts}`)
+	print(`[BrainrotFruits] Stud grid fallback parts: {blockStyleStats.gridFallbackParts}`)
 
 	return map
 end
