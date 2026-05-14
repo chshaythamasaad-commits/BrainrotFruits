@@ -1,8 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local brainrotFruits = ReplicatedStorage:WaitForChild("BrainrotFruits")
-local CharacterAnimationService = require(brainrotFruits.Modules.CharacterAnimationService)
-local CharacterModelFactory = require(brainrotFruits.Modules.CharacterModelFactory)
+local CharacterAnimationService = require(brainrotFruits.Modules.BrainrotAnimationService)
+local CharacterModelFactory = require(brainrotFruits.Modules.BrainrotModelFactory)
 local CharacterRegistry = require(brainrotFruits.Modules.CharacterRegistry)
 local CharacterVariantService = require(brainrotFruits.Modules.CharacterVariantService)
 local RarityConfig = require(brainrotFruits.Shared.RarityConfig)
@@ -20,7 +20,7 @@ local BASE_VALUE = 1100
 
 local TOOL_BASE_COLORS = {
 	Strawberita = Color3.fromRGB(239, 52, 61),
-	BananitoBandito = Color3.fromRGB(255, 218, 72),
+	BananaBandito = Color3.fromRGB(255, 218, 72),
 	CoconuttoBonkini = Color3.fromRGB(116, 73, 43),
 	LemonaldoSprintini = Color3.fromRGB(255, 223, 63),
 	WatermeloniWobblino = Color3.fromRGB(72, 178, 75),
@@ -29,7 +29,7 @@ local TOOL_BASE_COLORS = {
 
 local TOOL_ACCENT_COLORS = {
 	Strawberita = Color3.fromRGB(93, 181, 28),
-	BananitoBandito = Color3.fromRGB(112, 72, 39),
+	BananaBandito = Color3.fromRGB(112, 72, 39),
 	CoconuttoBonkini = Color3.fromRGB(255, 236, 190),
 	LemonaldoSprintini = Color3.fromRGB(56, 190, 92),
 	WatermeloniWobblino = Color3.fromRGB(221, 64, 55),
@@ -38,7 +38,7 @@ local TOOL_ACCENT_COLORS = {
 
 local TOOL_INITIALS = {
 	Strawberita = "SB",
-	BananitoBandito = "BB",
+	BananaBandito = "BB",
 	CoconuttoBonkini = "CB",
 	LemonaldoSprintini = "LS",
 	WatermeloniWobblino = "WW",
@@ -105,8 +105,10 @@ end
 local function getRewardEconomy(character, variant)
 	local incomeMultiplier = (character.IncomeMultiplier or 1) * (variant.IncomeMultiplierModifier or 1)
 	local visualTier = variant.VisualTier or 1
-	local income = math.max(1, math.floor(BASE_INCOME_PER_SECOND * incomeMultiplier + 0.5))
-	local value = math.max(25, math.floor(BASE_VALUE * incomeMultiplier * visualTier + 0.5))
+	local baseIncome = character.BaseIncome or BASE_INCOME_PER_SECOND
+	local baseValue = character.SellValue or BASE_VALUE
+	local income = math.max(1, math.floor(baseIncome * incomeMultiplier + 0.5))
+	local value = math.max(25, math.floor(baseValue * incomeMultiplier * visualTier + 0.5))
 	return income, value, incomeMultiplier
 end
 

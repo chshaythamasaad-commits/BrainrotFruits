@@ -1,5 +1,5 @@
 local CharacterRegistry = require(script.Parent.Parent.Modules.CharacterRegistry)
-local CharacterModelFactory = require(script.Parent.Parent.Modules.CharacterModelFactory)
+local CharacterModelFactory = require(script.Parent.Parent.Modules.BrainrotModelFactory)
 
 local StrawberitaFactory = {}
 

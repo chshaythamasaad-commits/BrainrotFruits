@@ -2,8 +2,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Workspace = game:GetService("Workspace")
 
 local brainrotFruits = ReplicatedStorage:WaitForChild("BrainrotFruits")
-local CharacterAnimationService = require(brainrotFruits.Modules.CharacterAnimationService)
-local CharacterModelFactory = require(brainrotFruits.Modules.CharacterModelFactory)
+local CharacterAnimationService = require(brainrotFruits.Modules.BrainrotAnimationService)
+local CharacterModelFactory = require(brainrotFruits.Modules.BrainrotModelFactory)
 local CharacterRegistry = require(brainrotFruits.Modules.CharacterRegistry)
 
 local CharacterSpawnService = {}
@@ -57,6 +57,47 @@ local function getPreviewPivot(options, index, row)
 	return origin * CFrame.new(((index or 1) - 1) * spacingX, 0, ((row or 1) - 1) * spacingZ)
 end
 
+local function createPreviewPad(parent, model, pivot, character, variantId)
+	local padFolder = parent:FindFirstChild("PreviewPads")
+	if not padFolder then
+		padFolder = Instance.new("Folder")
+		padFolder.Name = "PreviewPads"
+		padFolder.Parent = parent
+	end
+
+	local baseColor = character.ColorTheme or Color3.fromRGB(255, 112, 168)
+	local pad = Instance.new("Part")
+	pad.Name = `{model.Name}_Pad`
+	pad.Size = Vector3.new(5.8, 0.34, 4.6)
+	pad.CFrame = pivot * CFrame.new(0, -2.15, 0)
+	pad.Color = Color3.fromRGB(39, 42, 54)
+	pad.Material = Enum.Material.SmoothPlastic
+	pad.Anchored = true
+	pad.CanCollide = false
+	pad.CanTouch = false
+	pad.CanQuery = false
+	pad:SetAttribute("DebugPreview", true)
+	pad:SetAttribute("CharacterId", character.Id)
+	pad:SetAttribute("VariantId", variantId)
+	pad.Parent = padFolder
+
+	local glow = Instance.new("Part")
+	glow.Name = `{model.Name}_PadGlow`
+	glow.Size = Vector3.new(4.6, 0.08, 3.55)
+	glow.CFrame = pad.CFrame * CFrame.new(0, 0.22, 0)
+	glow.Color = baseColor
+	glow.Material = Enum.Material.Neon
+	glow.Transparency = 0.28
+	glow.Anchored = true
+	glow.CanCollide = false
+	glow.CanTouch = false
+	glow.CanQuery = false
+	glow:SetAttribute("DebugPreview", true)
+	glow.Parent = padFolder
+
+	return pad
+end
+
 function CharacterSpawnService.clearPreviewModels(parent)
 	printVersion()
 
@@ -86,6 +127,9 @@ function CharacterSpawnService.spawnPreview(characterId, variantId, options)
 	model.Name = `{normalizedVariantId}_{character.Id}_Preview`
 	model:SetAttribute("DebugPreview", true)
 	model.Parent = parent
+	if options.pad ~= false then
+		createPreviewPad(parent, model, options.pivot or CFrame.new(), character, normalizedVariantId)
+	end
 	CharacterAnimationService.startIdle(model, {
 		characterId = character.Id,
 		variantName = normalizedVariantId,

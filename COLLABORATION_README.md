@@ -12,9 +12,10 @@ This branch has multiple people and Codex instances contributing. Treat existing
 
 ## Current Branch Context
 
-- Active branch: `feature/strawberita-catapult-slice`.
-- Current playable slice: shared catapult, crate launch, Strawberita reveal, return-run, plot claim, bouncy/studded visual polish.
-- Important handoff file: `docs/handoffs/STRAWBERITA_CATAPULT_HANDOFF.md`.
+- Active Git branch in the clean repo: `main`.
+- Current playable slice: shared catapult, crate launch, roster-based Brainrot Fruit reveal, return-run, plot claim, display placement, tool reward, and bouncy/studded visual polish.
+- Important handoff file: `CODEX_HANDOFF.md`.
+- Current character source of truth: `references/modelreferences/CharactersRefs`.
 
 ## Temporary Showcase Removed
 

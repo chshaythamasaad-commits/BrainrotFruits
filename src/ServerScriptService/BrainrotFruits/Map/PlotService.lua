@@ -5,7 +5,7 @@ local MapBuilder = require(script.Parent.MapBuilder)
 local CatapultBinder = require(script.Parent.CatapultBinder)
 local DisplayPlatformService = require(script.Parent.Parent.Gameplay.DisplayPlatformService)
 local brainrotFruits = ReplicatedStorage:WaitForChild("BrainrotFruits")
-local CharacterAnimationService = require(brainrotFruits.Modules.CharacterAnimationService)
+local CharacterAnimationService = require(brainrotFruits.Modules.BrainrotAnimationService)
 
 local PlotService = {}
 

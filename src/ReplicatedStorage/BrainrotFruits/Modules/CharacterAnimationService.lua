@@ -642,7 +642,7 @@ function CharacterAnimationService.playIntro(model, reward)
 	elseif characterId == "LemonaldoSprintini" then
 		runnerFootTap(state)
 		emitSparkles(state, "LemonaldoIntroSpeed", 18, Vector3.new(0, -1.45, 0.35), NumberRange.new(1.0, 2.2))
-	elseif characterId == "BananitoBandito" then
+	elseif characterId == "BananaBandito" or characterId == "BananitoBandito" then
 		tweenProperty(state, "IntroStumble", state.root, 0.2, { CFrame = state.baseRootCFrame * CFrame.new(-0.18, 0.12, 0) * CFrame.Angles(0, 0, math.rad(-6)) }, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
 		waitWhileActive(state, 0.2)
 		banditHatTip(state)

@@ -58,6 +58,40 @@ local PRESENTATION_COLORS = {
 		revealCount = 34,
 		securedCount = 30,
 	},
+	Diamond = {
+		auraColor = Color3.fromRGB(162, 239, 255),
+		sparkleColorA = Color3.fromRGB(245, 255, 255),
+		sparkleColorB = Color3.fromRGB(105, 214, 255),
+		burstColorA = Color3.fromRGB(250, 255, 255),
+		burstColorB = Color3.fromRGB(112, 224, 255),
+		platformRate = 3.1,
+		platformBounce = 0.2,
+		platformLightBrightness = 0.38,
+		platformDisplayLightBrightness = 0.34,
+		platformLightRange = 8.5,
+		trailRate = 15,
+		trailIdleRate = 3.5,
+		toolRate = 3.2,
+		revealCount = 38,
+		securedCount = 32,
+	},
+	Galaxy = {
+		auraColor = Color3.fromRGB(129, 81, 255),
+		sparkleColorA = Color3.fromRGB(116, 245, 255),
+		sparkleColorB = Color3.fromRGB(211, 102, 255),
+		burstColorA = Color3.fromRGB(121, 246, 255),
+		burstColorB = Color3.fromRGB(155, 82, 255),
+		platformRate = 4.2,
+		platformBounce = 0.25,
+		platformLightBrightness = 0.46,
+		platformDisplayLightBrightness = 0.4,
+		platformLightRange = 10,
+		trailRate = 18,
+		trailIdleRate = 4,
+		toolRate = 4,
+		revealCount = 46,
+		securedCount = 38,
+	},
 	Rainbow = {
 		auraColor = Color3.fromRGB(104, 238, 255),
 		sparkleColorA = Color3.fromRGB(255, 104, 166),
@@ -242,6 +276,7 @@ function CharacterVariantService.applyVariantVFX(model, characterId, variantId, 
 	for _, descendant in ipairs(model:GetDescendants()) do
 		if descendant:IsA("BasePart") then
 			local colorRole = descendant:GetAttribute("VariantColorRole")
+			local keepReadableMaterial = colorRole == "Face" or colorRole == "Eye" or colorRole == "Skin"
 			if colorRole ~= "Face" and colorRole ~= "Eye" and colorRole ~= "Skin" then
 				local color = variantDefinition.Palette[colorRole]
 				descendant.Color = normalizedVariantId == "Base" and getPartBaseColor(descendant) or (color or getPartBaseColor(descendant))
@@ -249,7 +284,7 @@ function CharacterVariantService.applyVariantVFX(model, characterId, variantId, 
 				descendant.Color = getPartBaseColor(descendant)
 			end
 
-			descendant.Material = normalizedVariantId == "Base" and getPartBaseMaterial(descendant) or (variantDefinition.Material or getPartBaseMaterial(descendant))
+			descendant.Material = (normalizedVariantId == "Base" or keepReadableMaterial) and getPartBaseMaterial(descendant) or (variantDefinition.Material or getPartBaseMaterial(descendant))
 		end
 	end
 

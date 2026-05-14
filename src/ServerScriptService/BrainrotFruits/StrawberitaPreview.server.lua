@@ -25,6 +25,7 @@ end
 local statue = CharacterSpawnService.spawnPreview("DragonfruttoDrippo", "Cosmic", {
 	parent = showcaseFolder,
 	label = false,
+	pad = false,
 	scale = 2.25,
 	pivot = CFrame.new(0, 7.25, -8) * CFrame.Angles(0, math.rad(180), 0),
 })

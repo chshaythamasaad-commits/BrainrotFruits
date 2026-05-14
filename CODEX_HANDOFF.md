@@ -1,188 +1,197 @@
-# BrainrotFruits Codex Handoff
+# BrainrotFruits Handoff
 
-## Project Summary
+## Current Pass
 
-BrainrotFruits is a Roblox/Rojo project for a game currently called "Catapult a Brainrot Fruit" / "BrainrotFruits."
+Restored and polished the first real Brainrot Fruits roster from the current voxel/chibi reference pack:
 
-Core concept:
+- `references/modelreferences/CharactersRefs/Characters/BananitoBandito`
+- `references/modelreferences/CharactersRefs/Characters/CoconuttoBonkini`
+- `references/modelreferences/CharactersRefs/Characters/DragonfruttoDrippo`
+- `references/modelreferences/CharactersRefs/Characters/LemonaldoSprintini`
+- `references/modelreferences/CharactersRefs/Characters/Strawberita`
+- `references/modelreferences/CharactersRefs/Characters/WatermeloniWobblino`
 
-Players use a catapult to launch a Brainrot Crate across a map. The distance reached determines rarity. The crate opens into a brainrot fruit character. A cartoon chaos hazard such as a banana monkey, chef knife curse, blender blade wall, or similar chase mechanic spawns. The player must survive, return, or claim the reward, place the brainrot fruit on their plot, earn money, and upgrade their catapult, luck, speed, and slots.
+The runtime uses canonical `BananaBandito` as the character id, with `BananitoBandito` preserved as a registry alias because the reference folder is still named `BananitoBandito`.
 
-Core loop:
+## Restored Structure
 
-`Catapult -> Crash -> Reveal -> Escape -> Collect -> Place -> Earn -> Upgrade`
+- Rojo project maps `ReplicatedStorage`, `ServerScriptService`, `StarterGui`, `StarterPlayer`, and `Workspace`.
+- No nested duplicate `.git` folders were found.
+- `CharacterRegistry.lua` now owns the six-character roster, source reference paths, income values, sell values, variant definitions, weights, and animation styles.
+- `BrainrotModelFactory.lua` is the active polished model factory.
+- `CharacterModelFactory.lua` remains as a compatibility shim for older require paths.
+- `BrainrotAnimationService.lua` is the active animation-service wrapper.
+- `CharacterAnimationService.lua` still contains the unique idle/intro implementation for the roster.
 
-## Design Direction
+## Character Roster
 
-BrainrotFruits is inspired by the general simulator loop of games like Kick a Lucky Block, but we do not want to fully copy it.
+Each registry entry includes:
 
-The unique hook should be:
+- `Id`
+- `DisplayName`
+- `Rarity`
+- `BaseFruit`
+- `BaseIncome`
+- `SellValue`
+- `ColorTheme`
+- `ShortDescription`
+- `ReferencePath`
+- `ReferenceFolderPath`
+- `BaseReferenceImagePath`
+- `NotesPath`
+- `IncomeMultiplier`
+- `Weight`
+- `StyleTags`
+- `AnimationStyle`
+- `Variants` / `VariantDefinitions`
 
-- Catapult instead of kicking
-- Brainrot fruit characters instead of lucky blocks
-- Distance plus survival determines reward value
-- Cartoon chaos hazards after landing
-- Collectible brainrot fruits generate money on player plots
+Supported shared variants:
 
-## Current Theme
+- `Base`
+- `Golden`
+- `Diamond`
+- `Galaxy`
+- `Rainbow`
+- `Toxic`
+- `Cosmic`
 
-The theme is TikTok/Italian-brainrot-inspired fruit characters. Use original parody-style brainrot fruits and characters rather than relying on exact disputed or copyrighted meme characters.
+Aliases preserve older reward data names:
 
-Main early character focus:
+- `Normal` -> `Base`
+- `Shiny` -> `Rainbow`
+- `BananitoBandito` -> `BananaBandito`
 
-- Strawberita / Strawberina style fruit mascot
-- Bananito Bonkito
-- Applelini Slappelini
-- Orangutango Mango
-- Pineapplino Spinnino
-- Dragonfrutto Delirium
-- Crocodilo Watermelono
-- The Forbidden Smoothie
+## Model Factory
 
-Current reference files are stored in the `references/` folder.
+Active module:
 
-## Technical Stack
+`src/ReplicatedStorage/BrainrotFruits/Modules/BrainrotModelFactory.lua`
 
-- Roblox Studio
-- Rojo
-- Aftman
-- Luau
-- GitHub repo: https://github.com/chshaythamasaad-commits/BrainrotFruits.git
+The factory creates Roblox-native, part-based placeholder mascots for all six characters. No external meshes or uploaded assets are required.
 
-## How To Run Locally
+Visual polish now includes:
 
-1. Clone the repo:
+- rounder toy-like silhouettes using ball/cylinder/wedge parts
+- large readable face panels and eyes
+- chibi arms, legs, shoes, and accessories
+- character-specific props such as hat, bandana, club, sunglasses, chain, sumo belt, bow, leaves, and rind stripes
+- per-part `AnimationRole` and `VariantColorRole` attributes for animation and variant styling
 
-   ```powershell
-   git clone https://github.com/chshaythamasaad-commits/BrainrotFruits.git
-   ```
+Final imported meshes can replace these builders later by swapping the character builder inside `BrainrotModelFactory` while preserving model attributes and `PrimaryPart`.
 
-2. Open the folder in VS Code.
-3. Install tools:
+## Variants
 
-   ```powershell
-   aftman install
-   ```
+Active module:
 
-4. Start Rojo:
+`src/ReplicatedStorage/BrainrotFruits/Modules/CharacterVariantService.lua`
 
-   ```powershell
-   rojo serve default.project.json
-   ```
+Variants are data-driven through `CharacterRegistry.VariantDefinitions`.
 
-5. Open Roblox Studio.
-6. Open the Rojo plugin.
-7. Connect to the running Rojo server.
+- `Base`: original fruit colors, no aura.
+- `Golden`: gold palette, metal body accents, subtle sparkles.
+- `Diamond`: icy blue-white palette, crystalline material on non-face parts, glints.
+- `Galaxy`: purple/blue cosmic palette, star particles.
+- `Rainbow`: color cycling on fruit/accent parts with sparkles.
+- `Toxic`: lime/purple palette with bubble-style particles.
+- `Cosmic`: high-tier purple/blue star aura.
 
-## Current File Structure
+Faces, eyes, and skin panels intentionally keep their base material so variants stay readable.
 
-Important files and folders:
+## Animation
 
-- `src/`
-- `src/client/`
-- `src/server/`
-- `src/shared/`
-- `references/`
-- `aftman.toml`
-- `default.project.json`
-- `README.md`
-- `start-rojo.cmd`
-- `start-rojo.ps1`
-- `CODEX_HANDOFF.md`
+Active wrapper:
 
-## Current Implementation Status
+`src/ReplicatedStorage/BrainrotFruits/Modules/BrainrotAnimationService.lua`
 
-This clean repo is currently a foundation project, not a playable prototype yet.
+Implementation:
 
-What exists now:
+`src/ReplicatedStorage/BrainrotFruits/Modules/CharacterAnimationService.lua`
 
-- Rojo project file at `default.project.json`
-- Aftman tool config at `aftman.toml`
-- Starter server script at `src/server/init.server.luau`
-- Starter client script at `src/client/init.client.luau`
-- Basic shared module at `src/shared/init.luau`
-- Rojo helper scripts: `start-rojo.cmd` and `start-rojo.ps1`
-- Strawberita reference material under `references/`
+Unique idle styles:
 
-What is not implemented yet in this clean repo:
+- Strawberita: cute wave, bounce, leaf/bow life.
+- BananaBandito: hat tip, suspicious look, side-step feel.
+- CoconuttoBonkini: club raise, chunky stomp, dust puff.
+- LemonaldoSprintini: fast foot taps and runner dust.
+- WatermeloniWobblino: slow wobble, stomp, heavy bounce.
+- DragonfruttoDrippo: shades adjustment, cool nod, sparkle flash.
 
-- No catapult gameplay system yet
-- No remotes yet
-- No player data service yet
-- No plot assignment yet
-- No map builder yet
-- No rarity/reward service yet
-- No inventory or saving yet
-- No production UI yet
+Idle cleanup is handled by `CharacterAnimationService.stopIdle(model)`, which cancels tweens/connections, restores original part CFrames, and removes transient VFX.
 
-## Next Recommended Implementation Pass
+## Preview Gallery
 
-Build the first playable foundation in small passes:
+Server script:
 
-1. Server/client folder structure
-2. Remotes
-3. Player leaderstats
-4. Player data service
-5. Map setup service
-6. Plot assignment
-7. Catapult launch test
-8. Distance-to-rarity calculation
-9. Basic UI
-10. Debug messages
+`src/ServerScriptService/BrainrotFruits/StrawberitaPreview.server.lua`
 
-Do not implement full inventory, saving, trading, rebirth, monetization, or advanced modeling yet unless specifically asked.
+Preview/debug service:
 
-## Development Rules
+`src/ServerScriptService/BrainrotFruits/CharacterSpawnService.lua`
 
-- Work in small passes.
-- After each pass, test in Roblox Studio.
-- Keep systems modular.
-- Use `ServerScriptService` for server logic.
-- Use `ReplicatedStorage` for remotes/shared modules.
-- Use `StarterGui` or client scripts for UI.
-- Avoid deprecated `BodyVelocity`.
-- Prefer `TweenService`, constraints, or `AssemblyLinearVelocity` where appropriate.
-- Add clear debug prints.
-- Update `CODEX_HANDOFF.md` after each major change.
-- Commit and push after each working pass.
+Normal play mode spawns one base model of each character in the central hub preview. If `Workspace.BrainrotMap.DebugMode` is true, the preview spawns all variants.
 
-## Git Workflow For Collaborators
+Studio command examples:
 
-Always pull before starting:
-
-```powershell
-git pull --rebase origin main
+```lua
+local svc = require(game.ServerScriptService.BrainrotFruits.CharacterSpawnService)
+svc.spawnAllCharacters("Base", { clearFirst = true, playIntro = true })
+svc.spawnAllVariants(nil, { clearFirst = true, playIntro = true })
+svc.spawnPreview("DragonfruttoDrippo", "Cosmic", { clearFirst = true, playIntro = true })
 ```
 
-Check status:
+## Reward Integration
 
-```powershell
-git status
-```
+`RewardService` now rolls characters from `CharacterRegistry.getWeightedCharacters()` and variants from `RarityConfig.DistanceBands`.
 
-Commit meaningful changes:
+Reward creation path:
 
-```powershell
-git add .
-git commit -m "Clear message"
-```
+1. Pick distance band.
+2. Roll character id from the registry.
+3. Roll variant id from `RarityConfig`.
+4. Build reward data with character base income/sell value plus variant multiplier.
+5. Spawn model through `BrainrotModelFactory`.
+6. Apply variant VFX.
+7. Play reveal/intro burst.
+8. Place secured reward through `PlotService`.
+9. Start display idle animation and display platform presentation.
+10. Grant a matching reward tool.
 
-Push:
+Existing Strawberita-specific wrappers remain compatible.
 
-```powershell
-git push origin main
-```
+## Manual Studio Test Checklist
 
-If two people edit the same files, merge conflicts can happen. Resolve carefully and do not overwrite each other's work.
+1. Run `rojo serve default.project.json`.
+2. Connect Roblox Studio's Rojo plugin to `localhost:34872`.
+3. Press Play.
+4. Confirm `Workspace.BrainrotMap` loads without output errors.
+5. Confirm central preview shows all six base characters.
+6. Confirm labels are readable and not giant boards.
+7. Run `spawnAllVariants(nil, { clearFirst = true, playIntro = true })` from the command bar.
+8. Confirm Base, Golden, Diamond, Galaxy, Rainbow, Toxic, and Cosmic variants render.
+9. Confirm idle animations start and stop without jitter or drifting.
+10. Launch from the shared catapult and confirm the reward flow still reveals, places, animates, and grants a tool.
 
-## Latest Handoff Summary
+## Validation Done
 
-Date: 2026-05-13
+- `git pull --rebase origin main`: already up to date.
+- Remote confirmed: `https://github.com/chshaythamasaad-commits/BrainrotFruits.git`
+- `rojo build default.project.json --output BrainrotFruits_rojo_check.rbxlx`: passed.
+- Temporary build artifact was removed.
+- No nested `.git` folders found.
+- No `.log`, `.rbxlx`, or `.rbxl` junk artifacts remained after validation.
 
-This session verified that `BrainrotFruits_Clean` is the clean Git repo on `main` with origin set to:
+No local Luau syntax/static checker was available in PATH, so final behavior still needs the manual Studio output check above.
 
-https://github.com/chshaythamasaad-commits/BrainrotFruits.git
+## Known Limitations
 
-Added this handoff file and updated the README so another Codex or user can clone the project, run Rojo, understand the concept, and continue from the foundation state.
+- These are still Roblox-native placeholder models, not final imported art meshes.
+- The preview gallery is intentionally simple and debug-friendly.
+- Passive income saving, trading, rebirths, monetization, and full economy progression remain out of scope.
+- Roster weights and variant odds are early tuning values.
 
-Next Codex should start with the first playable foundation pass: remotes, leaderstats, plot/map setup, and a basic catapult launch test.
+## Recommended Next Pass
+
+- Studio playtest and screenshot pass for scale/readability.
+- Fine-tune individual character part proportions after seeing them in-camera.
+- Add proper imported meshes one character at a time while preserving registry ids, attributes, and factory API.
+- Add lightweight UI for preview spawning only if command-bar preview becomes annoying.
