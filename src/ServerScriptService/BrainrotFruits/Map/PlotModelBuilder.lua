@@ -4,6 +4,7 @@ local CatapultModelBuilder = require(script.Parent.CatapultModelBuilder)
 
 PlotModelBuilder.PlotSize = Vector3.new(70, 1, 55)
 PlotModelBuilder.ModelVersion = "BaseReferencePlot_V3"
+PlotModelBuilder.PolishVersion = "InvitingPlots_V2"
 
 local COLORS = {
 	Grass = Color3.fromRGB(71, 171, 75),
@@ -227,6 +228,9 @@ local function createFoundation(plot, plotFrame, plotId, theme)
 	createPart(foundation, "GrassInterior", Vector3.new(62, 0.16, 47), localToWorld(plotFrame, 0, 0.8, 1.2), COLORS.Grass, Enum.Material.Grass)
 	createPart(foundation, "CenterPath", Vector3.new(8, 0.18, 42), localToWorld(plotFrame, 0, 0.95, -2.5), COLORS.Path, Enum.Material.Sand)
 	createPart(foundation, "PathGateBridge", Vector3.new(12, 0.18, 12), localToWorld(plotFrame, 0, 0.98, -31.5), COLORS.Path, Enum.Material.Sand)
+	for index, z in ipairs({ -20, -12, -4, 4, 12 }) do
+		createPart(foundation, `CenterPathStone{index}`, Vector3.new(5.6, 0.08, 2.4), localToWorld(plotFrame, 0, 1.08, z), COLORS.PathDark, Enum.Material.SmoothPlastic, 0.12)
+	end
 
 	for _, data in ipairs({
 		{ "FrontStoneEdge", Vector3.new(74, 1.4, 2.6), Vector3.new(0, 0.55, -halfZ - 1.3) },
@@ -290,6 +294,8 @@ local function createFence(plot, plotFrame, theme)
 	createPart(gate, "GateRightPillar", Vector3.new(1.35, 4.2, 1.35), localToWorld(plotFrame, 7.2, 2.45, -halfZ - 0.35), COLORS.WoodDark, Enum.Material.Wood)
 	createPart(gate, "GateCapLeft", Vector3.new(1.7, 0.5, 1.7), localToWorld(plotFrame, -7.2, 4.85, -halfZ - 0.35), theme.color, Enum.Material.SmoothPlastic)
 	createPart(gate, "GateCapRight", Vector3.new(1.7, 0.5, 1.7), localToWorld(plotFrame, 7.2, 4.85, -halfZ - 0.35), theme.color, Enum.Material.SmoothPlastic)
+	createPart(gate, "GateTopBeam", Vector3.new(17, 0.75, 0.75), localToWorld(plotFrame, 0, 5.35, -halfZ - 0.35), COLORS.Wood, Enum.Material.Wood)
+	createPart(gate, "GateGlowTrim", Vector3.new(12, 0.18, 0.28), localToWorld(plotFrame, 0, 5.88, -halfZ - 0.72), theme.accent, Enum.Material.Neon, 0.15)
 end
 
 local function createOwnerSign(plot, plotFrame, plotId, theme, ownerName)
@@ -399,6 +405,10 @@ local function createHut(plot, plotFrame, theme)
 	createWedge(hut, "RoofFrontSlope", Vector3.new(16.9, 2.6, 5.7), frame * CFrame.new(0, 6.4, -2.9) * CFrame.Angles(0, math.rad(180), 0), theme.roof, Enum.Material.SmoothPlastic)
 	createWedge(hut, "RoofBackSlope", Vector3.new(16.9, 2.6, 5.7), frame * CFrame.new(0, 6.4, 2.9), theme.roof, Enum.Material.SmoothPlastic)
 	createPart(hut, "Chimney", Vector3.new(1.9, 3.3, 1.9), frame * CFrame.new(4.8, 7.2, 1.2), COLORS.StoneDark, Enum.Material.Slate)
+	createPart(hut, "RoofGlowTrim", Vector3.new(14.8, 0.22, 0.38), frame * CFrame.new(0, 5.4, -5.72), theme.accent, Enum.Material.Neon, 0.18)
+	createPart(hut, "WelcomeMat", Vector3.new(5.4, 0.14, 2.2), frame * CFrame.new(0, 0.78, -8.15), theme.accent, Enum.Material.SmoothPlastic)
+	createPart(hut, "FlowerBoxLeft", Vector3.new(2.7, 0.42, 0.55), frame * CFrame.new(-4.2, 2.12, -5.2), theme.accent, Enum.Material.SmoothPlastic)
+	createPart(hut, "FlowerBoxRight", Vector3.new(2.7, 0.42, 0.55), frame * CFrame.new(4.2, 2.12, -5.2), theme.accent, Enum.Material.SmoothPlastic)
 
 	return hut
 end
@@ -408,12 +418,17 @@ local function createDecorations(plot, plotFrame, theme)
 	createVoxelTree(plot, "BackRightTree", plotFrame, Vector3.new(28, 0.78, 21), 0.78, Color3.fromRGB(78, 174, 69))
 	createBush(plot, "FrontLeftBush", plotFrame, Vector3.new(-29, 0.95, -17), 0.7, COLORS.GrassLight)
 	createBush(plot, "FrontRightBush", plotFrame, Vector3.new(29, 0.95, -17), 0.7, COLORS.GrassLight)
+	createBush(plot, "GateLeftAccentBush", plotFrame, Vector3.new(-12, 0.95, -24), 0.58, theme.accent:Lerp(COLORS.Grass, 0.45))
+	createBush(plot, "GateRightAccentBush", plotFrame, Vector3.new(12, 0.95, -24), 0.58, theme.accent:Lerp(COLORS.Grass, 0.45))
 	createBush(plot, "BackFlowerBush", plotFrame, Vector3.new(22, 0.95, 22), 0.75, theme.accent:Lerp(COLORS.Grass, 0.52))
 	createRock(plot, "LeftRock", plotFrame, Vector3.new(-29, 0.9, 7), 0.78)
 	createRock(plot, "RightRock", plotFrame, Vector3.new(29, 0.9, 8), 0.78)
 	createFlowerPatch(plot, "FlowersLeft", plotFrame, Vector3.new(-29, 0.95, -4), theme.accent)
 	createFlowerPatch(plot, "FlowersRight", plotFrame, Vector3.new(29, 0.95, -4), theme.accent)
+	createFlowerPatch(plot, "GateFlowersLeft", plotFrame, Vector3.new(-16, 0.95, -22), theme.accent)
+	createFlowerPatch(plot, "GateFlowersRight", plotFrame, Vector3.new(16, 0.95, -22), theme.accent)
 	createCrates(plot, "BackCrates", plotFrame, Vector3.new(-22, 0.95, 18))
+	createCrates(plot, "CollectorCrates", plotFrame, Vector3.new(23, 0.95, -18))
 
 	for _, localPosition in ipairs({
 		Vector3.new(-30, 0.95, -25),
@@ -439,6 +454,7 @@ function PlotModelBuilder.createPlot(config)
 	plot:SetAttribute("Status", ownerName and "Claimed" or "Unclaimed")
 	plot:SetAttribute("Theme", theme.name)
 	plot:SetAttribute("PlotModelVersion", PlotModelBuilder.ModelVersion)
+	plot:SetAttribute("PlotPolishVersion", PlotModelBuilder.PolishVersion)
 	plot.Parent = config.parent
 
 	local base = createFoundation(plot, plotFrame, plotId, theme)

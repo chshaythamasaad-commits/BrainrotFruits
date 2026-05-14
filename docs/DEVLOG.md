@@ -169,3 +169,13 @@ Commit: this documentation pass.
 - Reduced billboard label sizes/distances for previews, hazards, and return markers; plot ownership now relies on the physical sign surface.
 - Added more decorative trees, bushes, flowers, crates, small fruit statues, and reveal-zone sparkles to fill empty grass without blocking paths.
 - Kept the working Strawberita transform stable and added only lightweight return-run sparkle particles for movement polish.
+
+### Center area polish - main launch hub
+
+- Marked the generated map with `CenterAreaVersion = "MainLaunchHub_V1"`, `IslandLayoutVersion = "CompactSocialIsland_V1"`, and `PlotPolishVersion = "InvitingPlots_V2"`.
+- Tightened the six-plot island layout so player bases sit closer to the hub and are easier to visit from the center.
+- Replaced the visible launch sign with `MAIN LAUNCH`, added a brighter launch plaza, and rotated the main gameplay catapult 180 degrees while preserving the +Z launch-lane direction.
+- Added physical `TOP LAUNCHES` and `TOP DISTANCE` leaderboard boards near the central plaza.
+- Polished the rarest-fruit showcase with a cleaner `RAREST FRUIT` sign, glow platform, and central presentation ring.
+- Moved shop/sell/upgrades/index booths out to side placements so they do not block the launch, leaderboards, or showcase.
+- Added plot polish details including nicer gate trim, path stones, hut trim, welcome mats, gate flowers, bushes, and collector-side crates.

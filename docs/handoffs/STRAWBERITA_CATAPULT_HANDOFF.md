@@ -212,6 +212,38 @@ Latest multiplayer note: overlapping shared-catapult launches should now fail wi
 - Movement polish intentionally avoids bounce animation, anchored followers, or server-pivot jitter; it adds only small return-run sparkle particles to the welded transformed Strawberita visual.
 - Added kid-friendly decorations around the hub, lane edges, reveal island, and empty grass between plots.
 
+## Latest Center Area Polish Notes
+
+- Active central map builder: `src/ServerScriptService/BrainrotFruits/Map/MapBuilder.lua`, especially `MapBuilder.build()`, `buildHub()`, `buildSharedLaunchArea()`, `buildSharedCatapult()`, and `buildIslandBase()`.
+- Active plot builder: `src/ServerScriptService/BrainrotFruits/Map/PlotModelBuilder.lua`, function `PlotModelBuilder.createPlot(config)`.
+- Active catapult model builder: `src/ServerScriptService/BrainrotFruits/Map/CatapultModelBuilder.lua`, function `CatapultModelBuilder.createCatapult(config)`.
+- `Workspace.BrainrotMap` now sets:
+  - `CenterAreaVersion = MainLaunchHub_V1`
+  - `IslandLayoutVersion = CompactSocialIsland_V1`
+  - `PlotPolishVersion = InvitingPlots_V2`
+- The visible launch sign now says `MAIN LAUNCH`; no active world sign uses `Shared Lunch` or `Shared Launch`.
+- The main gameplay catapult is rotated in `buildSharedCatapult()` and tagged with `LaunchFacingFixed = true`; its launch origin/direction are explicitly overridden so gameplay still launches down the lane.
+- The island was tightened by moving the six plot centers inward and shrinking the central/side/back island lobes.
+- `TOP LAUNCHES` and `TOP DISTANCE` physical leaderboard boards are placed near the central hub.
+- The rarest-fruit showcase remains in the central hub with a cleaner `RAREST FRUIT` sign, glow pedestal, and surrounding presentation ring.
+- Plot polish is additive: `PlotModelVersion` remains `BaseReferencePlot_V3`, and each plot now also has `PlotPolishVersion = InvitingPlots_V2`.
+
+## Latest Center Area Studio Verification
+
+1. Press Play and confirm Output prints:
+   - `[BrainrotFruits] CenterAreaPolish_V1 active`
+   - `[BrainrotFruits] Main catapult rotated and aligned`
+   - `[BrainrotFruits] CompactSocialIslandLayout_V1 active`
+   - `[BrainrotFruits] PlotPolish_V2 active`
+2. In Explorer, confirm `Workspace.BrainrotMap` has:
+   - `CenterAreaVersion = MainLaunchHub_V1`
+   - `IslandLayoutVersion = CompactSocialIsland_V1`
+   - `PlotPolishVersion = InvitingPlots_V2`
+3. Confirm `Workspace.BrainrotMap.SharedLaunchArea.MainLaunchSign` exists and the visible text reads `MAIN LAUNCH`.
+4. Confirm the main catapult has `LaunchFacingFixed = true` and still launches players forward along the lane.
+5. Confirm `CentralHub` contains `TopLaunchesLeaderboard`, `TopDistanceLeaderboard`, and the `ShowcasePedestal`.
+6. Confirm each plot keeps `PlotModelVersion = BaseReferencePlot_V3` and now also has `PlotPolishVersion = InvitingPlots_V2`.
+
 ## Known Issues
 
 Latest note: push now works from the active `M:\Games\BrainrotFruits-git` clone; older push-auth warnings below may refer to earlier sessions.

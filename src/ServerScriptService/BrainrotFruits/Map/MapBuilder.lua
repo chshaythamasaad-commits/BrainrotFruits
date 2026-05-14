@@ -39,12 +39,12 @@ local PLOT_THEMES = {
 }
 
 local PLOT_LAYOUTS = {
-	Vector3.new(-104, 0, -98),
-	Vector3.new(-155, 0, -2),
-	Vector3.new(-104, 0, 96),
-	Vector3.new(104, 0, -98),
-	Vector3.new(155, 0, -2),
-	Vector3.new(104, 0, 96),
+	Vector3.new(-88, 0, -82),
+	Vector3.new(-128, 0, -2),
+	Vector3.new(-88, 0, 82),
+	Vector3.new(88, 0, -82),
+	Vector3.new(128, 0, -2),
+	Vector3.new(88, 0, 82),
 }
 
 local function getOrCreateFolder(parent, name)
@@ -334,18 +334,49 @@ local function createBooth(parent, name, position, yawDegrees, color, accent)
 	return model
 end
 
+local function createLeaderboard(parent, name, title, rows, cframe, accentColor)
+	local model = Instance.new("Model")
+	model.Name = name
+	model:SetAttribute("Type", "GlobalLeaderboard")
+	model:SetAttribute("LeaderboardName", title)
+	model.Parent = parent
+
+	local board = createPart(model, "Board", Vector3.new(20, 11.5, 0.75), cframe, COLORS.Black, Enum.Material.SmoothPlastic)
+	board.CanCollide = false
+	local trimColor = accentColor or Color3.fromRGB(255, 213, 84)
+	createPart(model, "BackPlate", Vector3.new(21.6, 12.8, 0.55), cframe * CFrame.new(0, 0, 0.22), COLORS.WoodDark, Enum.Material.Wood)
+	createPart(model, "TopBeam", Vector3.new(22.6, 1, 1.2), cframe * CFrame.new(0, 6.7, 0.12), COLORS.Wood, Enum.Material.Wood)
+	createPart(model, "BottomBeam", Vector3.new(22.4, 0.8, 1.1), cframe * CFrame.new(0, -6.45, 0.12), COLORS.Wood, Enum.Material.Wood)
+	createPart(model, "LeftPost", Vector3.new(1, 14, 1), cframe * CFrame.new(-10.9, -0.65, 0.12), COLORS.WoodDark, Enum.Material.Wood)
+	createPart(model, "RightPost", Vector3.new(1, 14, 1), cframe * CFrame.new(10.9, -0.65, 0.12), COLORS.WoodDark, Enum.Material.Wood)
+	createPart(model, "Crown", Vector3.new(4.2, 1.4, 0.75), cframe * CFrame.new(0, 8.0, -0.08), trimColor, Enum.Material.Neon, 0.04)
+	createPart(model, "GlowStrip", Vector3.new(17.5, 0.22, 0.18), cframe * CFrame.new(0, 4.3, -0.46), trimColor, Enum.Material.Neon, 0.08)
+
+	local textLines = { title }
+	for index, row in ipairs(rows) do
+		table.insert(textLines, `{index}. {row}`)
+	end
+	addSurfaceText(board, table.concat(textLines, "\n"), Enum.NormalId.Front, trimColor, COLORS.Black)
+
+	model.PrimaryPart = board
+	return model
+end
+
 local function buildSharedCatapult(parent)
 	local catapult = CatapultModelBuilder.createCatapult({
 		parent = parent,
 		name = "Catapult",
-		cframe = CFrame.new(0, 0.95, 54),
+		cframe = CFrame.new(0, 0.95, 54) * CFrame.Angles(0, math.rad(180), 0),
 		scale = 1.35,
 		plotId = 0,
 		isSharedLauncher = true,
 		decorative = false,
+		launchOrigin = Vector3.new(0, 11.1, 70),
+		launchDirection = Vector3.new(0, 0, 1),
 	})
 	catapult:SetAttribute("OrientationCorrected", true)
 	catapult:SetAttribute("FacesLaunchLane", true)
+	catapult:SetAttribute("LaunchFacingFixed", true)
 	return catapult
 end
 
@@ -356,7 +387,8 @@ local function buildSharedLaunchArea(map)
 	createPart(launchArea, "LaunchPlaza", Vector3.new(58, 0.4, 42), CFrame.new(0, 0.46, 48), COLORS.Stone, Enum.Material.Slate)
 	createPart(launchArea, "LaunchPlazaInset", Vector3.new(42, 0.18, 27), CFrame.new(0, 0.78, 48), Color3.fromRGB(84, 94, 104), Enum.Material.SmoothPlastic)
 	createPath(launchArea, "HubToLaunchPath", Vector3.new(14, 0.18, 44), CFrame.new(0, 0.9, 28) * CFrame.Angles(0, math.rad(90), 0))
-	createFacingSign(launchArea, "SharedLaunchSign", "SHARED LAUNCH", CFrame.new(0, 7.1, 32) * CFrame.Angles(0, math.rad(180), 0), COLORS.Black, Vector3.new(18, 4.2, 0.7))
+	createFacingSign(launchArea, "MainLaunchSign", "MAIN LAUNCH", CFrame.new(0, 7.1, 32) * CFrame.Angles(0, math.rad(180), 0), COLORS.Black, Vector3.new(18, 4.2, 0.7))
+	createPart(launchArea, "MainLaunchGlow", Vector3.new(34, 0.15, 6.5), CFrame.new(0, 1.04, 31.5), Color3.fromRGB(255, 198, 51), Enum.Material.Neon, 0.65)
 
 	buildSharedCatapult(launchArea)
 	createTopTextPad(launchArea, "LaunchDirectionArrow", "LAUNCH >>", Vector3.new(18, 0.16, 4.2), CFrame.new(0, 1.12, 69), Color3.fromRGB(234, 74, 108), COLORS.White)
@@ -403,7 +435,7 @@ local function buildSharedLaunchArea(map)
 		end
 	end
 
-	for _, distance in ipairs({ 20, 40, 60, 80, 100, 150, 200, 300, 400, 500 }) do
+	for _, distance in ipairs({ 25, 50, 75, 100, 150, 200, 300, 400, 500 }) do
 		local z = 70 + distance
 		createPart(lane, `DistanceLine_{distance}`, Vector3.new(22, 0.12, 0.42), CFrame.new(0, 0.98, z), COLORS.White, Enum.Material.SmoothPlastic)
 		createTopTextPad(lane, `DistanceMarker_{distance}`, tostring(distance), Vector3.new(7, 0.15, 3.2), CFrame.new(0, 1.08, z + 2.4), Color3.fromRGB(58, 139, 68), COLORS.White):SetAttribute("DistanceStuds", distance)
@@ -497,12 +529,14 @@ local function buildHub(map)
 	local hub = getOrCreateFolder(map, "CentralHub")
 	hub:ClearAllChildren()
 
-	createPart(hub, "HubStonePlaza", Vector3.new(92, 0.45, 84), CFrame.new(0, 0.42, 0), COLORS.Stone, Enum.Material.Slate)
-	createPart(hub, "SafeZoneGrass", Vector3.new(63, 0.2, 56), CFrame.new(0, 0.78, -4), COLORS.Grass, Enum.Material.Grass)
-	createPart(hub, "SafeZoneRingNorth", Vector3.new(63, 0.18, 4), CFrame.new(0, 0.94, -32), COLORS.Path, Enum.Material.Sand)
-	createPart(hub, "SafeZoneRingSouth", Vector3.new(63, 0.18, 4), CFrame.new(0, 0.94, 24), COLORS.Path, Enum.Material.Sand)
-	createPart(hub, "SafeZoneRingWest", Vector3.new(4, 0.18, 56), CFrame.new(-31.5, 0.94, -4), COLORS.Path, Enum.Material.Sand)
-	createPart(hub, "SafeZoneRingEast", Vector3.new(4, 0.18, 56), CFrame.new(31.5, 0.94, -4), COLORS.Path, Enum.Material.Sand)
+	createPart(hub, "HubStonePlaza", Vector3.new(82, 0.45, 76), CFrame.new(0, 0.42, -2), COLORS.Stone, Enum.Material.Slate)
+	createPart(hub, "SafeZoneGrass", Vector3.new(56, 0.2, 50), CFrame.new(0, 0.78, -5), COLORS.Grass, Enum.Material.Grass)
+	createPart(hub, "SafeZoneRingNorth", Vector3.new(58, 0.18, 4), CFrame.new(0, 0.94, -31), COLORS.Path, Enum.Material.Sand)
+	createPart(hub, "SafeZoneRingSouth", Vector3.new(58, 0.18, 4), CFrame.new(0, 0.94, 21), COLORS.Path, Enum.Material.Sand)
+	createPart(hub, "SafeZoneRingWest", Vector3.new(4, 0.18, 52), CFrame.new(-29, 0.94, -5), COLORS.Path, Enum.Material.Sand)
+	createPart(hub, "SafeZoneRingEast", Vector3.new(4, 0.18, 52), CFrame.new(29, 0.94, -5), COLORS.Path, Enum.Material.Sand)
+	createPart(hub, "CenterShowcaseRing", Vector3.new(34, 0.16, 34), CFrame.new(0, 1.02, -8), Color3.fromRGB(255, 224, 91), Enum.Material.Neon, 0.72)
+	createPart(hub, "CenterShowcaseWalkRing", Vector3.new(42, 0.14, 42), CFrame.new(0, 0.98, -8), COLORS.Path, Enum.Material.Sand)
 
 	createTopTextPad(hub, "SafeZoneTextPad", "SAFE ZONE", Vector3.new(22, 0.16, 5), CFrame.new(0, 1.06, 20), Color3.fromRGB(57, 160, 71), COLORS.White)
 	if MapBuilder.DebugMode then
@@ -510,15 +544,33 @@ local function buildHub(map)
 	end
 	createFacingSign(hub, "HubTitleSign", "BRAINROT FRUITS", CFrame.new(0, 7.2, -39), Color3.fromRGB(234, 74, 108), Vector3.new(23, 5.2, 0.8))
 
-	createBooth(hub, "SHOP", Vector3.new(-37, 0.95, -13), 30, Color3.fromRGB(211, 57, 46), Color3.fromRGB(255, 245, 232))
-	createBooth(hub, "SELL", Vector3.new(-33, 0.95, 21), 145, Color3.fromRGB(214, 151, 42), Color3.fromRGB(255, 241, 147))
-	createBooth(hub, "UPGRADES", Vector3.new(35, 0.95, -13), -30, Color3.fromRGB(130, 72, 219), Color3.fromRGB(245, 226, 255))
-	createBooth(hub, "INDEX", Vector3.new(33, 0.95, 21), -145, Color3.fromRGB(42, 128, 214), Color3.fromRGB(215, 241, 255))
+	createLeaderboard(
+		hub,
+		"TopLaunchesLeaderboard",
+		"TOP LAUNCHES",
+		{ "FruitRocket 982", "BananaBoss 821", "BerryBandit 744", "MelonMan 630", "LaunchKing 512" },
+		CFrame.new(-34, 7.4, -28) * CFrame.Angles(0, math.rad(15), 0),
+		Color3.fromRGB(255, 213, 84)
+	)
+	createLeaderboard(
+		hub,
+		"TopDistanceLeaderboard",
+		"TOP DISTANCE",
+		{ "PlayerOne 500", "FruitMaster 420", "SkyHighBot 360", "VoidLauncher 310", "ChunkyCat 275" },
+		CFrame.new(34, 7.4, -28) * CFrame.Angles(0, math.rad(-15), 0),
+		Color3.fromRGB(130, 239, 255)
+	)
 
-	local pedestal = createPart(hub, "ShowcasePedestal", Vector3.new(18, 3.2, 18), CFrame.new(0, 2, -8), Color3.fromRGB(50, 53, 70), Enum.Material.SmoothPlastic)
+	createBooth(hub, "SHOP", Vector3.new(-58, 0.95, -6), 82, Color3.fromRGB(211, 57, 46), Color3.fromRGB(255, 245, 232))
+	createBooth(hub, "SELL", Vector3.new(-53, 0.95, 31), 122, Color3.fromRGB(214, 151, 42), Color3.fromRGB(255, 241, 147))
+	createBooth(hub, "UPGRADES", Vector3.new(58, 0.95, -6), -82, Color3.fromRGB(130, 72, 219), Color3.fromRGB(245, 226, 255))
+	createBooth(hub, "INDEX", Vector3.new(53, 0.95, 31), -122, Color3.fromRGB(42, 128, 214), Color3.fromRGB(215, 241, 255))
+
+	local pedestal = createPart(hub, "ShowcasePedestal", Vector3.new(16, 3.2, 16), CFrame.new(0, 2, -8), Color3.fromRGB(50, 53, 70), Enum.Material.SmoothPlastic)
 	pedestal:SetAttribute("Role", "RarestFruitShowcase")
-	createPart(hub, "ShowcaseGlow", Vector3.new(14, 0.24, 14), CFrame.new(0, 3.72, -8), Color3.fromRGB(153, 86, 255), Enum.Material.Neon, 0.25)
-	createFacingSign(hub, "ShowcaseSign", "RAREST FRUIT\nSHOWCASE", CFrame.new(0, 7.2, -24), Color3.fromRGB(38, 39, 44), Vector3.new(18, 4.6, 0.7), Color3.fromRGB(255, 235, 79))
+	createPart(hub, "ShowcaseGlow", Vector3.new(13, 0.24, 13), CFrame.new(0, 3.72, -8), Color3.fromRGB(153, 86, 255), Enum.Material.Neon, 0.18)
+	createPart(hub, "ShowcaseOuterGlow", Vector3.new(22, 0.14, 22), CFrame.new(0, 3.58, -8), Color3.fromRGB(255, 91, 231), Enum.Material.Neon, 0.75)
+	createFacingSign(hub, "ShowcaseSign", "RAREST FRUIT", CFrame.new(0, 6.1, -23.5), Color3.fromRGB(38, 39, 44), Vector3.new(15, 3.5, 0.7), Color3.fromRGB(255, 235, 79))
 
 	for _, position in ipairs({
 		Vector3.new(-45, 0, -31),
@@ -532,9 +584,10 @@ local function buildHub(map)
 	end
 
 	for plotId, center in ipairs(PLOT_LAYOUTS) do
-		local target = Vector3.new(center.X * 0.46, 0, center.Z * 0.46)
+		local target = Vector3.new(center.X * 0.42, 0, center.Z * 0.42)
 		local direction = Vector3.new(center.X, 0, center.Z).Unit
-		createPath(hub, `PathToPlot{plotId}`, Vector3.new(11, 0.16, 93), CFrame.lookAt(target, target + direction) * CFrame.new(0, 0.88, 0))
+		local pathLength = math.max(58, Vector3.new(center.X, 0, center.Z).Magnitude * 0.58)
+		createPath(hub, `PathToPlot{plotId}`, Vector3.new(10, 0.16, pathLength), CFrame.lookAt(target, target + direction) * CFrame.new(0, 0.88, 0))
 	end
 end
 
@@ -550,10 +603,10 @@ local function buildIslandBase(map)
 	local island = getOrCreateFolder(map, "IslandBase")
 	island:ClearAllChildren()
 
-	createIslandPiece(island, "CoreGrass", Vector3.new(240, 0.7, 185), Vector3.new(0, -0.08, -8), COLORS.Grass)
-	createIslandPiece(island, "LeftPlotLobe", Vector3.new(115, 0.7, 230), Vector3.new(-132, -0.08, -2), COLORS.GrassLight)
-	createIslandPiece(island, "RightPlotLobe", Vector3.new(115, 0.7, 230), Vector3.new(132, -0.08, -2), COLORS.GrassLight)
-	createIslandPiece(island, "BackLobe", Vector3.new(220, 0.7, 92), Vector3.new(0, -0.08, -130), COLORS.Grass)
+	createIslandPiece(island, "CoreGrass", Vector3.new(214, 0.7, 166), Vector3.new(0, -0.08, -8), COLORS.Grass)
+	createIslandPiece(island, "LeftPlotLobe", Vector3.new(105, 0.7, 205), Vector3.new(-112, -0.08, -2), COLORS.GrassLight)
+	createIslandPiece(island, "RightPlotLobe", Vector3.new(105, 0.7, 205), Vector3.new(112, -0.08, -2), COLORS.GrassLight)
+	createIslandPiece(island, "BackLobe", Vector3.new(196, 0.7, 82), Vector3.new(0, -0.08, -112), COLORS.Grass)
 	createIslandPiece(island, "LaunchPeninsula", Vector3.new(88, 0.7, 260), Vector3.new(0, -0.08, 190), COLORS.Grass)
 	createIslandPiece(island, "ExtendedLaunchCauseway", Vector3.new(76, 0.7, 330), Vector3.new(0, -0.08, 435), COLORS.GrassLight)
 	createIslandPiece(island, "RevealPlatformIsland", Vector3.new(132, 0.7, 94), Vector3.new(0, -0.08, 628), COLORS.GrassDark)
@@ -562,12 +615,12 @@ local function buildIslandBase(map)
 	edges:ClearAllChildren()
 
 	for index, data in ipairs({
-		{ pos = Vector3.new(-206, -1.7, -95), size = Vector3.new(16, 5.5, 88) },
-		{ pos = Vector3.new(206, -1.7, -95), size = Vector3.new(16, 5.5, 88) },
-		{ pos = Vector3.new(-206, -1.7, 82), size = Vector3.new(16, 5.5, 96) },
-		{ pos = Vector3.new(206, -1.7, 82), size = Vector3.new(16, 5.5, 96) },
-		{ pos = Vector3.new(-70, -1.7, -184), size = Vector3.new(120, 5.5, 16) },
-		{ pos = Vector3.new(70, -1.7, -184), size = Vector3.new(120, 5.5, 16) },
+		{ pos = Vector3.new(-178, -1.7, -82), size = Vector3.new(16, 5.5, 82) },
+		{ pos = Vector3.new(178, -1.7, -82), size = Vector3.new(16, 5.5, 82) },
+		{ pos = Vector3.new(-178, -1.7, 72), size = Vector3.new(16, 5.5, 88) },
+		{ pos = Vector3.new(178, -1.7, 72), size = Vector3.new(16, 5.5, 88) },
+		{ pos = Vector3.new(-60, -1.7, -157), size = Vector3.new(104, 5.5, 16) },
+		{ pos = Vector3.new(60, -1.7, -157), size = Vector3.new(104, 5.5, 16) },
 		{ pos = Vector3.new(-48, -1.7, 364), size = Vector3.new(14, 5.5, 245) },
 		{ pos = Vector3.new(48, -1.7, 364), size = Vector3.new(14, 5.5, 245) },
 		{ pos = Vector3.new(-65, -1.7, 672), size = Vector3.new(88, 5.5, 16) },
@@ -577,10 +630,10 @@ local function buildIslandBase(map)
 	end
 
 	for index, position in ipairs({
-		Vector3.new(-224, -2.2, -132),
-		Vector3.new(224, -2.2, -128),
-		Vector3.new(-232, -2.2, 44),
-		Vector3.new(232, -2.2, 56),
+		Vector3.new(-195, -2.2, -112),
+		Vector3.new(195, -2.2, -108),
+		Vector3.new(-198, -2.2, 38),
+		Vector3.new(198, -2.2, 48),
 		Vector3.new(-62, -2.2, 568),
 		Vector3.new(64, -2.2, 604),
 		Vector3.new(-96, -2.2, 680),
@@ -590,8 +643,8 @@ local function buildIslandBase(map)
 	end
 
 	for index, position in ipairs({
-		Vector3.new(-213, -1.1, 121),
-		Vector3.new(213, -1.1, -118),
+		Vector3.new(-188, -1.1, 104),
+		Vector3.new(188, -1.1, -104),
 		Vector3.new(89, -1.1, 646),
 	}) do
 		createPart(edges, `Waterfall{index}`, Vector3.new(7, 5.2, 1.1), CFrame.new(position), Color3.fromRGB(91, 206, 255), Enum.Material.Neon, 0.35)
@@ -718,6 +771,9 @@ function MapBuilder.build()
 	map:SetAttribute("GameplayVersion", "StrawberitaReturnTool_V2")
 	map:SetAttribute("LaunchLaneVersion", "ExtendedDecoratedLane_V1")
 	map:SetAttribute("VisualPolishVersion", "CleanKidFriendlyUI_V1")
+	map:SetAttribute("CenterAreaVersion", "MainLaunchHub_V1")
+	map:SetAttribute("IslandLayoutVersion", "CompactSocialIsland_V1")
+	map:SetAttribute("PlotPolishVersion", "InvitingPlots_V2")
 	map:SetAttribute("DebugMode", MapBuilder.DebugMode)
 	map.Parent = Workspace
 
@@ -742,6 +798,10 @@ function MapBuilder.build()
 	print("[BrainrotFruits] POLISHED PLOT V2 ACTIVE - base reference layout loaded")
 	print("[BrainrotFruits] InvisibleCenterSpawn_V1 active")
 	print("[BrainrotFruits] Catapult orientation corrected")
+	print("[BrainrotFruits] CenterAreaPolish_V1 active")
+	print("[BrainrotFruits] Main catapult rotated and aligned")
+	print("[BrainrotFruits] CompactSocialIslandLayout_V1 active")
+	print("[BrainrotFruits] PlotPolish_V2 active")
 	print("[BrainrotFruits] LaunchLaneExtended_V1 active")
 	print("[BrainrotFruits] CleanKidFriendlyUI_V1 active")
 	print("[BrainrotFruits] Debug visual markers hidden in normal mode")

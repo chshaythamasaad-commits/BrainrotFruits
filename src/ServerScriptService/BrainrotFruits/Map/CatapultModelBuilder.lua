@@ -111,6 +111,8 @@ function CatapultModelBuilder.createCatapult(config)
 	local isShared = config.isSharedLauncher == true
 	local decorative = config.decorative == true
 	local catapultVersion = decorative and not isShared and CatapultModelBuilder.StatueVersion or CatapultModelBuilder.Version
+	local launchOriginOverride = config.launchOrigin
+	local launchDirectionOverride = config.launchDirection
 
 	if not printedVersion then
 		print("[BrainrotFruits] BlockyCatapult_V1 active")
@@ -194,10 +196,14 @@ function CatapultModelBuilder.createCatapult(config)
 
 	if isShared then
 		local interactZone = createPart(model, "InteractZone", Vector3.new(14, 5.5, 13) * scale, localFrame(frame, scale, 0, 3.15, -8.8), COLORS.Interact, Enum.Material.ForceField, 0.78)
+		local launchDirection = frame:VectorToWorldSpace(Vector3.new(0, 0, 1))
+		if typeof(launchDirectionOverride) == "Vector3" and launchDirectionOverride.Magnitude > 0 then
+			launchDirection = launchDirectionOverride.Unit
+		end
 		interactZone.CanCollide = false
 		interactZone:SetAttribute("SharedLaunch", true)
-		interactZone:SetAttribute("LaunchOrigin", (frame * CFrame.new(0, 7.5 * scale, 12.3 * scale)).Position)
-		interactZone:SetAttribute("LaunchDirection", frame:VectorToWorldSpace(Vector3.new(0, 0, 1)))
+		interactZone:SetAttribute("LaunchOrigin", typeof(launchOriginOverride) == "Vector3" and launchOriginOverride or (frame * CFrame.new(0, 7.5 * scale, 12.3 * scale)).Position)
+		interactZone:SetAttribute("LaunchDirection", launchDirection)
 		addSurfaceText(interactZone, "LOAD CRATE", Enum.NormalId.Top)
 		model.PrimaryPart = interactZone
 	else
