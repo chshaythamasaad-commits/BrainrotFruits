@@ -365,6 +365,20 @@ Latest multiplayer note: overlapping shared-catapult launches should now fail wi
 2. Confirm no separate temporary asset-review platform appears.
 3. Confirm the normal `Workspace.BrainrotMap` gameplay map still builds.
 
+## Latest Sell Stall Asset Notes
+
+- Added source-backed builder asset `src/assets/BrainrotFruitAssets/SellStall.rbxmx`.
+- Added `ServerStorage.BrainrotFruitAssets` to `default.project.json` so Rojo syncs the asset into Studio.
+- The model root is named `SellStall` and has a PrimaryPart named `RootPart`.
+- This pass only adds the asset and storage mapping; it does not replace the procedural hub Sell booth yet.
+
+## Latest Sell Stall Asset Verification
+
+1. Run `rojo serve default.project.json` from this branch.
+2. Connect Studio with the Rojo plugin.
+3. Confirm `ServerStorage.BrainrotFruitAssets.SellStall` exists.
+4. Confirm the current map still builds normally.
+
 ## Known Issues
 
 Latest note: push now works from the active `M:\Games\BrainrotFruits-git` clone; older push-auth warnings below may refer to earlier sessions.

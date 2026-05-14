@@ -1,0 +1,417 @@
+﻿<roblox version="4">
+  <Item class="Model" referent="RBX_SellStall_Model_57">
+    <Properties><string name="Name">SellStall</string><Ref name="PrimaryPart">RBX_SellStall_RootPart_1</Ref></Properties>
+    <Item class="Part" referent="RBX_SellStall_RootPart_1"><Properties><bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool><Color3 name="Color"><R>1</R><G>1</G><B>1</B></Color3><token name="Material">256</token><string name="Name">RootPart</string><float name="Transparency">1</float><token name="TopSurface">0</token><token name="BottomSurface">0</token><token name="FrontSurface">0</token><token name="BackSurface">0</token><token name="LeftSurface">0</token><token name="RightSurface">0</token><CoordinateFrame name="CFrame"><X>0</X><Y>0.1</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame><Vector3 name="size"><X>0.2</X><Y>0.2</Y><Z>0.2</Z></Vector3></Properties></Item>
+    <Item class="Folder" referent="RBX_SellStall_Base_51">
+      <Properties><string name="Name">Base</string></Properties>
+    <Item class="Part" referent="RBX_SellStall_LowerBase_2">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.55</R><G>0.25</G><B>0.1</B></Color3><token name="Material">256</token><string name="Name">LowerBase</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>1</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>18</X><Y>2</Y><Z>10</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_FrontTrim_3">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.19</R><G>0.09</G><B>0.035</B></Color3><token name="Material">256</token><string name="Name">FrontTrim</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>0.5</Y><Z>-5.6</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>20</X><Y>1</Y><Z>1.2</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_BackTrim_4">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.19</R><G>0.09</G><B>0.035</B></Color3><token name="Material">256</token><string name="Name">BackTrim</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>0.5</Y><Z>5.6</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>20</X><Y>1</Y><Z>1.2</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_LeftTrim_5">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.19</R><G>0.09</G><B>0.035</B></Color3><token name="Material">256</token><string name="Name">LeftTrim</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>-9.6</X><Y>0.5</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>1.2</X><Y>1</Y><Z>10</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_RightTrim_6">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.19</R><G>0.09</G><B>0.035</B></Color3><token name="Material">256</token><string name="Name">RightTrim</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>9.6</X><Y>0.5</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>1.2</X><Y>1</Y><Z>10</Z></Vector3>
+      </Properties>
+    </Item>
+    </Item>
+    <Item class="Folder" referent="RBX_SellStall_Counter_52">
+      <Properties><string name="Name">Counter</string></Properties>
+    <Item class="Part" referent="RBX_SellStall_CounterWallFront_11">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.94</R><G>0.48</G><B>0.13</B></Color3><token name="Material">256</token><string name="Name">CounterWallFront</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>3</Y><Z>-4.5</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>18</X><Y>2</Y><Z>1</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_CounterWallBack_12">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.94</R><G>0.48</G><B>0.13</B></Color3><token name="Material">256</token><string name="Name">CounterWallBack</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>3</Y><Z>4.5</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>18</X><Y>2</Y><Z>1</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_CounterWallLeft_13">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.94</R><G>0.48</G><B>0.13</B></Color3><token name="Material">256</token><string name="Name">CounterWallLeft</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>-8.5</X><Y>3</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>1</X><Y>2</Y><Z>8</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_CounterWallRight_14">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.94</R><G>0.48</G><B>0.13</B></Color3><token name="Material">256</token><string name="Name">CounterWallRight</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>8.5</X><Y>3</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>1</X><Y>2</Y><Z>8</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_InteriorFloor_15">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.7</R><G>0.33</G><B>0.1</B></Color3><token name="Material">256</token><string name="Name">InteriorFloor</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>2.2</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>16</X><Y>0.4</Y><Z>8</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Folder" referent="RBX_SellStall_TopRim_16">
+      <Properties><string name="Name">TopRim</string></Properties>
+    <Item class="Part" referent="RBX_SellStall_TopRimFront_7">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>1</R><G>0.62</G><B>0.22</B></Color3><token name="Material">256</token><string name="Name">TopRimFront</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>4.4</Y><Z>-4.6</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>19</X><Y>0.8</Y><Z>1.4</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_TopRimBack_8">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>1</R><G>0.62</G><B>0.22</B></Color3><token name="Material">256</token><string name="Name">TopRimBack</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>4.4</Y><Z>4.6</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>19</X><Y>0.8</Y><Z>1.4</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_TopRimLeft_9">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>1</R><G>0.62</G><B>0.22</B></Color3><token name="Material">256</token><string name="Name">TopRimLeft</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>-8.8</X><Y>4.4</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>1.4</X><Y>0.8</Y><Z>7.8</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_TopRimRight_10">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>1</R><G>0.62</G><B>0.22</B></Color3><token name="Material">256</token><string name="Name">TopRimRight</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>8.8</X><Y>4.4</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>1.4</X><Y>0.8</Y><Z>7.8</Z></Vector3>
+      </Properties>
+    </Item>
+    </Item>
+    </Item>
+    <Item class="Folder" referent="RBX_SellStall_Posts_53">
+      <Properties><string name="Name">Posts</string></Properties>
+    <Item class="Part" referent="RBX_SellStall_FrontLeftPost_21">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.94</R><G>0.48</G><B>0.13</B></Color3><token name="Material">256</token><string name="Name">FrontLeftPost</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>-9</X><Y>7</Y><Z>-5.2</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>1.6</X><Y>12</Y><Z>1.6</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_FrontRightPost_22">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.94</R><G>0.48</G><B>0.13</B></Color3><token name="Material">256</token><string name="Name">FrontRightPost</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>9</X><Y>7</Y><Z>-5.2</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>1.6</X><Y>12</Y><Z>1.6</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_BackLeftPost_23">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.94</R><G>0.48</G><B>0.13</B></Color3><token name="Material">256</token><string name="Name">BackLeftPost</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>-9</X><Y>7</Y><Z>5.2</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>1.6</X><Y>12</Y><Z>1.6</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_BackRightPost_24">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.94</R><G>0.48</G><B>0.13</B></Color3><token name="Material">256</token><string name="Name">BackRightPost</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>9</X><Y>7</Y><Z>5.2</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>1.6</X><Y>12</Y><Z>1.6</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Folder" referent="RBX_SellStall_PostFootBlocks_25">
+      <Properties><string name="Name">PostFootBlocks</string></Properties>
+    <Item class="Part" referent="RBX_SellStall_FrontLeftFootBlock_17">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.19</R><G>0.09</G><B>0.035</B></Color3><token name="Material">256</token><string name="Name">FrontLeftFootBlock</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>-9</X><Y>0.5</Y><Z>-5.5</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>3</X><Y>1</Y><Z>3</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_FrontRightFootBlock_18">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.19</R><G>0.09</G><B>0.035</B></Color3><token name="Material">256</token><string name="Name">FrontRightFootBlock</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>9</X><Y>0.5</Y><Z>-5.5</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>3</X><Y>1</Y><Z>3</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_BackLeftFootBlock_19">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.19</R><G>0.09</G><B>0.035</B></Color3><token name="Material">256</token><string name="Name">BackLeftFootBlock</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>-9</X><Y>0.5</Y><Z>5.5</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>3</X><Y>1</Y><Z>3</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_BackRightFootBlock_20">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.19</R><G>0.09</G><B>0.035</B></Color3><token name="Material">256</token><string name="Name">BackRightFootBlock</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>9</X><Y>0.5</Y><Z>5.5</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>3</X><Y>1</Y><Z>3</Z></Vector3>
+      </Properties>
+    </Item>
+    </Item>
+    </Item>
+    <Item class="Folder" referent="RBX_SellStall_Roof_54">
+      <Properties><string name="Name">Roof</string></Properties>
+    <Item class="Part" referent="RBX_SellStall_RoofMain_26">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>1</R><G>0.045</G><B>0.055</B></Color3><token name="Material">256</token><string name="Name">RoofMain</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>13.6</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>10</X><Y>1.2</Y><Z>14</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_RoofLeftSection_27">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>1</R><G>0.045</G><B>0.055</B></Color3><token name="Material">256</token><string name="Name">RoofLeftSection</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>-8</X><Y>13.45</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>6</X><Y>1.2</Y><Z>14</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_RoofRightSection_28">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>1</R><G>0.045</G><B>0.055</B></Color3><token name="Material">256</token><string name="Name">RoofRightSection</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>8</X><Y>13.45</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>6</X><Y>1.2</Y><Z>14</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_RoofFrontTrim_29">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.67</R><G>0.015</G><B>0.02</B></Color3><token name="Material">256</token><string name="Name">RoofFrontTrim</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>13.2</Y><Z>-7.3</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>22.6</X><Y>1</Y><Z>0.6</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_RoofBackTrim_30">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.67</R><G>0.015</G><B>0.02</B></Color3><token name="Material">256</token><string name="Name">RoofBackTrim</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>13.2</Y><Z>7.3</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>22.6</X><Y>1</Y><Z>0.6</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_RoofLeftTrim_31">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.67</R><G>0.015</G><B>0.02</B></Color3><token name="Material">256</token><string name="Name">RoofLeftTrim</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>-11.3</X><Y>13.2</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>0.6</X><Y>1</Y><Z>14</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_RoofRightTrim_32">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">true</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.67</R><G>0.015</G><B>0.02</B></Color3><token name="Material">256</token><string name="Name">RoofRightTrim</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>11.3</X><Y>13.2</Y><Z>0</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>0.6</X><Y>1</Y><Z>14</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Folder" referent="RBX_SellStall_RoofStudDetails_33">
+      <Properties><string name="Name">RoofStudDetails</string></Properties>
+
+    </Item>
+    </Item>
+    <Item class="Folder" referent="RBX_SellStall_Sign_55">
+      <Properties><string name="Name">Sign</string></Properties>
+    <Item class="Folder" referent="RBX_SellStall_SignFrame_43">
+      <Properties><string name="Name">SignFrame</string></Properties>
+    <Item class="Part" referent="RBX_SellStall_SignFrameTop_34">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.19</R><G>0.09</G><B>0.035</B></Color3><token name="Material">256</token><string name="Name">SignFrameTop</string><float name="Transparency">0</float>
+        <token name="TopSurface">0</token><token name="BottomSurface">0</token><token name="FrontSurface">0</token><token name="BackSurface">0</token><token name="LeftSurface">0</token><token name="RightSurface">0</token>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>11.5</Y><Z>-6.05</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>12.6</X><Y>0.5</Y><Z>0.4</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_SignFrameBottom_35">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.19</R><G>0.09</G><B>0.035</B></Color3><token name="Material">256</token><string name="Name">SignFrameBottom</string><float name="Transparency">0</float>
+        <token name="TopSurface">0</token><token name="BottomSurface">0</token><token name="FrontSurface">0</token><token name="BackSurface">0</token><token name="LeftSurface">0</token><token name="RightSurface">0</token>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>9.1</Y><Z>-6.05</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>12.6</X><Y>0.5</Y><Z>0.4</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_SignFrameLeft_36">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.19</R><G>0.09</G><B>0.035</B></Color3><token name="Material">256</token><string name="Name">SignFrameLeft</string><float name="Transparency">0</float>
+        <token name="TopSurface">0</token><token name="BottomSurface">0</token><token name="FrontSurface">0</token><token name="BackSurface">0</token><token name="LeftSurface">0</token><token name="RightSurface">0</token>
+        <CoordinateFrame name="CFrame"><X>-6</X><Y>10.3</Y><Z>-6.05</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>0.6</X><Y>2.4</Y><Z>0.4</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_SignFrameRight_37">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.19</R><G>0.09</G><B>0.035</B></Color3><token name="Material">256</token><string name="Name">SignFrameRight</string><float name="Transparency">0</float>
+        <token name="TopSurface">0</token><token name="BottomSurface">0</token><token name="FrontSurface">0</token><token name="BackSurface">0</token><token name="LeftSurface">0</token><token name="RightSurface">0</token>
+        <CoordinateFrame name="CFrame"><X>6</X><Y>10.3</Y><Z>-6.05</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>0.6</X><Y>2.4</Y><Z>0.4</Z></Vector3>
+      </Properties>
+    </Item>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_SignPanel_42">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.94</R><G>0.48</G><B>0.13</B></Color3><token name="Material">256</token><string name="Name">SignPanel</string><float name="Transparency">0</float>
+        <token name="TopSurface">0</token><token name="BottomSurface">0</token><token name="FrontSurface">0</token><token name="BackSurface">0</token><token name="LeftSurface">0</token><token name="RightSurface">0</token>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>10.3</Y><Z>-6.15</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>11.4</X><Y>2.1</Y><Z>0.2</Z></Vector3>
+      </Properties>
+      <Item class="SurfaceGui" referent="RBX_SellStall_SignText_40">
+        <Properties><bool name="AlwaysOnTop">false</bool><token name="Face">5</token><string name="Name">SignText</string><float name="PixelsPerStud">80</float></Properties>
+        <Item class="TextLabel" referent="RBX_SellStall_SellBrainrotsText_41">
+          <Properties>
+            <float name="BackgroundTransparency">1</float><string name="Name">SellBrainrotsText</string>
+            <UDim2 name="Position"><XS>0</XS><XO>0</XO><YS>0</YS><YO>0</YO></UDim2><UDim2 name="Size"><XS>1</XS><XO>0</XO><YS>1</YS><YO>0</YO></UDim2>
+            <string name="Text">Sell Brainrots</string><Color3 name="TextColor3"><R>1</R><G>0.05</G><B>0.05</B></Color3><bool name="TextScaled">true</bool><Color3 name="TextStrokeColor3"><R>0.02</R><G>0.01</G><B>0.005</B></Color3><float name="TextStrokeTransparency">0</float>
+          </Properties>
+        </Item>
+      </Item>    
+    </Item>
+    <Item class="Folder" referent="RBX_SellStall_HangingRods_44">
+      <Properties><string name="Name">HangingRods</string></Properties>
+    <Item class="Part" referent="RBX_SellStall_HangingRodLeft_38">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.02</R><G>0.018</G><B>0.015</B></Color3><token name="Material">256</token><string name="Name">HangingRodLeft</string><float name="Transparency">0</float>
+        <token name="TopSurface">0</token><token name="BottomSurface">0</token><token name="FrontSurface">0</token><token name="BackSurface">0</token><token name="LeftSurface">0</token><token name="RightSurface">0</token>
+        <CoordinateFrame name="CFrame"><X>-5.2</X><Y>12.25</Y><Z>-6.05</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>0.18</X><Y>1.5</Y><Z>0.18</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_HangingRodRight_39">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.02</R><G>0.018</G><B>0.015</B></Color3><token name="Material">256</token><string name="Name">HangingRodRight</string><float name="Transparency">0</float>
+        <token name="TopSurface">0</token><token name="BottomSurface">0</token><token name="FrontSurface">0</token><token name="BackSurface">0</token><token name="LeftSurface">0</token><token name="RightSurface">0</token>
+        <CoordinateFrame name="CFrame"><X>5.2</X><Y>12.25</Y><Z>-6.05</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>0.18</X><Y>1.5</Y><Z>0.18</Z></Vector3>
+      </Properties>
+    </Item>
+    </Item>
+    </Item>
+    <Item class="Folder" referent="RBX_SellStall_Interaction_56">
+      <Properties><string name="Name">Interaction</string></Properties>
+    <Item class="Part" referent="RBX_SellStall_SellPad_48">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanQuery">true</bool><bool name="CanTouch">true</bool>
+        <Color3 name="Color"><R>1</R><G>0.11</G><B>0.12</B></Color3><token name="Material">256</token><string name="Name">SellPad</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">3</token><token name="BackSurface">3</token><token name="LeftSurface">3</token><token name="RightSurface">3</token>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>0.2</Y><Z>-9.7</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>12</X><Y>0.4</Y><Z>7</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Folder" referent="RBX_SellStall_PadTrim_49">
+      <Properties><string name="Name">PadTrim</string></Properties>
+    <Item class="Part" referent="RBX_SellStall_PadTrimFront_45">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.67</R><G>0.015</G><B>0.02</B></Color3><token name="Material">256</token><string name="Name">PadTrimFront</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">0</token><token name="BackSurface">0</token><token name="LeftSurface">0</token><token name="RightSurface">0</token>
+        <CoordinateFrame name="CFrame"><X>0</X><Y>0.35</Y><Z>-13.35</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>12.4</X><Y>0.4</Y><Z>0.3</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_PadTrimLeft_46">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.67</R><G>0.015</G><B>0.02</B></Color3><token name="Material">256</token><string name="Name">PadTrimLeft</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">0</token><token name="BackSurface">0</token><token name="LeftSurface">0</token><token name="RightSurface">0</token>
+        <CoordinateFrame name="CFrame"><X>-6.15</X><Y>0.35</Y><Z>-9.7</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>0.3</X><Y>0.4</Y><Z>7</Z></Vector3>
+      </Properties>
+    </Item>
+    <Item class="Part" referent="RBX_SellStall_PadTrimRight_47">
+      <Properties>
+        <bool name="Anchored">true</bool><bool name="CanCollide">false</bool><bool name="CanQuery">true</bool><bool name="CanTouch">false</bool>
+        <Color3 name="Color"><R>0.67</R><G>0.015</G><B>0.02</B></Color3><token name="Material">256</token><string name="Name">PadTrimRight</string><float name="Transparency">0</float>
+        <token name="TopSurface">3</token><token name="BottomSurface">0</token><token name="FrontSurface">0</token><token name="BackSurface">0</token><token name="LeftSurface">0</token><token name="RightSurface">0</token>
+        <CoordinateFrame name="CFrame"><X>6.15</X><Y>0.35</Y><Z>-9.7</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+        <Vector3 name="size"><X>0.3</X><Y>0.4</Y><Z>7</Z></Vector3>
+      </Properties>
+    </Item>
+    </Item>
+    <Item class="Folder" referent="RBX_SellStall_OptionalGlow_50">
+      <Properties><string name="Name">OptionalGlow</string></Properties>
+
+    </Item>
+    </Item>
+  </Item>
+</roblox>
