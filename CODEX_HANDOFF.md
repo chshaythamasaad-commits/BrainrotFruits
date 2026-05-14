@@ -1,5 +1,36 @@
 # BrainrotFruits Handoff
 
+## Premium Showcase Visual Pass
+
+This pass upgraded the existing code-generated mascot models toward a more premium Roblox simulator showcase style without changing the core gameplay loop.
+
+Files changed in this pass:
+
+- `src/ReplicatedStorage/BrainrotFruits/Modules/BrainrotModelFactory.lua`
+- `src/ServerScriptService/BrainrotFruits/CharacterSpawnService.lua`
+- `src/ServerScriptService/BrainrotFruits/Map/MapBuilder.lua`
+- `src/ServerScriptService/BrainrotFruits/StrawberitaPreview.server.lua`
+- `CODEX_HANDOFF.md`
+
+Visual changes:
+
+- `BrainrotModelFactory.Version` is now `BrainrotModelFactory_PremiumShowcaseMascots_V2`.
+- All generated mascots now use stronger face frames, bigger readable expressions, more layered fruit/body massing, and extra contour parts.
+- Strawberita received the most mascot-benchmark polish: broader strawberry form, top shoulder mass, side cheek masses, more leaf crown pieces, bow tails, skirt pleats, and front shine.
+- BananaBandito now has stronger banana curve pieces, peel crown, mask ties, hat band, bandana knot, money bag patch, and clearer bandit/cowboy identity.
+- CoconuttoBonkini now has side shell massing, cream drips, coconut pores, extra cracks, flower/palm details, tunic teeth, and club wrap.
+- LemonaldoSprintini now has lemon skin dots, stronger front belly, headband knot/tail, sport stripe, sock stripes, speed-bolt accents, and more athletic readability.
+- WatermeloniWobblino now has bigger rind caps, belly roundness, extra stripe rhythm, top leaf, sumo belt ties, inner slice glow, and a happier wobble face.
+- DragonfruttoDrippo now has side body massing, extra spikes, front shine, sunglasses glint, jacket lapels, chain charm, and a clearer confident pose.
+- Non-base variants now get attached premium accents such as glow disks, chest badges, crown shards, diamond shards, star chips, orbit bars, rainbow strips, and toxic bubble gems.
+
+Presentation changes:
+
+- Preview spawns now use `PreviewStands` with layered pedestals, glow insets, small nameplates, and rarity gems instead of plain flat pads.
+- Normal preview mode includes a low showroom floor band with subtle glow strips and top text.
+- Preview model roots were raised slightly so characters sit better on the new stands.
+- `Workspace.BrainrotMap` sets `BrainrotShowcaseVisualVersion = "PremiumShowcaseMascots_V2"`.
+
 ## Current Pass
 
 Restored and polished the first real Brainrot Fruits roster from the current voxel/chibi reference pack:
@@ -72,9 +103,11 @@ The factory creates Roblox-native, part-based placeholder mascots for all six ch
 Visual polish now includes:
 
 - rounder toy-like silhouettes using ball/cylinder/wedge parts
-- large readable face panels and eyes
+- layered contour pieces and stronger silhouette-specific shapes
+- large readable face panels, face frames, and eyes
 - chibi arms, legs, shoes, and accessories
 - character-specific props such as hat, bandana, club, sunglasses, chain, sumo belt, bow, leaves, and rind stripes
+- attached premium variant accent parts for non-base variants
 - per-part `AnimationRole` and `VariantColorRole` attributes for animation and variant styling
 
 Final imported meshes can replace these builders later by swapping the character builder inside `BrainrotModelFactory` while preserving model attributes and `PrimaryPart`.
@@ -128,7 +161,7 @@ Preview/debug service:
 
 `src/ServerScriptService/BrainrotFruits/CharacterSpawnService.lua`
 
-Normal play mode spawns one base model of each character in the central hub preview. If `Workspace.BrainrotMap.DebugMode` is true, the preview spawns all variants.
+Normal play mode spawns one base model of each character in the central hub preview. If `Workspace.BrainrotMap.DebugMode` is true, the preview spawns all variants. Preview stands now include layered pedestals, glow insets, compact nameplates, and rarity gems.
 
 Studio command examples:
 
@@ -165,11 +198,12 @@ Existing Strawberita-specific wrappers remain compatible.
 3. Press Play.
 4. Confirm `Workspace.BrainrotMap` loads without output errors.
 5. Confirm central preview shows all six base characters.
-6. Confirm labels are readable and not giant boards.
+6. Confirm labels and nameplates are readable and not giant boards.
 7. Run `spawnAllVariants(nil, { clearFirst = true, playIntro = true })` from the command bar.
 8. Confirm Base, Golden, Diamond, Galaxy, Rainbow, Toxic, and Cosmic variants render.
 9. Confirm idle animations start and stop without jitter or drifting.
-10. Launch from the shared catapult and confirm the reward flow still reveals, places, animates, and grants a tool.
+10. Confirm variant accents do not block faces or movement.
+11. Launch from the shared catapult and confirm the reward flow still reveals, places, animates, and grants a tool.
 
 ## Validation Done
 
