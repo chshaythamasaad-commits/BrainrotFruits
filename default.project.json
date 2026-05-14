@@ -3,20 +3,30 @@
   "tree": {
     "$className": "DataModel",
     "ReplicatedStorage": {
-      "Shared": {
-        "$path": "src/shared"
+      "BrainrotFruits": {
+        "$path": "src/ReplicatedStorage/BrainrotFruits"
       }
     },
     "ServerScriptService": {
-      "Server": {
-        "$path": "src/server"
+      "BrainrotFruits": {
+        "$path": "src/ServerScriptService/BrainrotFruits"
       }
     },
     "StarterPlayer": {
       "StarterPlayerScripts": {
-        "Client": {
-          "$path": "src/client"
+        "BrainrotFruits": {
+          "$path": "src/StarterPlayer/StarterPlayerScripts/BrainrotFruits"
         }
+      }
+    },
+    "StarterGui": {
+      "BrainrotFruits": {
+        "$path": "src/StarterGui/BrainrotFruits"
+      }
+    },
+    "Workspace": {
+      "BrainrotMap": {
+        "$path": "src/Workspace/BrainrotMap"
       }
     }
   }

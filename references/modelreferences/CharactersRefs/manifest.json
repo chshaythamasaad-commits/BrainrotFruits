@@ -1,0 +1,169 @@
+{
+  "style": "Voxel chibi Roblox-friendly turnaround sheets; blocky/cubic geometry, cute face panels, four-view layout.",
+  "characters": [
+    {
+      "id": "Strawberita",
+      "base_turnaround": "References/Characters/Strawberita/Base/Strawberita_Base_Turnaround.png",
+      "variant_notes": "References/Characters/Strawberita/Variants/VARIANT_NOTES.md"
+    },
+    {
+      "id": "BananitoBandito",
+      "base_turnaround": "References/Characters/BananitoBandito/Base/BananitoBandito_Base_Turnaround.png",
+      "variant_notes": "References/Characters/BananitoBandito/Variants/VARIANT_NOTES.md"
+    },
+    {
+      "id": "CoconuttoBonkini",
+      "base_turnaround": "References/Characters/CoconuttoBonkini/Base/CoconuttoBonkini_Base_Turnaround.png",
+      "variant_notes": "References/Characters/CoconuttoBonkini/Variants/VARIANT_NOTES.md"
+    },
+    {
+      "id": "LemonaldoSprintini",
+      "base_turnaround": "References/Characters/LemonaldoSprintini/Base/LemonaldoSprintini_Base_Turnaround.png",
+      "variant_notes": "References/Characters/LemonaldoSprintini/Variants/VARIANT_NOTES.md"
+    },
+    {
+      "id": "WatermeloniWobblino",
+      "base_turnaround": "References/Characters/WatermeloniWobblino/Base/WatermeloniWobblino_Base_Turnaround.png",
+      "variant_notes": "References/Characters/WatermeloniWobblino/Variants/VARIANT_NOTES.md"
+    },
+    {
+      "id": "DragonfruttoDrippo",
+      "base_turnaround": "References/Characters/DragonfruttoDrippo/Base/DragonfruttoDrippo_Base_Turnaround.png",
+      "variant_notes": "References/Characters/DragonfruttoDrippo/Variants/VARIANT_NOTES.md"
+    }
+  ],
+  "variants": {
+    "Strawberita": [
+      {
+        "id": "Base",
+        "visual_rule": "Use exact base colors and no aura; default version."
+      },
+      {
+        "id": "Golden",
+        "visual_rule": "Gold/yellow material accents, subtle coin sparkles, rarity glow kept Roblox-friendly."
+      },
+      {
+        "id": "Rainbow",
+        "visual_rule": "Soft rainbow gradient accents, small star particles, not too noisy."
+      },
+      {
+        "id": "Toxic",
+        "visual_rule": "Lime/green hazard accents, bubbles/drips, faint green aura."
+      },
+      {
+        "id": "Cosmic",
+        "visual_rule": "Dark purple/blue accents, tiny star particles, faint orbit ring."
+      }
+    ],
+    "BananitoBandito": [
+      {
+        "id": "Base",
+        "visual_rule": "Use exact base colors and no aura; default version."
+      },
+      {
+        "id": "Golden",
+        "visual_rule": "Gold/yellow material accents, subtle coin sparkles, rarity glow kept Roblox-friendly."
+      },
+      {
+        "id": "Rainbow",
+        "visual_rule": "Soft rainbow gradient accents, small star particles, not too noisy."
+      },
+      {
+        "id": "Toxic",
+        "visual_rule": "Lime/green hazard accents, bubbles/drips, faint green aura."
+      },
+      {
+        "id": "Cosmic",
+        "visual_rule": "Dark purple/blue accents, tiny star particles, faint orbit ring."
+      }
+    ],
+    "CoconuttoBonkini": [
+      {
+        "id": "Base",
+        "visual_rule": "Use exact base colors and no aura; default version."
+      },
+      {
+        "id": "Golden",
+        "visual_rule": "Gold/yellow material accents, subtle coin sparkles, rarity glow kept Roblox-friendly."
+      },
+      {
+        "id": "Rainbow",
+        "visual_rule": "Soft rainbow gradient accents, small star particles, not too noisy."
+      },
+      {
+        "id": "Toxic",
+        "visual_rule": "Lime/green hazard accents, bubbles/drips, faint green aura."
+      },
+      {
+        "id": "Cosmic",
+        "visual_rule": "Dark purple/blue accents, tiny star particles, faint orbit ring."
+      }
+    ],
+    "LemonaldoSprintini": [
+      {
+        "id": "Base",
+        "visual_rule": "Use exact base colors and no aura; default version."
+      },
+      {
+        "id": "Golden",
+        "visual_rule": "Gold/yellow material accents, subtle coin sparkles, rarity glow kept Roblox-friendly."
+      },
+      {
+        "id": "Rainbow",
+        "visual_rule": "Soft rainbow gradient accents, small star particles, not too noisy."
+      },
+      {
+        "id": "Toxic",
+        "visual_rule": "Lime/green hazard accents, bubbles/drips, faint green aura."
+      },
+      {
+        "id": "Cosmic",
+        "visual_rule": "Dark purple/blue accents, tiny star particles, faint orbit ring."
+      }
+    ],
+    "WatermeloniWobblino": [
+      {
+        "id": "Base",
+        "visual_rule": "Use exact base colors and no aura; default version."
+      },
+      {
+        "id": "Golden",
+        "visual_rule": "Gold/yellow material accents, subtle coin sparkles, rarity glow kept Roblox-friendly."
+      },
+      {
+        "id": "Rainbow",
+        "visual_rule": "Soft rainbow gradient accents, small star particles, not too noisy."
+      },
+      {
+        "id": "Toxic",
+        "visual_rule": "Lime/green hazard accents, bubbles/drips, faint green aura."
+      },
+      {
+        "id": "Cosmic",
+        "visual_rule": "Dark purple/blue accents, tiny star particles, faint orbit ring."
+      }
+    ],
+    "DragonfruttoDrippo": [
+      {
+        "id": "Base",
+        "visual_rule": "Use exact base colors and no aura; default version."
+      },
+      {
+        "id": "Golden",
+        "visual_rule": "Gold/yellow material accents, subtle coin sparkles, rarity glow kept Roblox-friendly."
+      },
+      {
+        "id": "Rainbow",
+        "visual_rule": "Soft rainbow gradient accents, small star particles, not too noisy."
+      },
+      {
+        "id": "Toxic",
+        "visual_rule": "Lime/green hazard accents, bubbles/drips, faint green aura."
+      },
+      {
+        "id": "Cosmic",
+        "visual_rule": "Dark purple/blue accents, tiny star particles, faint orbit ring."
+      }
+    ]
+  }
+}

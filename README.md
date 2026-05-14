@@ -1,8 +1,8 @@
 # BrainrotFruits
 
-Roblox/Rojo project for **Catapult a Brainrot Fruit**.
+Catapult a Brainrot Fruit.
 
-Players will launch Brainrot Crates with a catapult, reveal collectible brainrot fruit characters, bring rewards back to their plots, earn money, and upgrade.
+Current playable slice: approach the shared catapult, charge a fruit crate launch, land it down the lane, reveal a distance-based Strawberita variant, then watch the PG Wobble Blob placeholder bonk sequence.
 
 ## Tech
 
@@ -17,8 +17,4 @@ aftman install
 rojo serve default.project.json
 ```
 
-Then open Roblox Studio, open the Rojo plugin, and connect to the running Rojo server.
-
-## Handoff
-
-See [CODEX_HANDOFF.md](CODEX_HANDOFF.md) for the current project status, design direction, local setup steps, and recommended next implementation pass.
+In Roblox Studio, connect the Rojo plugin to `localhost:34872`, press Play, walk to the shared catapult in `Workspace.BrainrotMap.SharedLaunchArea`, then hold and release `E`, `Space`, mouse click, or the mobile `Launch` action.
