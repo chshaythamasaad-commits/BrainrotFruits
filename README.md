@@ -15,6 +15,15 @@ The first roster is sourced from `references/modelreferences/CharactersRefs`:
 
 The active placeholder models are Roblox-native voxel/chibi mascots built by `BrainrotModelFactory`, with variants and lightweight idle animations ready for Studio preview.
 
+Builder-backed Studio assets sync into `ServerStorage.BrainrotFruitAssets` through Rojo:
+
+- SellStall
+- RunUpgradesStall
+- Catapult Upgrades Stall
+- Leaderboard
+
+These are backed up for review/use, but they do not replace the generated map booths yet.
+
 ## Tech
 
 - Roblox Studio

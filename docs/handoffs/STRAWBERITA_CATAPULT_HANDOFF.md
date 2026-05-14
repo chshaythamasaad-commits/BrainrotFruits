@@ -365,6 +365,42 @@ Latest multiplayer note: overlapping shared-catapult launches should now fail wi
 2. Confirm no separate temporary asset-review platform appears.
 3. Confirm the normal `Workspace.BrainrotMap` gameplay map still builds.
 
+## Latest Sell Stall Asset Notes
+
+- Added source-backed builder asset `src/assets/BrainrotFruitAssets/SellStall.rbxmx`.
+- Added `ServerStorage.BrainrotFruitAssets` to `default.project.json` so Rojo syncs the asset into Studio.
+- The model root is named `SellStall` and has a PrimaryPart named `RootPart`.
+- This pass only adds the asset and storage mapping; it does not replace the procedural hub Sell booth yet.
+
+## Latest Sell Stall Asset Verification
+
+1. Run `rojo serve default.project.json` from this branch.
+2. Connect Studio with the Rojo plugin.
+3. Confirm `ServerStorage.BrainrotFruitAssets.SellStall` exists.
+4. Confirm the current map still builds normally.
+
+## Latest Builder Asset Batch Notes
+
+- Added source-backed builder models under `src/assets/BrainrotFruitAssets`:
+  - `Catapult Upgrades Stall.rbxmx`
+  - `Leaderboard.rbxmx`
+  - `RunUpgradesStall.rbxmx`
+  - Updated `SellStall.rbxmx`
+- Added new visual reference folders under `references/references`:
+  - `Catapult Upgrade Stall`
+  - `Leaderboard`
+  - `Upgrade Speed Stall`
+  - `coin stack shrine`
+- These assets are synced by the existing `ServerStorage.BrainrotFruitAssets` Rojo mapping.
+- This pass only backs up the builder assets and references; it does not replace procedural map booths yet.
+
+## Latest Builder Asset Batch Verification
+
+1. Run `rojo serve default.project.json` from this branch.
+2. Connect Studio with the Rojo plugin.
+3. Confirm `ServerStorage.BrainrotFruitAssets` contains `SellStall`, `RunUpgradesStall`, `Catapult Upgrades Stall`, and `Leaderboard`.
+4. Confirm the current generated map still builds normally.
+
 ## Known Issues
 
 Latest note: push now works from the active `M:\Games\BrainrotFruits-git` clone; older push-auth warnings below may refer to earlier sessions.

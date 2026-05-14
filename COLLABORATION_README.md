@@ -14,8 +14,9 @@ This branch has multiple people and Codex instances contributing. Treat existing
 
 - Active Git branch in the clean repo: `main`.
 - Current playable slice: shared catapult, crate launch, roster-based Brainrot Fruit reveal, return-run, plot claim, display placement, tool reward, and bouncy/studded visual polish.
-- Important handoff file: `CODEX_HANDOFF.md`.
+- Important handoff files: `CODEX_HANDOFF.md` and `docs/handoffs/STRAWBERITA_CATAPULT_HANDOFF.md`.
 - Current character source of truth: `references/modelreferences/CharactersRefs`.
+- Current builder asset backup path: `src/assets/BrainrotFruitAssets`, synced to `ServerStorage.BrainrotFruitAssets`.
 
 ## Temporary Showcase Removed
 
