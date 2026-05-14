@@ -257,9 +257,18 @@ function PlotService.placeRewardOnSlot(player, rewardModel, reward)
 	slot:SetAttribute("FruitDisplayName", reward.displayName or rewardModel.Name)
 
 	local yOffset = (slot.Size.Y / 2) + 1.65
-	rewardModel:PivotTo(slot.CFrame * CFrame.new(0, yOffset, 0) * CFrame.Angles(0, math.rad(180), 0))
+	local displayPosition = slot.Position + Vector3.new(0, yOffset, 0)
+	local plot = PlotService.getPlayerPlot(player)
+	local targetPosition = plot and plot:GetPivot().Position or (slot.CFrame * CFrame.new(0, 0, -8)).Position
+	local flatTarget = Vector3.new(targetPosition.X, displayPosition.Y, targetPosition.Z)
+	local displayCFrame = slot.CFrame * CFrame.new(0, yOffset, 0) * CFrame.Angles(0, math.rad(180), 0)
+	if (flatTarget - displayPosition).Magnitude > 0.1 then
+		displayCFrame = CFrame.lookAt(displayPosition, flatTarget)
+	end
+	rewardModel:PivotTo(displayCFrame)
 	rewardModel:SetAttribute("DisplaySlotIndex", slot:GetAttribute("SlotIndex"))
 	rewardModel:SetAttribute("PlotId", slot:GetAttribute("PlotId"))
+	rewardModel:SetAttribute("FacesPlotCenter", true)
 
 	return slot
 end

@@ -10,6 +10,14 @@ local PlotService = require(script.Parent.Map.PlotService)
 local RewardService = {}
 
 local rng = Random.new()
+local printedToolRewardVersion = false
+
+local function printToolRewardVersion()
+	if not printedToolRewardVersion then
+		print("[BrainrotFruits] StrawberitaToolReward_V1 active")
+		printedToolRewardVersion = true
+	end
+end
 
 local function getOrCreateFolder(parent, name)
 	local folder = parent:FindFirstChild(name)
@@ -63,6 +71,113 @@ local function createCratePiece(parent, name, size, cframe, color)
 	part.CanCollide = false
 	part.Parent = parent
 	return part
+end
+
+local function addToolSurfaceText(part, text, face)
+	local surface = Instance.new("SurfaceGui")
+	surface.Name = "ToolSurfaceText"
+	surface.Face = face or Enum.NormalId.Front
+	surface.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
+	surface.PixelsPerStud = 28
+	surface.LightInfluence = 0.18
+	surface.Parent = part
+
+	local label = Instance.new("TextLabel")
+	label.BackgroundTransparency = 1
+	label.Font = Enum.Font.GothamBlack
+	label.Text = text
+	label.TextColor3 = Color3.fromRGB(255, 255, 245)
+	label.TextScaled = true
+	label.TextStrokeTransparency = 0.2
+	label.Size = UDim2.fromScale(1, 1)
+	label.Parent = surface
+end
+
+local function createToolPart(tool, handle, name, size, offset, color, material, transparency)
+	local part = Instance.new("Part")
+	part.Name = name
+	part.Size = size
+	part.CFrame = handle.CFrame * offset
+	part.Color = color
+	part.Material = material or Enum.Material.SmoothPlastic
+	part.Transparency = transparency or 0
+	part.Anchored = false
+	part.CanCollide = false
+	part.Massless = true
+	part.TopSurface = Enum.SurfaceType.Smooth
+	part.BottomSurface = Enum.SurfaceType.Smooth
+	part.Parent = tool
+
+	local weld = Instance.new("WeldConstraint")
+	weld.Name = "ToolVisualWeld"
+	weld.Part0 = handle
+	weld.Part1 = part
+	weld.Parent = part
+
+	return part
+end
+
+local function grantRewardTool(player, reward)
+	printToolRewardVersion()
+
+	local backpack = player:FindFirstChildOfClass("Backpack") or player:FindFirstChild("Backpack")
+	if not backpack then
+		return nil
+	end
+
+	local variantName = reward and (reward.variantName or reward.variant) or FruitConfig.DefaultVariant
+	local variantConfig = FruitConfig.StrawberitaVariants[variantName] or FruitConfig.StrawberitaVariants[FruitConfig.DefaultVariant]
+	local displayName = reward and reward.displayName or variantConfig.displayName or "Base Strawberita"
+
+	local tool = Instance.new("Tool")
+	tool.Name = displayName
+	tool.ToolTip = `BrainrotFruits reward: {displayName}`
+	tool.RequiresHandle = true
+	tool.CanBeDropped = false
+	tool:SetAttribute("RewardType", "Strawberita")
+	tool:SetAttribute("RewardVariant", variantName)
+	tool:SetAttribute("Rarity", reward and reward.rarity or variantConfig.rarity or "Common")
+	tool:SetAttribute("OwnerUserId", player.UserId)
+
+	local handle = Instance.new("Part")
+	handle.Name = "Handle"
+	handle.Size = Vector3.new(1.15, 1.32, 0.82)
+	handle.Color = variantConfig.bodyColor
+	handle.Material = variantConfig.material or Enum.Material.SmoothPlastic
+	handle.Anchored = false
+	handle.CanCollide = false
+	handle.Massless = true
+	handle.TopSurface = Enum.SurfaceType.Smooth
+	handle.BottomSurface = Enum.SurfaceType.Smooth
+	handle.Parent = tool
+	addToolSurfaceText(handle, "BF", Enum.NormalId.Front)
+
+	createToolPart(tool, handle, "FacePanel", Vector3.new(0.72, 0.42, 0.08), CFrame.new(0, 0.05, -0.45), variantConfig.facePanelColor or variantConfig.bellyColor, Enum.Material.SmoothPlastic)
+	createToolPart(tool, handle, "LeftEye", Vector3.new(0.14, 0.18, 0.08), CFrame.new(-0.22, 0.11, -0.52), Color3.fromRGB(18, 18, 18), Enum.Material.SmoothPlastic)
+	createToolPart(tool, handle, "RightEye", Vector3.new(0.14, 0.18, 0.08), CFrame.new(0.22, 0.11, -0.52), Color3.fromRGB(18, 18, 18), Enum.Material.SmoothPlastic)
+	createToolPart(tool, handle, "LeafCap", Vector3.new(0.82, 0.16, 0.7), CFrame.new(0, 0.74, 0), variantConfig.leafColor or Color3.fromRGB(80, 180, 60), Enum.Material.Grass)
+	createToolPart(tool, handle, "Stem", Vector3.new(0.24, 0.38, 0.24), CFrame.new(0, 1.0, 0), variantConfig.leafShadowColor or Color3.fromRGB(55, 130, 45), Enum.Material.Wood)
+	createToolPart(tool, handle, "SeedA", Vector3.new(0.13, 0.13, 0.08), CFrame.new(-0.37, 0.36, -0.48), variantConfig.seedColor, variantConfig.seedMaterial)
+	createToolPart(tool, handle, "SeedB", Vector3.new(0.13, 0.13, 0.08), CFrame.new(0.37, 0.34, -0.48), variantConfig.seedColor, variantConfig.seedMaterial)
+
+	local effects = variantConfig.effects or {}
+	if effects.light then
+		local light = Instance.new("PointLight")
+		light.Name = "RewardToolGlow"
+		light.Color = effects.light
+		light.Brightness = 0.55
+		light.Range = 8
+		light.Parent = handle
+	end
+	if effects.sparkles then
+		local sparkles = Instance.new("Sparkles")
+		sparkles.Name = "RewardToolSparkles"
+		sparkles.SparkleColor = effects.sparkles
+		sparkles.Parent = handle
+	end
+
+	tool.Parent = backpack
+	return tool
 end
 
 local function openCrate(crate, landingPosition)
@@ -178,9 +293,16 @@ function RewardService.claimPendingReward(player, rewardModel, reward)
 	rewardModel:SetAttribute("ClaimState", "Secured")
 	rewardModel:SetAttribute("ClaimedByUserId", player.UserId)
 	rewardModel:SetAttribute("DisplaySlotIndex", placedSlot:GetAttribute("SlotIndex"))
+	local rewardTool = grantRewardTool(player, reward)
+	if rewardTool then
+		rewardModel:SetAttribute("RewardToolName", rewardTool.Name)
+		rewardModel:SetAttribute("RewardToolGranted", true)
+	end
 	print(`[BrainrotFruits] Secured {reward.displayName or rewardModel.Name} on Plot {placedSlot:GetAttribute("PlotId")} Slot {placedSlot:GetAttribute("SlotIndex")}.`)
 
 	return placedSlot
 end
+
+printToolRewardVersion()
 
 return RewardService

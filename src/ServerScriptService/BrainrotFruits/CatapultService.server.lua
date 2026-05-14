@@ -7,10 +7,10 @@ local FXService = require(script.Parent.FXService)
 local PlotService = require(script.Parent.Map.PlotService)
 local ReturnRunService = require(script.Parent.ReturnRunService)
 local RewardService = require(script.Parent.RewardService)
+local StrawberitaTransformService = require(script.Parent.StrawberitaTransformService)
 
 local rng = Random.new()
 local lastLaunchByUserId = {}
-local crateStateByUserId = {}
 local sharedCatapultBusyUserId = nil
 local sharedCatapultBusyUntil = 0
 
@@ -47,11 +47,6 @@ local revealResultRemote = getOrCreateRemote(remoteFolder, CatapultConfig.Remote
 local function getPlayerRoot(player)
 	local character = player.Character
 	return character and character:FindFirstChild("HumanoidRootPart")
-end
-
-local function getPlayerHumanoid(player)
-	local character = player.Character
-	return character and character:FindFirstChildOfClass("Humanoid")
 end
 
 local function clampPower(power)
@@ -149,113 +144,6 @@ local function makeCrate(origin, player, powerAlpha, plot)
 	return crate
 end
 
-local function setCharacterAsCrate(player, crate)
-	local character = player.Character
-	local humanoid = getPlayerHumanoid(player)
-	local root = getPlayerRoot(player)
-	if not character or not humanoid or not root then
-		return false
-	end
-
-	local state = {
-		crate = crate,
-		character = character,
-		humanoid = humanoid,
-		root = root,
-		rootAnchored = root.Anchored,
-		walkSpeed = humanoid.WalkSpeed,
-		jumpPower = humanoid.JumpPower,
-		jumpHeight = humanoid.JumpHeight,
-		autoRotate = humanoid.AutoRotate,
-		platformStand = humanoid.PlatformStand,
-		parts = {},
-		decals = {},
-	}
-	crateStateByUserId[player.UserId] = state
-
-	for _, descendant in ipairs(character:GetDescendants()) do
-		if descendant:IsA("BasePart") then
-			state.parts[descendant] = {
-				Transparency = descendant.Transparency,
-				CanCollide = descendant.CanCollide,
-				CanTouch = descendant.CanTouch,
-			}
-			descendant.Transparency = 1
-			descendant.CanCollide = false
-			descendant.CanTouch = false
-		elseif descendant:IsA("Decal") or descendant:IsA("Texture") then
-			state.decals[descendant] = descendant.Transparency
-			descendant.Transparency = 1
-		end
-	end
-
-	root.Anchored = true
-	root.CFrame = crate.CFrame + Vector3.new(0, 1.8, 0)
-	humanoid.WalkSpeed = 0
-	humanoid.JumpPower = 0
-	humanoid.JumpHeight = 0
-	humanoid.AutoRotate = false
-	humanoid.PlatformStand = true
-
-	player:SetAttribute("IsLaunching", true)
-	player:SetAttribute("IsCrate", true)
-	player:SetAttribute("PendingRewardName", "")
-	player:SetAttribute("ReturnRunActive", false)
-
-	return true
-end
-
-local function syncCharacterToCrate(player, crate)
-	local state = crateStateByUserId[player.UserId]
-	if not state or state.crate ~= crate then
-		return
-	end
-
-	local root = getPlayerRoot(player)
-	if root then
-		root.CFrame = crate.CFrame + Vector3.new(0, 1.8, 0)
-	end
-end
-
-local function restoreCharacterFromCrate(player, position)
-	local state = crateStateByUserId[player.UserId]
-	if not state then
-		return
-	end
-
-	for part, original in pairs(state.parts) do
-		if part and part.Parent then
-			part.Transparency = original.Transparency
-			part.CanCollide = original.CanCollide
-			part.CanTouch = original.CanTouch
-		end
-	end
-
-	for decal, transparency in pairs(state.decals) do
-		if decal and decal.Parent then
-			decal.Transparency = transparency
-		end
-	end
-
-	local humanoid = getPlayerHumanoid(player)
-	local root = getPlayerRoot(player)
-	if root then
-		root.Anchored = state.rootAnchored
-		root.CFrame = CFrame.new(position + Vector3.new(0, 4, 0))
-	end
-	if humanoid then
-		humanoid.WalkSpeed = state.walkSpeed or 16
-		humanoid.JumpPower = state.jumpPower or humanoid.JumpPower
-		humanoid.JumpHeight = state.jumpHeight or humanoid.JumpHeight
-		humanoid.AutoRotate = state.autoRotate ~= false
-		humanoid.PlatformStand = state.platformStand == true
-	end
-
-	crateStateByUserId[player.UserId] = nil
-	player:SetAttribute("IsLaunching", false)
-	player:SetAttribute("IsCrate", false)
-end
-
 local function releaseSharedCatapult(player)
 	if sharedCatapultBusyUserId == player.UserId then
 		sharedCatapultBusyUserId = nil
@@ -269,7 +157,7 @@ local function trackLanding(player, crate, launchOrigin)
 
 	while crate.Parent and os.clock() - startedAt < CatapultConfig.LandingTimeoutSeconds do
 		landedPosition = crate.Position
-		syncCharacterToCrate(player, crate)
+		StrawberitaTransformService.syncToCrate(player, crate)
 		if os.clock() - startedAt > 0.7 and crate.AssemblyLinearVelocity.Magnitude <= CatapultConfig.RestingSpeed then
 			break
 		end
@@ -277,7 +165,7 @@ local function trackLanding(player, crate, launchOrigin)
 	end
 
 	if not crate.Parent then
-		restoreCharacterFromCrate(player, landedPosition)
+		StrawberitaTransformService.finish(player, true, landedPosition)
 		releaseSharedCatapult(player)
 		return
 	end
@@ -287,7 +175,7 @@ local function trackLanding(player, crate, launchOrigin)
 	crate:SetAttribute("LandingDistance", distance)
 	FXService.emitBurst(crate.Parent, landedPosition + Vector3.new(0, 1.2, 0), Color3.fromRGB(255, 238, 145), "LandingBurst", 22)
 
-	print(`[BrainrotFruits] {player.Name} became a launched crate and landed {math.floor(distance)} studs from the shared catapult.`)
+	print(`[BrainrotFruits] {player.Name} launched as Strawberita and landed {math.floor(distance)} studs from the shared catapult.`)
 
 	launchResultRemote:FireClient(player, {
 		ok = true,
@@ -302,7 +190,7 @@ local function trackLanding(player, crate, launchOrigin)
 
 	if crate.Parent then
 		local reveal = RewardService.revealCrate(player, crate, landedPosition, distance)
-		restoreCharacterFromCrate(player, landedPosition)
+		StrawberitaTransformService.releaseForReturnRun(player, landedPosition)
 		releaseSharedCatapult(player)
 
 		revealResultRemote:FireClient(player, {
@@ -320,10 +208,11 @@ local function trackLanding(player, crate, launchOrigin)
 
 		local startedReturnRun, reason = ReturnRunService.start(player, reveal)
 		if not startedReturnRun then
+			StrawberitaTransformService.finish(player, true, landedPosition)
 			warn(`[BrainrotFruits] Could not start return run for {player.Name}: {reason or "Unknown"}.`)
 		end
 	else
-		restoreCharacterFromCrate(player, landedPosition)
+		StrawberitaTransformService.finish(player, true, landedPosition)
 		releaseSharedCatapult(player)
 	end
 end
@@ -342,7 +231,7 @@ requestLaunchRemote.OnServerEvent:Connect(function(player, payload)
 		return
 	end
 
-	if crateStateByUserId[player.UserId] or player:GetAttribute("IsLaunching") == true then
+	if StrawberitaTransformService.isActive(player) or player:GetAttribute("IsLaunching") == true then
 		fireFailure(player, "AlreadyLaunching")
 		return
 	end
@@ -399,7 +288,7 @@ requestLaunchRemote.OnServerEvent:Connect(function(player, payload)
 	launchDirection = flatLaunchDirection.Unit
 
 	local crate = makeCrate(launchOrigin + Vector3.new(rng:NextNumber(-0.15, 0.15), 0, 0), player, powerAlpha, plot)
-	if not setCharacterAsCrate(player, crate) then
+	if not StrawberitaTransformService.beginFlight(player, crate, PlotService.getPlayerCratesFolder(player)) then
 		crate:Destroy()
 		releaseSharedCatapult(player)
 		fireFailure(player, "CharacterNotReady")
@@ -425,7 +314,6 @@ end)
 
 Players.PlayerRemoving:Connect(function(player)
 	lastLaunchByUserId[player.UserId] = nil
-	crateStateByUserId[player.UserId] = nil
 	if sharedCatapultBusyUserId == player.UserId then
 		releaseSharedCatapult(player)
 	end

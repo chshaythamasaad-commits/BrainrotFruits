@@ -377,8 +377,8 @@ local function createPlotCatapult(plot, plotFrame, plotId)
 	return CatapultModelBuilder.createCatapult({
 		parent = plot,
 		name = "PlotCatapult",
-		cframe = localToWorld(plotFrame, 0, 1, -1),
-		scale = 0.78,
+		cframe = localToWorld(plotFrame, 0, 1.08, -1) * CFrame.Angles(0, math.rad(180), 0),
+		scale = 0.48,
 		plotId = plotId,
 		isSharedLauncher = false,
 		decorative = true,

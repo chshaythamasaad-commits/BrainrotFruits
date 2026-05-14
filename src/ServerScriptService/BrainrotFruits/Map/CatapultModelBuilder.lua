@@ -1,8 +1,10 @@
 local CatapultModelBuilder = {}
 
 CatapultModelBuilder.Version = "BlockyCatapult_V1"
+CatapultModelBuilder.StatueVersion = "BlockyCatapult_Statue_V1"
 
 local printedVersion = false
+local printedStatueVersion = false
 
 local COLORS = {
 	Wood = Color3.fromRGB(143, 89, 43),
@@ -108,10 +110,15 @@ function CatapultModelBuilder.createCatapult(config)
 	local plotId = config.plotId or 0
 	local isShared = config.isSharedLauncher == true
 	local decorative = config.decorative == true
+	local catapultVersion = decorative and not isShared and CatapultModelBuilder.StatueVersion or CatapultModelBuilder.Version
 
 	if not printedVersion then
 		print("[BrainrotFruits] BlockyCatapult_V1 active")
 		printedVersion = true
+	end
+	if decorative and not isShared and not printedStatueVersion then
+		print("[BrainrotFruits] BlockyCatapult_Statue_V1 active")
+		printedStatueVersion = true
 	end
 
 	local model = Instance.new("Model")
@@ -120,8 +127,13 @@ function CatapultModelBuilder.createCatapult(config)
 	model:SetAttribute("PlotId", plotId)
 	model:SetAttribute("IsSharedLauncher", isShared)
 	model:SetAttribute("Decorative", decorative)
-	model:SetAttribute("CatapultVersion", CatapultModelBuilder.Version)
+	model:SetAttribute("CatapultVersion", catapultVersion)
 	model.Parent = config.parent
+
+	if decorative and not isShared then
+		createPart(model, "DisplayPedestal", Vector3.new(15.4, 0.55, 17.2) * scale, localFrame(frame, scale, 0, 0.28, 0), COLORS.Stone, Enum.Material.Slate)
+		createPart(model, "PedestalGlowInset", Vector3.new(12.6, 0.18, 14.2) * scale, localFrame(frame, scale, 0, 0.64, 0), Color3.fromRGB(255, 216, 103), Enum.Material.Neon, 0.45)
+	end
 
 	local base = createPart(model, "BaseFrame", Vector3.new(13.5, 1.1, 15.5) * scale, localFrame(frame, scale, 0, 0.55, 0), COLORS.Wood, Enum.Material.WoodPlanks)
 	createPart(model, "FrontBeam", Vector3.new(15.5, 1.3, 1.4) * scale, localFrame(frame, scale, 0, 1.15, -6.9), COLORS.WoodDark, Enum.Material.WoodPlanks)

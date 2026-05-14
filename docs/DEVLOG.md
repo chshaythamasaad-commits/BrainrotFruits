@@ -149,3 +149,14 @@ Commit: this documentation pass.
 - Recorded useful references, script risk, IP concerns, and design lessons in `docs/asset_research/blocky_style_references.md`.
 - Reworked Strawberita's face again using the research lessons: clearer face tile, calmer square eyes, one highlight per eye, tiny pixel smile, and no accessory crossing the expression.
 - Replaced the front sash with a small block bow near the top of the body and widened the stacked strawberry body slightly for a chunkier collectible silhouette.
+
+## Gameplay/Map Polish Pass
+
+### Strawberita return tool and extended lane
+
+- Marked the generated map with `GameplayVersion = "StrawberitaReturnTool_V2"` and `LaunchLaneVersion = "ExtendedDecoratedLane_V1"`.
+- Extended the shared launch lane out to 500-stud markers, added milestone arches, flags, lamps, rails, arrows, rocks, bushes, and a farther reveal island.
+- Kept the shared central catapult as the active gameplay launcher and marked it with corrected launch-lane orientation attributes.
+- Shrunk per-plot catapults into decorative statue-style pieces with `CatapultVersion = "BlockyCatapult_Statue_V1"`.
+- Added `StrawberitaTransformService` so the launched player is visually represented by the voxel Strawberita during flight and return run.
+- On successful base return, `RewardService` now grants a Strawberita reward Tool into the player's Backpack while preserving existing plot-slot display placement.

@@ -170,6 +170,34 @@ Strawberita must stay anchored to the approved chunky voxel / block-built Roblox
 
 Latest multiplayer note: overlapping shared-catapult launches should now fail with "Catapult is busy!", and rewards should only place after the launching player returns to their own base.
 
+## Latest Gameplay/Map Polish Notes
+
+- Active map builder: `src/ServerScriptService/BrainrotFruits/Map/MapBuilder.lua`, function `MapBuilder.build()`.
+- Active catapult builder: `src/ServerScriptService/BrainrotFruits/Map/CatapultModelBuilder.lua`, function `CatapultModelBuilder.createCatapult(config)`.
+- Active launch service: `src/ServerScriptService/BrainrotFruits/CatapultService.server.lua`.
+- Active transform service: `src/ServerScriptService/BrainrotFruits/StrawberitaTransformService.lua`.
+- Active reward Tool grant logic: `src/ServerScriptService/BrainrotFruits/RewardService.lua`, function `claimPendingReward`.
+- `Workspace.BrainrotMap` now sets `GameplayVersion = "StrawberitaReturnTool_V2"` and `LaunchLaneVersion = "ExtendedDecoratedLane_V1"`.
+- The shared catapult remains the gameplay launcher and is tagged with `OrientationCorrected = true` and `FacesLaunchLane = true`.
+- Decorative plot catapults are smaller statue/showpieces tagged with `CatapultVersion = "BlockyCatapult_Statue_V1"` and remain `Decorative = true`.
+- During launch and return-run, the player's normal avatar is hidden while an anchored voxel Strawberita follows the player/crate proxy; after success/failure, the avatar visuals are restored.
+- Successful base return still places the reward on the next open plot slot and now also grants a variant-named Strawberita Tool into the player's Backpack.
+
+## Latest Studio Verification
+
+1. Press Play and confirm Output prints:
+   - `[BrainrotFruits] Catapult orientation corrected`
+   - `[BrainrotFruits] LaunchLaneExtended_V1 active`
+   - `[BrainrotFruits] StrawberitaTransform_V1 active`
+   - `[BrainrotFruits] StrawberitaToolReward_V1 active`
+2. In Explorer, confirm `Workspace.BrainrotMap` has:
+   - `GameplayVersion = StrawberitaReturnTool_V2`
+   - `LaunchLaneVersion = ExtendedDecoratedLane_V1`
+3. Confirm `Workspace.BrainrotMap.SharedLaunchArea.LaunchLane` includes distance markers through `500`.
+4. Confirm each `Workspace.BrainrotMap.Plots.Plot*/PlotCatapult` has `CatapultVersion = BlockyCatapult_Statue_V1`.
+5. Launch from the shared catapult and verify the visible player becomes Strawberita during flight and while running back.
+6. Secure the reward by touching the player's own `BaseClaimZone`; verify the reward is on a plot slot and a matching Tool appears in the player's Backpack.
+
 ## Known Issues
 
 Latest note: push now works from the active `M:\Games\BrainrotFruits-git` clone; older push-auth warnings below may refer to earlier sessions.
@@ -183,6 +211,8 @@ Latest note: push now works from the active `M:\Games\BrainrotFruits-git` clone;
 - The Wobble Blob is placeholder logic only; it marks a bonk but does not yet drive a real claim/fail economy.
 - The crate landing detector is intentionally simple and may need tuning per lane after Studio play-testing.
 - Map art is intentionally simple procedural parts.
+- The Strawberita transform is currently a server-driven visual override that follows the real hidden character; a future pass can replace it with a true custom controllable rig if needed.
+- The reward Tool is a lightweight miniature handle representation, not a full miniaturized clone of the complete Strawberita model yet.
 
 ## Next Suggested Tasks
 

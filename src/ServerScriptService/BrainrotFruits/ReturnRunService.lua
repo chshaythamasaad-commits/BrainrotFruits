@@ -7,6 +7,7 @@ local ChaosHazardService = require(script.Parent.ChaosHazardService)
 local FXService = require(script.Parent.FXService)
 local PlotService = require(script.Parent.Map.PlotService)
 local RewardService = require(script.Parent.RewardService)
+local StrawberitaTransformService = require(script.Parent.StrawberitaTransformService)
 
 local ReturnRunService = {}
 
@@ -88,6 +89,7 @@ local function clearState(player, state)
 	activeByUserId[player.UserId] = nil
 	setPlayerReturnAttributes(player, nil)
 	restoreSpeedBoost(state)
+	StrawberitaTransformService.finish(player, false)
 
 	if state.diedConnection then
 		state.diedConnection:Disconnect()

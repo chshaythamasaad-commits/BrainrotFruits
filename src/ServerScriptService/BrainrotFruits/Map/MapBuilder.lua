@@ -9,7 +9,7 @@ MapBuilder.MapName = "BrainrotMap"
 MapBuilder.MapVersion = "IslandReferenceMap_V2"
 MapBuilder.PlotCount = 6
 MapBuilder.PlotSize = PlotModelBuilder.PlotSize
-MapBuilder.SharedLaneLength = 132
+MapBuilder.SharedLaneLength = 540
 MapBuilder.SlotCount = 12
 MapBuilder.DebugMode = false
 
@@ -267,6 +267,35 @@ local function createPath(parent, name, size, cframe)
 	return path
 end
 
+local function createLaneFlag(parent, name, position, side, color)
+	local model = Instance.new("Model")
+	model.Name = name
+	model.Parent = parent
+
+	local poleX = side * 17.2
+	createPart(model, "Pole", Vector3.new(0.35, 4.4, 0.35), CFrame.new(poleX, 3.1, position.Z), COLORS.WoodDark, Enum.Material.Wood)
+	createPart(model, "Flag", Vector3.new(3.1, 1.6, 0.28), CFrame.new(poleX + side * 1.65, 4.35, position.Z), color, Enum.Material.SmoothPlastic)
+	createPart(model, "FlagTip", Vector3.new(0.55, 0.55, 0.36), CFrame.new(poleX + side * 3.25, 4.35, position.Z), color:Lerp(COLORS.White, 0.25), Enum.Material.Neon, 0.1)
+
+	return model
+end
+
+local function createMilestoneArch(parent, distance, z, color)
+	local model = Instance.new("Model")
+	model.Name = `MilestoneArch_{distance}`
+	model:SetAttribute("DistanceStuds", distance)
+	model.Parent = parent
+
+	createPart(model, "LeftPost", Vector3.new(1.1, 8.2, 1.1), CFrame.new(-15.2, 4.65, z), COLORS.StoneDark, Enum.Material.Slate)
+	createPart(model, "RightPost", Vector3.new(1.1, 8.2, 1.1), CFrame.new(15.2, 4.65, z), COLORS.StoneDark, Enum.Material.Slate)
+	createPart(model, "TopBeam", Vector3.new(32, 1.15, 1.25), CFrame.new(0, 8.92, z), color, Enum.Material.SmoothPlastic)
+	local sign = createPart(model, "DistanceSign", Vector3.new(11, 2.1, 0.55), CFrame.new(0, 7.45, z - 0.82), color:Lerp(COLORS.Black, 0.18), Enum.Material.SmoothPlastic)
+	addSurfaceText(sign, `{distance} STUDS`, Enum.NormalId.Front, COLORS.White, COLORS.Black)
+	createPart(model, "GlowLine", Vector3.new(24, 0.14, 0.58), CFrame.new(0, 1.25, z), color, Enum.Material.Neon, 0.18)
+
+	return model
+end
+
 local function createBooth(parent, name, position, yawDegrees, color, accent)
 	local model = Instance.new("Model")
 	model.Name = `{name}Stand`
@@ -291,7 +320,7 @@ local function createBooth(parent, name, position, yawDegrees, color, accent)
 end
 
 local function buildSharedCatapult(parent)
-	return CatapultModelBuilder.createCatapult({
+	local catapult = CatapultModelBuilder.createCatapult({
 		parent = parent,
 		name = "Catapult",
 		cframe = CFrame.new(0, 0.95, 54),
@@ -300,6 +329,9 @@ local function buildSharedCatapult(parent)
 		isSharedLauncher = true,
 		decorative = false,
 	})
+	catapult:SetAttribute("OrientationCorrected", true)
+	catapult:SetAttribute("FacesLaunchLane", true)
+	return catapult
 end
 
 local function buildSharedLaunchArea(map)
@@ -312,6 +344,7 @@ local function buildSharedLaunchArea(map)
 	createFacingSign(launchArea, "SharedLaunchSign", "SHARED LAUNCH", CFrame.new(0, 7.1, 32) * CFrame.Angles(0, math.rad(180), 0), COLORS.Black, Vector3.new(18, 4.2, 0.7))
 
 	buildSharedCatapult(launchArea)
+	createTopTextPad(launchArea, "LaunchDirectionArrow", "LAUNCH >>", Vector3.new(18, 0.16, 4.2), CFrame.new(0, 1.12, 69), Color3.fromRGB(234, 74, 108), COLORS.White)
 
 	for _, position in ipairs({
 		Vector3.new(-24, 0, 35),
@@ -324,36 +357,86 @@ local function buildSharedLaunchArea(map)
 
 	local lane = Instance.new("Folder")
 	lane.Name = "LaunchLane"
+	lane:SetAttribute("LaunchLaneVersion", "ExtendedDecoratedLane_V1")
 	lane.Parent = launchArea
 
-	createPart(lane, "LaneFloor", Vector3.new(24, 0.32, MapBuilder.SharedLaneLength), CFrame.new(0, 0.62, 136), Color3.fromRGB(76, 166, 76), Enum.Material.Grass)
-	createPart(lane, "LaneCenterStripe", Vector3.new(1, 0.08, MapBuilder.SharedLaneLength - 10), CFrame.new(0, 0.84, 138), Color3.fromRGB(241, 255, 211), Enum.Material.SmoothPlastic)
+	local laneStartZ = 70
+	local laneEndZ = laneStartZ + MapBuilder.SharedLaneLength
+	local laneCenterZ = (laneStartZ + laneEndZ) / 2
+	local revealZ = laneEndZ + 18
+	lane:SetAttribute("LaneStartZ", laneStartZ)
+	lane:SetAttribute("LaneEndZ", laneEndZ)
+	lane:SetAttribute("RevealZoneZ", revealZ)
+
+	createPart(lane, "LaneFloor", Vector3.new(24, 0.32, MapBuilder.SharedLaneLength), CFrame.new(0, 0.62, laneCenterZ), Color3.fromRGB(76, 166, 76), Enum.Material.Grass)
+	createPart(lane, "LaneCenterStripe", Vector3.new(1, 0.08, MapBuilder.SharedLaneLength - 10), CFrame.new(0, 0.84, laneCenterZ), Color3.fromRGB(241, 255, 211), Enum.Material.SmoothPlastic)
+	for stripeIndex = 0, 8 do
+		local stripeZ = laneStartZ + 34 + stripeIndex * 58
+		local stripeColor = stripeIndex % 2 == 0 and Color3.fromRGB(92, 190, 92) or Color3.fromRGB(66, 151, 83)
+		createPart(lane, `LaneProgressStrip{stripeIndex}`, Vector3.new(22.4, 0.05, 7.5), CFrame.new(0, 0.88, stripeZ), stripeColor, Enum.Material.SmoothPlastic, 0.08)
+	end
 	for _, x in ipairs({ -12.6, 12.6 }) do
-		createPart(lane, "LaneStoneCurb", Vector3.new(0.8, 0.65, MapBuilder.SharedLaneLength), CFrame.new(x, 1.05, 136), COLORS.StoneDark, Enum.Material.Slate)
-		createPart(lane, "LaneFenceRail", Vector3.new(0.35, 0.45, MapBuilder.SharedLaneLength - 8), CFrame.new(x, 2.15, 138), COLORS.Wood, Enum.Material.Wood)
-		for index = 0, 9 do
-			createPart(lane, "LaneFencePost", Vector3.new(0.45, 2, 0.45), CFrame.new(x, 1.75, 78 + index * 13), COLORS.WoodDark, Enum.Material.Wood)
+		createPart(lane, "LaneStoneCurb", Vector3.new(0.8, 0.65, MapBuilder.SharedLaneLength), CFrame.new(x, 1.05, laneCenterZ), COLORS.StoneDark, Enum.Material.Slate)
+		createPart(lane, "LaneFenceRail", Vector3.new(0.35, 0.45, MapBuilder.SharedLaneLength - 8), CFrame.new(x, 2.15, laneCenterZ), COLORS.Wood, Enum.Material.Wood)
+		local postIndex = 0
+		for z = laneStartZ + 8, laneEndZ - 8, 28 do
+			postIndex += 1
+			createPart(lane, "LaneFencePost", Vector3.new(0.45, 2, 0.45), CFrame.new(x, 1.75, z), COLORS.WoodDark, Enum.Material.Wood)
+			if postIndex % 2 == 0 then
+				createPart(lane, "FencePostCap", Vector3.new(0.72, 0.32, 0.72), CFrame.new(x, 2.92, z), Color3.fromRGB(255, 224, 91), Enum.Material.Neon, 0.18)
+			end
 		end
 	end
 
-	for _, distance in ipairs({ 20, 40, 60, 80, 100 }) do
+	for _, distance in ipairs({ 20, 40, 60, 80, 100, 150, 200, 300, 400, 500 }) do
 		local z = 70 + distance
 		createPart(lane, `DistanceLine_{distance}`, Vector3.new(22, 0.12, 0.42), CFrame.new(0, 0.98, z), COLORS.White, Enum.Material.SmoothPlastic)
 		createTopTextPad(lane, `DistanceMarker_{distance}`, tostring(distance), Vector3.new(7, 0.15, 3.2), CFrame.new(0, 1.08, z + 2.4), Color3.fromRGB(58, 139, 68), COLORS.White):SetAttribute("DistanceStuds", distance)
+		if distance == 100 or distance == 200 or distance == 300 or distance == 400 or distance == 500 then
+			createMilestoneArch(lane, distance, z + 8, Color3.fromRGB(255, 181, 70):Lerp(Color3.fromRGB(130, 72, 219), math.clamp(distance / 520, 0, 1)))
+		end
 	end
 
-	createPart(lane, "RevealZoneBase", Vector3.new(54, 2.6, 42), CFrame.new(0, -0.35, 224), COLORS.StoneDark, Enum.Material.Slate)
-	local revealPlatform = createTopTextPad(lane, "LandingZone", "REVEAL ZONE", Vector3.new(45, 0.45, 34), CFrame.new(0, 1.16, 224), Color3.fromRGB(137, 78, 222), COLORS.White)
+	for index, z in ipairs({ 104, 156, 218, 278, 338, 398, 458, 518, 578 }) do
+		local side = index % 2 == 0 and 1 or -1
+		local color = PLOT_THEMES[((index - 1) % #PLOT_THEMES) + 1].color
+		createLaneFlag(lane, `LaneFlag{index}`, Vector3.new(0, 0, z), side, color)
+		createLamp(lane, `LaneLamp{index}`, Vector3.new(-side * 20.2, 0, z + 12), 0.72)
+		if index % 3 == 0 then
+			createTopTextPad(lane, `LaneArrow{index}`, ">>", Vector3.new(6.4, 0.13, 3.4), CFrame.new(0, 1.06, z + 24), Color3.fromRGB(234, 74, 108), COLORS.White)
+		end
+	end
+
+	for index, position in ipairs({
+		Vector3.new(-28, 0.5, 172),
+		Vector3.new(28, 0.5, 246),
+		Vector3.new(-30, 0.5, 344),
+		Vector3.new(30, 0.5, 438),
+		Vector3.new(-30, 0.5, 536),
+	}) do
+		createRock(lane, `LaneRock{index}`, position, 0.75)
+	end
+
+	for index, position in ipairs({
+		Vector3.new(-28, 0.55, 132),
+		Vector3.new(29, 0.55, 300),
+		Vector3.new(-29, 0.55, 492),
+	}) do
+		createBush(lane, `LaneBush{index}`, position, 0.72, COLORS.GrassLight)
+	end
+
+	createPart(lane, "RevealZoneBase", Vector3.new(58, 2.6, 46), CFrame.new(0, -0.35, revealZ), COLORS.StoneDark, Enum.Material.Slate)
+	local revealPlatform = createTopTextPad(lane, "LandingZone", "REVEAL ZONE", Vector3.new(49, 0.45, 37), CFrame.new(0, 1.16, revealZ), Color3.fromRGB(137, 78, 222), COLORS.White)
 	revealPlatform.Material = Enum.Material.Neon
 	revealPlatform.Transparency = 0.12
 	revealPlatform:SetAttribute("Role", "LandingZone")
-	createFacingSign(lane, "RevealZoneSign", "REVEAL ZONE", CFrame.new(0, 5.4, 205) * CFrame.Angles(0, math.rad(180), 0), Color3.fromRGB(111, 61, 197), Vector3.new(19, 4, 0.75))
+	createFacingSign(lane, "RevealZoneSign", "REVEAL ZONE", CFrame.new(0, 5.4, revealZ - 21) * CFrame.Angles(0, math.rad(180), 0), Color3.fromRGB(111, 61, 197), Vector3.new(19, 4, 0.75))
 
 	for _, position in ipairs({
-		Vector3.new(-24, 0, 207),
-		Vector3.new(24, 0, 207),
-		Vector3.new(-24, 0, 238),
-		Vector3.new(24, 0, 238),
+		Vector3.new(-25, 0, revealZ - 17),
+		Vector3.new(25, 0, revealZ - 17),
+		Vector3.new(-25, 0, revealZ + 18),
+		Vector3.new(25, 0, revealZ + 18),
 	}) do
 		createLamp(lane, "RevealLamp", position, 0.88)
 	end
@@ -427,8 +510,8 @@ local function createIslandPiece(parent, name, size, position, color)
 end
 
 local function buildIslandBase(map)
-	createPart(map, "Ocean", Vector3.new(570, 0.3, 620), CFrame.new(0, -3.35, 20), COLORS.Water, Enum.Material.SmoothPlastic, 0.04)
-	createPart(map, "DeepOcean", Vector3.new(650, 0.25, 700), CFrame.new(0, -3.7, 20), COLORS.WaterDeep, Enum.Material.SmoothPlastic, 0.12)
+	createPart(map, "Ocean", Vector3.new(620, 0.3, 1160), CFrame.new(0, -3.35, 190), COLORS.Water, Enum.Material.SmoothPlastic, 0.04)
+	createPart(map, "DeepOcean", Vector3.new(720, 0.25, 1260), CFrame.new(0, -3.7, 190), COLORS.WaterDeep, Enum.Material.SmoothPlastic, 0.12)
 
 	local island = getOrCreateFolder(map, "IslandBase")
 	island:ClearAllChildren()
@@ -437,8 +520,9 @@ local function buildIslandBase(map)
 	createIslandPiece(island, "LeftPlotLobe", Vector3.new(115, 0.7, 230), Vector3.new(-132, -0.08, -2), COLORS.GrassLight)
 	createIslandPiece(island, "RightPlotLobe", Vector3.new(115, 0.7, 230), Vector3.new(132, -0.08, -2), COLORS.GrassLight)
 	createIslandPiece(island, "BackLobe", Vector3.new(220, 0.7, 92), Vector3.new(0, -0.08, -130), COLORS.Grass)
-	createIslandPiece(island, "LaunchPeninsula", Vector3.new(86, 0.7, 185), Vector3.new(0, -0.08, 156), COLORS.Grass)
-	createIslandPiece(island, "RevealPlatformIsland", Vector3.new(110, 0.7, 70), Vector3.new(0, -0.08, 230), COLORS.GrassDark)
+	createIslandPiece(island, "LaunchPeninsula", Vector3.new(88, 0.7, 260), Vector3.new(0, -0.08, 190), COLORS.Grass)
+	createIslandPiece(island, "ExtendedLaunchCauseway", Vector3.new(76, 0.7, 330), Vector3.new(0, -0.08, 435), COLORS.GrassLight)
+	createIslandPiece(island, "RevealPlatformIsland", Vector3.new(132, 0.7, 94), Vector3.new(0, -0.08, 628), COLORS.GrassDark)
 
 	local edges = getOrCreateFolder(map, "IslandEdges")
 	edges:ClearAllChildren()
@@ -450,8 +534,10 @@ local function buildIslandBase(map)
 		{ pos = Vector3.new(206, -1.7, 82), size = Vector3.new(16, 5.5, 96) },
 		{ pos = Vector3.new(-70, -1.7, -184), size = Vector3.new(120, 5.5, 16) },
 		{ pos = Vector3.new(70, -1.7, -184), size = Vector3.new(120, 5.5, 16) },
-		{ pos = Vector3.new(-58, -1.7, 272), size = Vector3.new(72, 5.5, 16) },
-		{ pos = Vector3.new(58, -1.7, 272), size = Vector3.new(72, 5.5, 16) },
+		{ pos = Vector3.new(-48, -1.7, 364), size = Vector3.new(14, 5.5, 245) },
+		{ pos = Vector3.new(48, -1.7, 364), size = Vector3.new(14, 5.5, 245) },
+		{ pos = Vector3.new(-65, -1.7, 672), size = Vector3.new(88, 5.5, 16) },
+		{ pos = Vector3.new(65, -1.7, 672), size = Vector3.new(88, 5.5, 16) },
 	}) do
 		createPart(edges, `CliffBlock{index}`, data.size, CFrame.new(data.pos), COLORS.StoneDark, Enum.Material.Slate)
 	end
@@ -461,8 +547,10 @@ local function buildIslandBase(map)
 		Vector3.new(224, -2.2, -128),
 		Vector3.new(-232, -2.2, 44),
 		Vector3.new(232, -2.2, 56),
-		Vector3.new(-76, -2.2, 287),
-		Vector3.new(80, -2.2, 287),
+		Vector3.new(-62, -2.2, 568),
+		Vector3.new(64, -2.2, 604),
+		Vector3.new(-96, -2.2, 680),
+		Vector3.new(96, -2.2, 680),
 	}) do
 		createRock(edges, `EdgeRock{index}`, position, 1.45)
 	end
@@ -470,7 +558,7 @@ local function buildIslandBase(map)
 	for index, position in ipairs({
 		Vector3.new(-213, -1.1, 121),
 		Vector3.new(213, -1.1, -118),
-		Vector3.new(89, -1.1, 276),
+		Vector3.new(89, -1.1, 646),
 	}) do
 		createPart(edges, `Waterfall{index}`, Vector3.new(7, 5.2, 1.1), CFrame.new(position), Color3.fromRGB(91, 206, 255), Enum.Material.Neon, 0.35)
 		createPart(edges, `WaterfallFoam{index}`, Vector3.new(10, 0.2, 4.5), CFrame.new(position + Vector3.new(0, -2.7, 2.2)), COLORS.White, Enum.Material.SmoothPlastic, 0.18)
@@ -540,7 +628,8 @@ function MapBuilder.build()
 	local map = Instance.new("Folder")
 	map.Name = MapBuilder.MapName
 	map:SetAttribute("MapVersion", MapBuilder.MapVersion)
-	map:SetAttribute("GameplayVersion", "PlayerCrateReturnRun_V1")
+	map:SetAttribute("GameplayVersion", "StrawberitaReturnTool_V2")
+	map:SetAttribute("LaunchLaneVersion", "ExtendedDecoratedLane_V1")
 	map.Parent = Workspace
 
 	buildIslandBase(map)
@@ -563,6 +652,8 @@ function MapBuilder.build()
 	print("[BrainrotFruits] MAP V2 ACTIVE - island reference layout loaded")
 	print("[BrainrotFruits] POLISHED PLOT V2 ACTIVE - base reference layout loaded")
 	print("[BrainrotFruits] InvisibleCenterSpawn_V1 active")
+	print("[BrainrotFruits] Catapult orientation corrected")
+	print("[BrainrotFruits] LaunchLaneExtended_V1 active")
 
 	return map
 end
