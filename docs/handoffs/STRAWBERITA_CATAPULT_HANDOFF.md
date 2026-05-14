@@ -4,14 +4,15 @@
 
 The Strawberita + Catapult slice now runs inside a generated 6-player simulator-style map with one shared central launch area on `feature/strawberita-catapult-slice`.
 
+Latest gameplay pass adds the first return-run loop: the shared catapult launches the player as a lucky crate, the crate opens into a pending Strawberita reward, and the player must run back to their own plot claim zone to secure it.
+
 This repository is a fresh BrainrotFruits side project. Do not run Reverend Ru recovery logic here.
 
 ## Git State
 
 - Working branch: `feature/strawberita-catapult-slice`
-- Latest local implementation commit before this docs pass: `c223880` - `feat: add strawberita variants and preview lineup`
-- Previous local implementation commit: `f55d72e` - `chore: integrate base strawberita reference model`
-- Remote status at handoff: local branch is ahead of `origin/feature/strawberita-catapult-slice`; push attempts were blocked because this environment has no GitHub HTTPS credentials.
+- Latest implementation commit before this pass: `a2cd4aa` - `feat: add polished base reference plot model`
+- Remote status at handoff: push works from the active `M:\Games\BrainrotFruits-git` clone.
 
 ## What Was Implemented
 
@@ -30,6 +31,19 @@ This repository is a fresh BrainrotFruits side project. Do not run Reverend Ru r
 - Revealed Strawberita rewards are auto-placed on the player’s next open fruit slot as placeholder claim behavior.
 - Mobile-conscious charge HUD, cooldown feedback, reveal banner, and burst effects.
 - PG Wobble Blob placeholder hazard for future survive/claim gameplay.
+
+Latest note: older auto-placement notes are superseded by the Player Crate Return Run pass. Rewards now become pending rewards and are placed only after the player reaches their own `BaseClaimZone`.
+
+## Latest Gameplay Pass - Player Crate Return Run
+
+- `CatapultModelBuilder` creates the active `BlockyCatapult_V1` model for the shared launcher and decorative plot catapults.
+- `MapBuilder.build()` sets `Workspace.BrainrotMap.GameplayVersion = "PlayerCrateReturnRun_V1"`.
+- `CatapultService.server.lua` hides and locks the launching character, creates `LaunchedPlayerCrate_<UserId>`, moves the hidden character root with the crate during flight, then restores the character at reveal time.
+- `RewardService.revealCrate` now creates a pending reward with `ClaimState = "PendingReturnRun"` and no longer auto-places it.
+- `ReturnRunService` owns pending reward state, speed boost cleanup, own-plot claim detection, timeout/loss cleanup, and final `RewardService.claimPendingReward` placement.
+- `ChaosHazardService.spawnReturnBonker` adds a simple PG bonker that can catch the returning player and trigger reward loss.
+- `CatapultClient.client.lua` displays "Loading crate...", "Launch! You are the crate!", "Run back to your base to keep it!", "Reward Secured!", and "Reward Lost!" feedback.
+- `PlotModelBuilder` now emits `BaseReferencePlot_V3` plots with invisible center-safe `SpawnPad` parts and invisible `BaseClaimZone` parts.
 
 ## Base Strawberita Reference Used
 
@@ -61,6 +75,8 @@ Strawberita must stay anchored to the approved chunky voxel / block-built Roblox
 - `docs/asset_research/mesh_candidates.md`
 - `docs/handoffs/STRAWBERITA_CATAPULT_HANDOFF.md`
 - `art/references/Strawberita/strawberita_voxel_reference.png`
+- `references/references/Catapult/catapult-reference.png`
+- `references/references/Catapult/notes.md`
 - `references/references/Strawberita/strawberita_source_reference.png`
 - `src/ReplicatedStorage/BrainrotFruits/Configs/BrainrotFruitConfig.lua`
 - `src/ReplicatedStorage/BrainrotFruits/Models/StrawberitaFactory.lua`
@@ -69,10 +85,12 @@ Strawberita must stay anchored to the approved chunky voxel / block-built Roblox
 - `src/ServerScriptService/BrainrotFruits/CatapultService.server.lua`
 - `src/ServerScriptService/BrainrotFruits/ChaosHazardService.lua`
 - `src/ServerScriptService/BrainrotFruits/RewardService.lua`
+- `src/ServerScriptService/BrainrotFruits/ReturnRunService.lua`
 - `src/ServerScriptService/BrainrotFruits/StrawberitaPreview.server.lua`
 - `src/ServerScriptService/BrainrotFruits/TestWorldBuilder.server.lua`
 - `src/ServerScriptService/BrainrotFruits/Map/MapBuilder.lua`
 - `src/ServerScriptService/BrainrotFruits/Map/CatapultBinder.lua`
+- `src/ServerScriptService/BrainrotFruits/Map/CatapultModelBuilder.lua`
 - `src/ServerScriptService/BrainrotFruits/Map/PlotService.lua`
 - `src/ServerScriptService/BrainrotFruits/MapBootstrap.server.lua`
 - `src/StarterPlayer/StarterPlayerScripts/BrainrotFruits/CatapultClient.client.lua`
@@ -105,14 +123,14 @@ Strawberita must stay anchored to the approved chunky voxel / block-built Roblox
 
 ## Fruit Slot Placement
 
-- Each plot has ten display slots in `FruitSlots`.
-- On reveal, `RewardService` rolls the variant server-side and creates the Strawberita model.
-- `PlotService.placeRewardOnSlot` moves the reward to the next open slot and stores:
+- Each plot has twelve display slots in `FruitSlots`.
+- On reveal, `RewardService` rolls the variant server-side and creates a pending Strawberita model at the landing zone.
+- `ReturnRunService` calls `PlotService.placeRewardOnSlot` only after the player reaches their own `BaseClaimZone`; placement stores:
   - `Occupied`
   - `OwnerUserId`
   - `FruitVariant`
   - `FruitDisplayName`
-- This is placeholder auto-claim behavior until a real claim/inventory system exists.
+- If the player is bonked, dies, times out, or leaves before returning, the pending reward is cleared instead of placed.
 
 ## Latest Voxel Rebuild Notes
 
@@ -137,7 +155,9 @@ Strawberita must stay anchored to the approved chunky voxel / block-built Roblox
 7. Walk to the shared central launch area.
 8. Hold `E`, `Space`, mouse click, or the mobile `Launch` action to charge.
 9. Release to launch the crate down your lane.
-10. Watch it reveal a Strawberita, place onto your plot's next fruit slot, and spawn the Wobble Blob placeholder.
+10. Watch your character become the launched crate.
+11. After reveal, run back to your own plot.
+12. Confirm the reward is placed only after touching your plot's invisible `BaseClaimZone`.
 
 ## Multi-Player Studio Test
 
@@ -148,7 +168,11 @@ Strawberita must stay anchored to the approved chunky voxel / block-built Roblox
 5. Rewards should place onto the launching player’s own fruit slots.
 6. Leaving the server should reset that player’s plot to unclaimed.
 
+Latest multiplayer note: overlapping shared-catapult launches should now fail with "Catapult is busy!", and rewards should only place after the launching player returns to their own base.
+
 ## Known Issues
+
+Latest note: push now works from the active `M:\Games\BrainrotFruits-git` clone; older push-auth warnings below may refer to earlier sessions.
 
 - The requested initial cwd, `M:\Games\BrainrotFruits-main`, was a source snapshot without `.git`; implementation work was done in the real clone at `M:\Games\BrainrotFruits`.
 - GitHub push is not complete from this environment. `git push` was attempted after stable commits, but HTTPS auth failed with `could not read Username for 'https://github.com': terminal prompts disabled`.

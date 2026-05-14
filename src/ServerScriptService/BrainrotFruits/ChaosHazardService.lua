@@ -128,6 +128,11 @@ local function bonkReward(player, hazard, rewardModel)
 	print(`[BrainrotFruits] Wobble Blob placeholder bonked {rewardModel.Name}; future claim/survive rules go here.`)
 end
 
+local function getPlayerRoot(player)
+	local character = player.Character
+	return character and character:FindFirstChild("HumanoidRootPart")
+end
+
 function ChaosHazardService.spawnWobbleBlob(player, rewardModel)
 	if not rewardModel or not rewardModel.PrimaryPart then
 		return nil
@@ -155,6 +160,63 @@ function ChaosHazardService.spawnWobbleBlob(player, rewardModel)
 			local nextPosition = currentPosition + offset.Unit * step
 			hazard:PivotTo(CFrame.new(nextPosition + Vector3.new(0, wobble, 0), targetPosition))
 			task.wait(0.08)
+		end
+	end)
+
+	return hazard
+end
+
+function ChaosHazardService.spawnReturnBonker(player, rewardModel, onBonked)
+	if not rewardModel or not rewardModel.PrimaryPart then
+		return nil
+	end
+
+	local rewardPosition = rewardModel:GetPivot().Position
+	local spawnPosition = rewardPosition + Vector3.new(13, 1.1, -10)
+	local hazard = createWobbleBlob(spawnPosition, PlotService.getPlayerHazardsFolder(player))
+	hazard.Name = "ReturnRunBonker"
+	hazard:SetAttribute("Type", "ReturnRunBonker")
+	hazard:SetAttribute("TargetUserId", player.UserId)
+	hazard:SetAttribute("SafeCartoonHazard", true)
+
+	local startedAt = os.clock()
+	task.spawn(function()
+		while hazard.Parent and player.Parent and player:GetAttribute("ReturnRunActive") == true and os.clock() - startedAt < MAX_CHASE_SECONDS do
+			local root = getPlayerRoot(player)
+			if not root then
+				break
+			end
+
+			local currentPosition = hazard:GetPivot().Position
+			local targetPosition = root.Position + Vector3.new(0, 1.1, 0)
+			local offset = targetPosition - currentPosition
+			local distance = offset.Magnitude
+
+			if distance <= BONK_DISTANCE + 0.9 then
+				hazard:SetAttribute("SequenceEnded", true)
+				FXService.emitBurst(hazard.Parent, currentPosition + Vector3.new(0, 1.6, 0), Color3.fromRGB(255, 249, 148), "PlayerBonkBurst", 32)
+				print(`[BrainrotFruits] ReturnRun bonker caught {player.Name}.`)
+				if onBonked then
+					onBonked()
+				end
+				break
+			end
+
+			if distance > 0.05 then
+				local step = math.min(distance, (PLACEHOLDER_SPEED + 2.5) * 0.08)
+				local wobble = math.sin(os.clock() * 9) * 0.14
+				local nextPosition = currentPosition + offset.Unit * step
+				hazard:PivotTo(CFrame.new(nextPosition + Vector3.new(0, wobble, 0), targetPosition))
+			end
+			task.wait(0.08)
+		end
+
+		if hazard.Parent then
+			task.delay(1.5, function()
+				if hazard.Parent and hazard:GetAttribute("SequenceEnded") == true then
+					hazard:Destroy()
+				end
+			end)
 		end
 	end)
 

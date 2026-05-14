@@ -4,7 +4,6 @@ local brainrotFruits = ReplicatedStorage:WaitForChild("BrainrotFruits")
 local RarityConfig = require(brainrotFruits.Shared.RarityConfig)
 local FruitConfig = require(brainrotFruits.Configs.BrainrotFruitConfig)
 local StrawberitaFactory = require(brainrotFruits.Models.StrawberitaFactory)
-local ChaosHazardService = require(script.Parent.ChaosHazardService)
 local FXService = require(script.Parent.FXService)
 local PlotService = require(script.Parent.Map.PlotService)
 
@@ -106,9 +105,18 @@ end
 function RewardService.revealCrate(player, crate, landingPosition, distance)
 	local reward = RewardService.rollVariant(distance)
 	local rewardFolder = PlotService.getPlayerRewardsFolder(player)
+	local variantConfig = FruitConfig.StrawberitaVariants[reward.variantName] or FruitConfig.StrawberitaVariants[FruitConfig.DefaultVariant]
 
-	openCrate(crate, landingPosition)
+	local openedCrate = openCrate(crate, landingPosition)
 	FXService.emitBurst(crate.Parent, landingPosition + Vector3.new(0, 1.8, 0), Color3.fromRGB(255, 112, 168), "CrateOpenBurst", 34)
+	task.delay(10, function()
+		if crate.Parent then
+			crate:Destroy()
+		end
+		if openedCrate.Parent then
+			openedCrate:Destroy()
+		end
+	end)
 
 	local model = StrawberitaFactory.create(reward.variantName, {
 		anchored = true,
@@ -119,26 +127,28 @@ function RewardService.revealCrate(player, crate, landingPosition, distance)
 	model:SetAttribute("OwnerUserId", player.UserId)
 	model:SetAttribute("Distance", distance)
 	model:SetAttribute("BandName", reward.bandName)
-	model:SetAttribute("ClaimState", "AutoPlacedPrototype")
+	model:SetAttribute("ClaimState", "PendingReturnRun")
 	model.Parent = rewardFolder
 	FXService.emitBurst(rewardFolder, landingPosition + Vector3.new(0, 2.2, 0), Color3.fromRGB(255, 231, 120), "RevealBurst", 46)
 
-	local placedSlot = PlotService.placeRewardOnSlot(player, model, reward)
-	if placedSlot then
-		print(`[BrainrotFruits] Placed {reward.displayName} on Plot {placedSlot:GetAttribute("PlotId")} Slot {placedSlot:GetAttribute("SlotIndex")}.`)
-	else
-		warn(`[BrainrotFruits] No open fruit slot for {player.Name}; reward remains near the landing zone.`)
-	end
-
-	task.delay(1.25, function()
-		if model.Parent then
-			ChaosHazardService.spawnWobbleBlob(player, model)
-		end
-	end)
-
 	print(
-		`[BrainrotFruits] Reveal for {player.Name}: {reward.displayName} ({reward.rarity}) at {math.floor(distance)} studs in {reward.bandName}.`
+		`[BrainrotFruits] Pending reveal for {player.Name}: {reward.displayName} ({reward.rarity}) at {math.floor(distance)} studs in {reward.bandName}.`
 	)
+
+	local pendingReward = {
+		characterId = "Strawberita",
+		modelName = model.Name,
+		variant = reward.variantName,
+		variantName = reward.variantName,
+		displayName = reward.displayName,
+		rarity = reward.rarity,
+		bandName = reward.bandName,
+		income = variantConfig and variantConfig.income or 0,
+		launchDistance = distance,
+		distance = distance,
+		ownerUserId = player.UserId,
+		plotId = crate:GetAttribute("PlotId"),
+	}
 
 	return {
 		variantName = reward.variantName,
@@ -146,11 +156,31 @@ function RewardService.revealCrate(player, crate, landingPosition, distance)
 		rarity = reward.rarity,
 		bandName = reward.bandName,
 		distance = distance,
+		launchDistance = distance,
 		position = landingPosition,
 		plotId = crate:GetAttribute("PlotId"),
-		slotIndex = placedSlot and placedSlot:GetAttribute("SlotIndex") or nil,
 		modelName = model.Name,
+		rewardModel = model,
+		pendingReward = pendingReward,
 	}
+end
+
+function RewardService.claimPendingReward(player, rewardModel, reward)
+	if not rewardModel or not rewardModel.Parent then
+		return nil, "MissingRewardModel"
+	end
+
+	local placedSlot = PlotService.placeRewardOnSlot(player, rewardModel, reward)
+	if not placedSlot then
+		return nil, "NoEmptySlots"
+	end
+
+	rewardModel:SetAttribute("ClaimState", "Secured")
+	rewardModel:SetAttribute("ClaimedByUserId", player.UserId)
+	rewardModel:SetAttribute("DisplaySlotIndex", placedSlot:GetAttribute("SlotIndex"))
+	print(`[BrainrotFruits] Secured {reward.displayName or rewardModel.Name} on Plot {placedSlot:GetAttribute("PlotId")} Slot {placedSlot:GetAttribute("SlotIndex")}.`)
+
+	return placedSlot
 end
 
 return RewardService

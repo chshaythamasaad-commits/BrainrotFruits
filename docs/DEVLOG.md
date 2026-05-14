@@ -4,6 +4,18 @@
 
 Branch: `feature/strawberita-catapult-slice`
 
+### Gameplay pass - player crate return run
+
+Commit: this pass - `feat: add player crate return run gameplay`
+
+- Added `CatapultModelBuilder` and replaced the old shared/decorative catapult geometry with `BlockyCatapult_V1`, a blocky wooden A-frame catapult based on `references/references/Catapult/catapult-reference.png`.
+- Updated the shared launcher to set `GameplayVersion = "PlayerCrateReturnRun_V1"` on `Workspace.BrainrotMap`.
+- Changed launch behavior so the launching player's character is hidden/locked while a player-sized lucky crate represents them during flight.
+- Refactored reward reveal so crate opening creates a pending Strawberita reward at the landing zone instead of immediately placing it on the plot.
+- Added `ReturnRunService`: after reveal, the player is restored, receives a speed boost, and must run to their own `BaseClaimZone` to secure the pending reward.
+- Added return-run success/loss UI feedback, a temporary "YOUR BASE" marker, a simple return-run bonker hazard, and server-side duplicate-claim protection.
+- Updated plots to `BaseReferencePlot_V3`, with invisible center-safe `SpawnPad` parts and invisible `BaseClaimZone` claim areas.
+
 ### Pass 10 - Voxel reference geometry rebuild
 
 Commit: this pass - `feat: rebuild strawberita voxel reference geometry`

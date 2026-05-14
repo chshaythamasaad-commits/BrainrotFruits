@@ -7,6 +7,7 @@ CatapultConfig.Remotes = {
 	LaunchResult = "CatapultLaunchResult",
 	RequestReveal = "RequestCrateReveal",
 	RevealResult = "CrateRevealResult",
+	ReturnRunStatus = "ReturnRunStatus",
 }
 
 CatapultConfig.ChargeSeconds = 1.45
@@ -24,6 +25,9 @@ CatapultConfig.LandingTimeoutSeconds = 7
 CatapultConfig.RestingSpeed = 7
 CatapultConfig.MaxValidDistance = 130
 CatapultConfig.CrateLifetimeSeconds = 18
+CatapultConfig.ReturnRunWalkSpeed = 28
+CatapultConfig.ReturnRunTimeoutSeconds = 45
+CatapultConfig.SharedCatapultBusySeconds = 9
 
 CatapultConfig.WorldFolderName = "BrainrotMap"
 CatapultConfig.PlotsFolderName = "Plots"

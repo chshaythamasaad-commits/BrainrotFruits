@@ -1,5 +1,6 @@
 local Workspace = game:GetService("Workspace")
 
+local CatapultModelBuilder = require(script.Parent.CatapultModelBuilder)
 local PlotModelBuilder = require(script.Parent.PlotModelBuilder)
 
 local MapBuilder = {}
@@ -290,30 +291,15 @@ local function createBooth(parent, name, position, yawDegrees, color, accent)
 end
 
 local function buildSharedCatapult(parent)
-	local catapult = Instance.new("Model")
-	catapult.Name = "Catapult"
-	catapult:SetAttribute("SharedLaunch", true)
-	catapult.Parent = parent
-
-	createPart(catapult, "StoneBase", Vector3.new(16, 0.7, 12), CFrame.new(0, 1.05, 54), COLORS.StoneDark, Enum.Material.Slate)
-	createPart(catapult, "WoodenBase", Vector3.new(9, 0.75, 7), CFrame.new(0, 1.75, 54), COLORS.Wood, Enum.Material.Wood)
-	createPart(catapult, "LeftWheel", Vector3.new(2.1, 2.1, 1.0), CFrame.new(-5.2, 2.25, 52), COLORS.WoodDark, Enum.Material.Wood)
-	createPart(catapult, "RightWheel", Vector3.new(2.1, 2.1, 1.0), CFrame.new(5.2, 2.25, 52), COLORS.WoodDark, Enum.Material.Wood)
-	createPart(catapult, "LeftSupport", Vector3.new(0.6, 4.2, 0.6), CFrame.new(-2.6, 3.95, 54) * CFrame.Angles(0, 0, math.rad(-12)), COLORS.WoodDark, Enum.Material.Wood)
-	createPart(catapult, "RightSupport", Vector3.new(0.6, 4.2, 0.6), CFrame.new(2.6, 3.95, 54) * CFrame.Angles(0, 0, math.rad(12)), COLORS.WoodDark, Enum.Material.Wood)
-	createPart(catapult, "HingeBlock", Vector3.new(5.8, 0.7, 0.7), CFrame.new(0, 5.55, 55.1), COLORS.WoodDark, Enum.Material.Wood)
-	createPart(catapult, "LaunchArm", Vector3.new(0.7, 0.5, 10.5), CFrame.new(0, 5.95, 60.2) * CFrame.Angles(math.rad(-10), 0, 0), Color3.fromRGB(147, 94, 52), Enum.Material.Wood)
-	createPart(catapult, "BasketCup", Vector3.new(3.2, 0.7, 3.1), CFrame.new(0, 6.8, 66.1), Color3.fromRGB(151, 94, 52), Enum.Material.Wood)
-	createPart(catapult, "BasketLip", Vector3.new(3.6, 0.32, 3.5), CFrame.new(0, 7.25, 66.3), COLORS.WoodDark, Enum.Material.Wood)
-
-	local interactZone = createPart(catapult, "InteractZone", Vector3.new(13, 4, 12), CFrame.new(0, 3.3, 45), Color3.fromRGB(82, 185, 255), Enum.Material.ForceField, 0.78)
-	interactZone.CanCollide = false
-	interactZone:SetAttribute("SharedLaunch", true)
-	interactZone:SetAttribute("LaunchOrigin", Vector3.new(0, 6.4, 69))
-	interactZone:SetAttribute("LaunchDirection", Vector3.new(0, 0, 1))
-
-	catapult.PrimaryPart = interactZone
-	return catapult
+	return CatapultModelBuilder.createCatapult({
+		parent = parent,
+		name = "Catapult",
+		cframe = CFrame.new(0, 0.95, 54),
+		scale = 1.35,
+		plotId = 0,
+		isSharedLauncher = true,
+		decorative = false,
+	})
 end
 
 local function buildSharedLaunchArea(map)
@@ -554,6 +540,7 @@ function MapBuilder.build()
 	local map = Instance.new("Folder")
 	map.Name = MapBuilder.MapName
 	map:SetAttribute("MapVersion", MapBuilder.MapVersion)
+	map:SetAttribute("GameplayVersion", "PlayerCrateReturnRun_V1")
 	map.Parent = Workspace
 
 	buildIslandBase(map)
@@ -575,6 +562,7 @@ function MapBuilder.build()
 
 	print("[BrainrotFruits] MAP V2 ACTIVE - island reference layout loaded")
 	print("[BrainrotFruits] POLISHED PLOT V2 ACTIVE - base reference layout loaded")
+	print("[BrainrotFruits] InvisibleCenterSpawn_V1 active")
 
 	return map
 end

@@ -12,6 +12,7 @@ local remotes = brainrotFruits:WaitForChild(CatapultConfig.RemoteFolderName)
 local requestLaunchRemote = remotes:WaitForChild(CatapultConfig.Remotes.RequestLaunch)
 local launchResultRemote = remotes:WaitForChild(CatapultConfig.Remotes.LaunchResult)
 local revealResultRemote = remotes:WaitForChild(CatapultConfig.Remotes.RevealResult)
+local returnRunStatusRemote = remotes:WaitForChild(CatapultConfig.Remotes.ReturnRunStatus)
 
 local actionName = "BrainrotFruitsChargeCatapult"
 local charging = false
@@ -19,6 +20,8 @@ local chargeStartedAt = 0
 local cooldownUntil = 0
 local latestDistance = nil
 local revealMessageUntil = 0
+local returnRunActive = false
+local returnMarker = nil
 
 local rarityColors = {
 	Common = Color3.fromRGB(255, 255, 255),
@@ -147,6 +150,45 @@ local function setStatus(message)
 	title.Text = message
 end
 
+local function clearReturnMarker()
+	if returnMarker then
+		returnMarker:Destroy()
+		returnMarker = nil
+	end
+end
+
+local function showReturnMarker(plotId)
+	clearReturnMarker()
+
+	local map = Workspace:FindFirstChild(CatapultConfig.WorldFolderName)
+	local plots = map and map:FindFirstChild(CatapultConfig.PlotsFolderName)
+	local plot = plots and plots:FindFirstChild(`Plot{plotId}`)
+	local claimZone = plot and plot:FindFirstChild("BaseClaimZone")
+	if not claimZone then
+		return
+	end
+
+	local marker = Instance.new("BillboardGui")
+	marker.Name = "ReturnRunBaseMarker"
+	marker.Size = UDim2.fromOffset(180, 54)
+	marker.StudsOffset = Vector3.new(0, 7, 0)
+	marker.AlwaysOnTop = true
+	marker.MaxDistance = 260
+	marker.Parent = claimZone
+
+	local label = Instance.new("TextLabel")
+	label.BackgroundTransparency = 1
+	label.Font = Enum.Font.GothamBlack
+	label.Text = "YOUR BASE"
+	label.TextColor3 = Color3.fromRGB(103, 255, 139)
+	label.TextScaled = true
+	label.TextStrokeTransparency = 0.2
+	label.Size = UDim2.fromScale(1, 1)
+	label.Parent = marker
+
+	returnMarker = marker
+end
+
 local function showReveal(payload)
 	local rarity = payload.rarity or "Common"
 	local distance = math.floor(payload.distance or 0)
@@ -186,7 +228,7 @@ local function releaseCharge()
 	local chargeAlpha = getChargeAlpha()
 	charging = false
 	meterFill.Size = UDim2.fromScale(chargeAlpha, 1)
-	setStatus("Launching...")
+	setStatus("Loading crate...")
 
 	requestLaunchRemote:FireServer({
 		requestedPower = math.clamp(chargeAlpha, CatapultConfig.MinPower, CatapultConfig.MaxPower),
@@ -225,6 +267,12 @@ launchResultRemote.OnClientEvent:Connect(function(payload)
 			setStatus(`Cooldown {math.ceil(payload.cooldownRemaining or CatapultConfig.CooldownSeconds)}s`)
 		elseif payload.reason == "TooFarFromCatapult" then
 			setStatus("Step into the catapult zone")
+		elseif payload.reason == "CatapultBusy" then
+			setStatus("Catapult is busy!")
+		elseif payload.reason == "NoEmptySlots" then
+			setStatus("No empty slots!")
+		elseif payload.reason == "ReturnRunActive" then
+			setStatus("Secure your reward first!")
 		else
 			setStatus(`Launch failed: {payload.reason or "Unknown"}`)
 		end
@@ -233,10 +281,10 @@ launchResultRemote.OnClientEvent:Connect(function(payload)
 
 	if payload.status == "Launched" then
 		cooldownUntil = os.clock() + (payload.cooldownSeconds or CatapultConfig.CooldownSeconds)
-		setStatus("Crate is flying...")
+		setStatus("Launch! You are the crate!")
 	elseif payload.status == "Landed" then
 		latestDistance = payload.distance
-		setStatus(`Landed: {math.floor(payload.distance or 0)} studs`)
+		setStatus("Opening crate...")
 	end
 end)
 
@@ -245,8 +293,40 @@ revealResultRemote.OnClientEvent:Connect(function(payload)
 		return
 	end
 
-	setStatus(`Revealed {payload.displayName or "Strawberita"}!`)
+	setStatus(`You found: {payload.displayName or "Strawberita"}!`)
 	showReveal(payload)
+end)
+
+returnRunStatusRemote.OnClientEvent:Connect(function(payload)
+	if typeof(payload) ~= "table" then
+		return
+	end
+
+	if payload.status == "Started" then
+		returnRunActive = true
+		showReturnMarker(payload.plotId)
+		setStatus(payload.message or "Run back to your base to keep it!")
+		revealSubtitle.Text = "Run back to your base to keep it!"
+		revealMessageUntil = os.clock() + (payload.timeoutSeconds or 8)
+	elseif payload.status == "Secured" then
+		returnRunActive = false
+		clearReturnMarker()
+		setStatus(payload.message or "Reward Secured!")
+		revealTitle.Text = "Reward Secured!"
+		revealTitle.TextColor3 = Color3.fromRGB(103, 255, 139)
+		revealSubtitle.Text = payload.displayName or ""
+		revealFrame.Visible = true
+		revealMessageUntil = os.clock() + 3.5
+	elseif payload.status == "Lost" then
+		returnRunActive = false
+		clearReturnMarker()
+		setStatus(payload.message or "Reward Lost!")
+		revealTitle.Text = payload.message or "Reward Lost!"
+		revealTitle.TextColor3 = Color3.fromRGB(255, 91, 129)
+		revealSubtitle.Text = payload.reason or "Bonked"
+		revealFrame.Visible = true
+		revealMessageUntil = os.clock() + 3.5
+	end
 end)
 
 RunService.RenderStepped:Connect(function()
@@ -271,6 +351,10 @@ RunService.RenderStepped:Connect(function()
 		meterFill.Size = UDim2.fromScale(math.max(0, (cooldownUntil - now) / CatapultConfig.CooldownSeconds), 1)
 		meterFill.BackgroundColor3 = Color3.fromRGB(120, 175, 255)
 		setStatus(`Cooldown {math.ceil(cooldownUntil - now)}s`)
+	elseif returnRunActive then
+		meterFill.Size = UDim2.fromScale(1, 1)
+		meterFill.BackgroundColor3 = Color3.fromRGB(103, 255, 139)
+		setStatus("Run back to your base to keep it!")
 	elseif nearCatapult then
 		meterFill.Size = UDim2.fromScale(0, 1)
 		meterFill.BackgroundColor3 = Color3.fromRGB(255, 91, 129)

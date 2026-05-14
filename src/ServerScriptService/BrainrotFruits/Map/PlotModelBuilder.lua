@@ -1,7 +1,9 @@
 local PlotModelBuilder = {}
 
+local CatapultModelBuilder = require(script.Parent.CatapultModelBuilder)
+
 PlotModelBuilder.PlotSize = Vector3.new(70, 1, 55)
-PlotModelBuilder.ModelVersion = "BaseReferencePlot_V2"
+PlotModelBuilder.ModelVersion = "BaseReferencePlot_V3"
 
 local COLORS = {
 	Grass = Color3.fromRGB(71, 171, 75),
@@ -300,14 +302,24 @@ local function createOwnerSign(plot, plotFrame, plotId, theme, ownerName)
 end
 
 local function createSpawnPad(plot, plotFrame, plotId, theme)
-	local spawnPad = createTopTextPad(plot, "SpawnPad", "SPAWN", Vector3.new(12, 0.42, 9), localToWorld(plotFrame, -20, 1.08, -21), theme.color, COLORS.White)
-	spawnPad.Material = Enum.Material.Neon
-	spawnPad.Transparency = 0.12
+	local spawnPad = createPart(plot, "SpawnPad", Vector3.new(8, 1, 8), localToWorld(plotFrame, 0, 1.25, -9), theme.color, Enum.Material.SmoothPlastic, 1)
+	spawnPad.CanCollide = false
 	spawnPad:SetAttribute("Type", "SpawnPad")
 	spawnPad:SetAttribute("PlotId", plotId)
 	spawnPad:SetAttribute("Role", "SpawnPad")
+	spawnPad:SetAttribute("Invisible", true)
 
-	createPart(plot, "SpawnPadStoneBase", Vector3.new(14, 0.55, 10.8), localToWorld(plotFrame, -20, 0.82, -21), COLORS.StoneLight, Enum.Material.Slate)
+	return spawnPad
+end
+
+local function createBaseClaimZone(plot, plotFrame, plotId)
+	local claimZone = createPart(plot, "BaseClaimZone", Vector3.new(54, 8, 42), localToWorld(plotFrame, 0, 4.7, -1), Color3.fromRGB(103, 255, 139), Enum.Material.ForceField, 1)
+	claimZone.CanCollide = false
+	claimZone.CanQuery = false
+	claimZone.CanTouch = true
+	claimZone:SetAttribute("Type", "BaseClaimZone")
+	claimZone:SetAttribute("PlotId", plotId)
+	return claimZone
 end
 
 local function createCollector(plot, plotFrame, plotId, theme)
@@ -362,26 +374,15 @@ local function createFruitSlots(plot, plotFrame, plotId, theme, debugMode)
 end
 
 local function createPlotCatapult(plot, plotFrame, plotId)
-	local catapult = Instance.new("Model")
-	catapult.Name = "PlotCatapult"
-	catapult:SetAttribute("Type", "PlotCatapult")
-	catapult:SetAttribute("PlotId", plotId)
-	catapult:SetAttribute("Decorative", true)
-	catapult.Parent = plot
-
-	local baseFrame = localToWorld(plotFrame, 0, 1.12, 0)
-	local base = createPart(catapult, "StoneBase", Vector3.new(10, 0.7, 8.2), baseFrame, COLORS.StoneDark, Enum.Material.Slate)
-	createPart(catapult, "WoodenBase", Vector3.new(7.3, 0.6, 5.5), baseFrame * CFrame.new(0, 0.55, 0), COLORS.Wood, Enum.Material.Wood)
-	createPart(catapult, "LeftSupport", Vector3.new(0.55, 3.2, 0.55), baseFrame * CFrame.new(-2.1, 2.25, -0.3) * CFrame.Angles(0, 0, math.rad(-12)), COLORS.WoodDark, Enum.Material.Wood)
-	createPart(catapult, "RightSupport", Vector3.new(0.55, 3.2, 0.55), baseFrame * CFrame.new(2.1, 2.25, -0.3) * CFrame.Angles(0, 0, math.rad(12)), COLORS.WoodDark, Enum.Material.Wood)
-	createPart(catapult, "HingeBeam", Vector3.new(4.9, 0.5, 0.5), baseFrame * CFrame.new(0, 3.65, 0), COLORS.WoodDark, Enum.Material.Wood)
-	createPart(catapult, "ThrowingArm", Vector3.new(0.6, 0.42, 7.6), baseFrame * CFrame.new(0, 3.85, 2.2) * CFrame.Angles(math.rad(-13), 0, 0), Color3.fromRGB(147, 94, 52), Enum.Material.Wood)
-	createPart(catapult, "BasketCup", Vector3.new(2.4, 0.55, 2.1), baseFrame * CFrame.new(0, 4.55, 5.25), Color3.fromRGB(151, 94, 52), Enum.Material.Wood)
-	createPart(catapult, "CounterWeight", Vector3.new(2.3, 2.1, 2.3), baseFrame * CFrame.new(0, 2.15, -3.1), COLORS.Stone, Enum.Material.Slate)
-	createPart(catapult, "RopeA", Vector3.new(0.16, 2.7, 0.16), baseFrame * CFrame.new(-1.4, 2.75, 1.1) * CFrame.Angles(math.rad(23), 0, 0), Color3.fromRGB(213, 181, 123), Enum.Material.Fabric)
-	createPart(catapult, "RopeB", Vector3.new(0.16, 2.7, 0.16), baseFrame * CFrame.new(1.4, 2.75, 1.1) * CFrame.Angles(math.rad(23), 0, 0), Color3.fromRGB(213, 181, 123), Enum.Material.Fabric)
-
-	catapult.PrimaryPart = base
+	return CatapultModelBuilder.createCatapult({
+		parent = plot,
+		name = "PlotCatapult",
+		cframe = localToWorld(plotFrame, 0, 1, -1),
+		scale = 0.78,
+		plotId = plotId,
+		isSharedLauncher = false,
+		decorative = true,
+	})
 end
 
 local function createHut(plot, plotFrame, theme)
@@ -447,6 +448,7 @@ function PlotModelBuilder.createPlot(config)
 	createFence(plot, plotFrame, theme)
 	createOwnerSign(plot, plotFrame, plotId, theme, ownerName)
 	createSpawnPad(plot, plotFrame, plotId, theme)
+	createBaseClaimZone(plot, plotFrame, plotId)
 	createCollector(plot, plotFrame, plotId, theme)
 	createFruitSlots(plot, plotFrame, plotId, theme, config.debugMode)
 	createPlotCatapult(plot, plotFrame, plotId)

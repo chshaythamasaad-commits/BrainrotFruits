@@ -5,12 +5,18 @@ local brainrotFruits = ReplicatedStorage:WaitForChild("BrainrotFruits")
 local CatapultConfig = require(brainrotFruits.Shared.CatapultConfig)
 local FXService = require(script.Parent.FXService)
 local PlotService = require(script.Parent.Map.PlotService)
+local ReturnRunService = require(script.Parent.ReturnRunService)
 local RewardService = require(script.Parent.RewardService)
 
 local rng = Random.new()
 local lastLaunchByUserId = {}
+local crateStateByUserId = {}
+local sharedCatapultBusyUserId = nil
+local sharedCatapultBusyUntil = 0
 
 PlotService.init()
+ReturnRunService.init()
+print("[BrainrotFruits] PlayerCrateLaunch_V1 active")
 
 local function getOrCreateFolder(parent, name)
 	local folder = parent:FindFirstChild(name)
@@ -43,6 +49,11 @@ local function getPlayerRoot(player)
 	return character and character:FindFirstChild("HumanoidRootPart")
 end
 
+local function getPlayerHumanoid(player)
+	local character = player.Character
+	return character and character:FindFirstChildOfClass("Humanoid")
+end
+
 local function clampPower(power)
 	local numericPower = tonumber(power) or CatapultConfig.MinPower
 	return math.clamp(numericPower, CatapultConfig.MinPower, CatapultConfig.MaxPower)
@@ -57,10 +68,55 @@ local function flatDistance(fromPosition, toPosition)
 	return math.clamp(delta.Magnitude, 0, CatapultConfig.MaxValidDistance)
 end
 
+local function fireFailure(player, reason, extra)
+	local payload = extra or {}
+	payload.ok = false
+	payload.reason = reason
+	launchResultRemote:FireClient(player, payload)
+end
+
+local function addCrateSurfaceText(part, text, face)
+	local surface = Instance.new("SurfaceGui")
+	surface.Name = "CrateSurfaceText"
+	surface.Face = face
+	surface.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
+	surface.PixelsPerStud = 34
+	surface.Parent = part
+
+	local label = Instance.new("TextLabel")
+	label.BackgroundTransparency = 1
+	label.Font = Enum.Font.GothamBlack
+	label.Text = text
+	label.TextColor3 = Color3.fromRGB(255, 232, 95)
+	label.TextScaled = true
+	label.TextStrokeTransparency = 0.25
+	label.Size = UDim2.fromScale(1, 1)
+	label.Parent = surface
+end
+
+local function addCrateVisual(crate, name, size, offset, color, material)
+	local visual = Instance.new("Part")
+	visual.Name = name
+	visual.Size = size
+	visual.CFrame = crate.CFrame * offset
+	visual.Color = color
+	visual.Material = material or Enum.Material.SmoothPlastic
+	visual.CanCollide = false
+	visual.Massless = true
+	visual.Parent = crate
+
+	local weld = Instance.new("WeldConstraint")
+	weld.Part0 = crate
+	weld.Part1 = visual
+	weld.Parent = visual
+
+	return visual
+end
+
 local function makeCrate(origin, player, powerAlpha, plot)
 	local crate = Instance.new("Part")
-	crate.Name = `FruitCrate_{player.UserId}`
-	crate.Size = Vector3.new(2.4, 2.1, 2.4)
+	crate.Name = `LaunchedPlayerCrate_{player.UserId}`
+	crate.Size = Vector3.new(3.1, 3.1, 3.1)
 	crate.CFrame = CFrame.new(origin)
 	crate.Color = Color3.fromRGB(148, 94, 49)
 	crate.Material = Enum.Material.WoodPlanks
@@ -70,22 +126,15 @@ local function makeCrate(origin, player, powerAlpha, plot)
 	crate:SetAttribute("PlotId", plot:GetAttribute("PlotId"))
 	crate:SetAttribute("LaunchPower", powerAlpha)
 	crate:SetAttribute("HasLanded", false)
+	crate:SetAttribute("RepresentsPlayer", true)
 	crate.Parent = PlotService.getPlayerCratesFolder(player)
 
-	local corner = Instance.new("Part")
-	corner.Name = "BrightSticker"
-	corner.Size = Vector3.new(0.75, 0.08, 0.75)
-	corner.CFrame = crate.CFrame * CFrame.new(0, 1.08, -0.5)
-	corner.Color = Color3.fromRGB(255, 91, 129)
-	corner.Material = Enum.Material.SmoothPlastic
-	corner.CanCollide = false
-	corner.Massless = true
-	corner.Parent = crate
-
-	local weld = Instance.new("WeldConstraint")
-	weld.Part0 = crate
-	weld.Part1 = corner
-	weld.Parent = corner
+	addCrateVisual(crate, "TopStrap", Vector3.new(3.35, 0.22, 0.55), CFrame.new(0, 1.68, 0), Color3.fromRGB(91, 58, 34), Enum.Material.Wood)
+	addCrateVisual(crate, "FrontStrap", Vector3.new(0.55, 3.35, 0.22), CFrame.new(0, 0, -1.68), Color3.fromRGB(91, 58, 34), Enum.Material.Wood)
+	addCrateVisual(crate, "LeftMetalCorner", Vector3.new(0.62, 0.62, 0.18), CFrame.new(-1.05, 0.95, -1.7), Color3.fromRGB(135, 138, 137), Enum.Material.Metal)
+	addCrateVisual(crate, "RightMetalCorner", Vector3.new(0.62, 0.62, 0.18), CFrame.new(1.05, 0.95, -1.7), Color3.fromRGB(135, 138, 137), Enum.Material.Metal)
+	addCrateVisual(crate, "LuckySticker", Vector3.new(1.1, 1.1, 0.12), CFrame.new(0, -0.2, -1.72), Color3.fromRGB(255, 91, 129), Enum.Material.SmoothPlastic)
+	addCrateSurfaceText(crate, "?", Enum.NormalId.Front)
 
 	pcall(function()
 		crate:SetNetworkOwner(nil)
@@ -100,11 +149,118 @@ local function makeCrate(origin, player, powerAlpha, plot)
 	return crate
 end
 
-local function fireFailure(player, reason, extra)
-	local payload = extra or {}
-	payload.ok = false
-	payload.reason = reason
-	launchResultRemote:FireClient(player, payload)
+local function setCharacterAsCrate(player, crate)
+	local character = player.Character
+	local humanoid = getPlayerHumanoid(player)
+	local root = getPlayerRoot(player)
+	if not character or not humanoid or not root then
+		return false
+	end
+
+	local state = {
+		crate = crate,
+		character = character,
+		humanoid = humanoid,
+		root = root,
+		rootAnchored = root.Anchored,
+		walkSpeed = humanoid.WalkSpeed,
+		jumpPower = humanoid.JumpPower,
+		jumpHeight = humanoid.JumpHeight,
+		autoRotate = humanoid.AutoRotate,
+		platformStand = humanoid.PlatformStand,
+		parts = {},
+		decals = {},
+	}
+	crateStateByUserId[player.UserId] = state
+
+	for _, descendant in ipairs(character:GetDescendants()) do
+		if descendant:IsA("BasePart") then
+			state.parts[descendant] = {
+				Transparency = descendant.Transparency,
+				CanCollide = descendant.CanCollide,
+				CanTouch = descendant.CanTouch,
+			}
+			descendant.Transparency = 1
+			descendant.CanCollide = false
+			descendant.CanTouch = false
+		elseif descendant:IsA("Decal") or descendant:IsA("Texture") then
+			state.decals[descendant] = descendant.Transparency
+			descendant.Transparency = 1
+		end
+	end
+
+	root.Anchored = true
+	root.CFrame = crate.CFrame + Vector3.new(0, 1.8, 0)
+	humanoid.WalkSpeed = 0
+	humanoid.JumpPower = 0
+	humanoid.JumpHeight = 0
+	humanoid.AutoRotate = false
+	humanoid.PlatformStand = true
+
+	player:SetAttribute("IsLaunching", true)
+	player:SetAttribute("IsCrate", true)
+	player:SetAttribute("PendingRewardName", "")
+	player:SetAttribute("ReturnRunActive", false)
+
+	return true
+end
+
+local function syncCharacterToCrate(player, crate)
+	local state = crateStateByUserId[player.UserId]
+	if not state or state.crate ~= crate then
+		return
+	end
+
+	local root = getPlayerRoot(player)
+	if root then
+		root.CFrame = crate.CFrame + Vector3.new(0, 1.8, 0)
+	end
+end
+
+local function restoreCharacterFromCrate(player, position)
+	local state = crateStateByUserId[player.UserId]
+	if not state then
+		return
+	end
+
+	for part, original in pairs(state.parts) do
+		if part and part.Parent then
+			part.Transparency = original.Transparency
+			part.CanCollide = original.CanCollide
+			part.CanTouch = original.CanTouch
+		end
+	end
+
+	for decal, transparency in pairs(state.decals) do
+		if decal and decal.Parent then
+			decal.Transparency = transparency
+		end
+	end
+
+	local humanoid = getPlayerHumanoid(player)
+	local root = getPlayerRoot(player)
+	if root then
+		root.Anchored = state.rootAnchored
+		root.CFrame = CFrame.new(position + Vector3.new(0, 4, 0))
+	end
+	if humanoid then
+		humanoid.WalkSpeed = state.walkSpeed or 16
+		humanoid.JumpPower = state.jumpPower or humanoid.JumpPower
+		humanoid.JumpHeight = state.jumpHeight or humanoid.JumpHeight
+		humanoid.AutoRotate = state.autoRotate ~= false
+		humanoid.PlatformStand = state.platformStand == true
+	end
+
+	crateStateByUserId[player.UserId] = nil
+	player:SetAttribute("IsLaunching", false)
+	player:SetAttribute("IsCrate", false)
+end
+
+local function releaseSharedCatapult(player)
+	if sharedCatapultBusyUserId == player.UserId then
+		sharedCatapultBusyUserId = nil
+		sharedCatapultBusyUntil = 0
+	end
 end
 
 local function trackLanding(player, crate, launchOrigin)
@@ -113,13 +269,16 @@ local function trackLanding(player, crate, launchOrigin)
 
 	while crate.Parent and os.clock() - startedAt < CatapultConfig.LandingTimeoutSeconds do
 		landedPosition = crate.Position
+		syncCharacterToCrate(player, crate)
 		if os.clock() - startedAt > 0.7 and crate.AssemblyLinearVelocity.Magnitude <= CatapultConfig.RestingSpeed then
 			break
 		end
-		task.wait(0.15)
+		task.wait(0.08)
 	end
 
 	if not crate.Parent then
+		restoreCharacterFromCrate(player, landedPosition)
+		releaseSharedCatapult(player)
 		return
 	end
 
@@ -128,7 +287,7 @@ local function trackLanding(player, crate, launchOrigin)
 	crate:SetAttribute("LandingDistance", distance)
 	FXService.emitBurst(crate.Parent, landedPosition + Vector3.new(0, 1.2, 0), Color3.fromRGB(255, 238, 145), "LandingBurst", 22)
 
-	print(`[BrainrotFruits] {player.Name} launched a crate {math.floor(distance)} studs on Plot {crate:GetAttribute("PlotId")}.`)
+	print(`[BrainrotFruits] {player.Name} became a launched crate and landed {math.floor(distance)} studs from the shared catapult.`)
 
 	launchResultRemote:FireClient(player, {
 		ok = true,
@@ -143,6 +302,9 @@ local function trackLanding(player, crate, launchOrigin)
 
 	if crate.Parent then
 		local reveal = RewardService.revealCrate(player, crate, landedPosition, distance)
+		restoreCharacterFromCrate(player, landedPosition)
+		releaseSharedCatapult(player)
+
 		revealResultRemote:FireClient(player, {
 			ok = true,
 			status = "Revealed",
@@ -152,10 +314,17 @@ local function trackLanding(player, crate, launchOrigin)
 			bandName = reveal.bandName,
 			distance = reveal.distance,
 			plotId = reveal.plotId,
-			slotIndex = reveal.slotIndex,
 			position = reveal.position,
 			modelName = reveal.modelName,
 		})
+
+		local startedReturnRun, reason = ReturnRunService.start(player, reveal)
+		if not startedReturnRun then
+			warn(`[BrainrotFruits] Could not start return run for {player.Name}: {reason or "Unknown"}.`)
+		end
+	else
+		restoreCharacterFromCrate(player, landedPosition)
+		releaseSharedCatapult(player)
 	end
 end
 
@@ -173,6 +342,21 @@ requestLaunchRemote.OnServerEvent:Connect(function(player, payload)
 		return
 	end
 
+	if crateStateByUserId[player.UserId] or player:GetAttribute("IsLaunching") == true then
+		fireFailure(player, "AlreadyLaunching")
+		return
+	end
+
+	if ReturnRunService.hasActiveRun(player) or player:GetAttribute("ReturnRunActive") == true then
+		fireFailure(player, "ReturnRunActive")
+		return
+	end
+
+	if not PlotService.getNextOpenSlot(player) then
+		fireFailure(player, "NoEmptySlots")
+		return
+	end
+
 	local distanceToCatapult = (root.Position - zone.Position).Magnitude
 	if distanceToCatapult > CatapultConfig.InteractRange then
 		fireFailure(player, "TooFarFromCatapult")
@@ -180,6 +364,11 @@ requestLaunchRemote.OnServerEvent:Connect(function(player, payload)
 	end
 
 	local now = os.clock()
+	if sharedCatapultBusyUserId and sharedCatapultBusyUntil > now then
+		fireFailure(player, "CatapultBusy")
+		return
+	end
+
 	local lastLaunch = lastLaunchByUserId[player.UserId] or -math.huge
 	local cooldownRemaining = CatapultConfig.CooldownSeconds - (now - lastLaunch)
 	if cooldownRemaining > 0 then
@@ -191,6 +380,8 @@ requestLaunchRemote.OnServerEvent:Connect(function(player, payload)
 
 	local powerAlpha = clampPower(payload.requestedPower)
 	lastLaunchByUserId[player.UserId] = now
+	sharedCatapultBusyUserId = player.UserId
+	sharedCatapultBusyUntil = now + CatapultConfig.SharedCatapultBusySeconds
 
 	local launchOrigin = zone:GetAttribute("LaunchOrigin")
 	if typeof(launchOrigin) ~= "Vector3" then
@@ -208,6 +399,13 @@ requestLaunchRemote.OnServerEvent:Connect(function(player, payload)
 	launchDirection = flatLaunchDirection.Unit
 
 	local crate = makeCrate(launchOrigin + Vector3.new(rng:NextNumber(-0.15, 0.15), 0, 0), player, powerAlpha, plot)
+	if not setCharacterAsCrate(player, crate) then
+		crate:Destroy()
+		releaseSharedCatapult(player)
+		fireFailure(player, "CharacterNotReady")
+		return
+	end
+
 	local horizontalSpeed = lerp(CatapultConfig.MinHorizontalSpeed, CatapultConfig.MaxHorizontalSpeed, powerAlpha)
 	local upwardSpeed = lerp(CatapultConfig.MinUpwardSpeed, CatapultConfig.MaxUpwardSpeed, powerAlpha)
 	crate.AssemblyLinearVelocity = launchDirection * horizontalSpeed + Vector3.new(0, upwardSpeed, 0)
@@ -227,4 +425,8 @@ end)
 
 Players.PlayerRemoving:Connect(function(player)
 	lastLaunchByUserId[player.UserId] = nil
+	crateStateByUserId[player.UserId] = nil
+	if sharedCatapultBusyUserId == player.UserId then
+		releaseSharedCatapult(player)
+	end
 end)
