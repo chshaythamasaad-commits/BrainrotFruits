@@ -190,6 +190,7 @@ local function trackLanding(player, crate, launchOrigin)
 
 	if crate.Parent then
 		local reveal = RewardService.revealCrate(player, crate, landedPosition, distance)
+		StrawberitaTransformService.setVariant(player, reveal.variantName, reveal.pendingReward)
 		StrawberitaTransformService.releaseForReturnRun(player, landedPosition)
 		releaseSharedCatapult(player)
 

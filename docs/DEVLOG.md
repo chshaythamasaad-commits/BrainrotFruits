@@ -219,3 +219,12 @@ Commit: this documentation pass.
 - Fixed the most visible grass flicker by separating overlapping `IslandBase` slabs in `MapBuilder.buildIslandBase()`.
 - The core grass, plot lobes, back lobe, launch peninsula, extended causeway, and reveal island now use distinct top-plane heights instead of sharing the same visible Y plane.
 - Kept gameplay trigger parts, plot assignment, launch lane logic, reward placement, and transformation systems unchanged.
+
+### Strawberita variant VFX polish
+
+- Marked the generated map with `StrawberitaVariantVFXVersion = "VariantAuraSparkle_V1"`.
+- Added `Shared/StrawberitaVFX.lua` as the centralized variant-effect config for Base, Golden, Diamond, and Galaxy Strawberita.
+- Platform Strawberitas now get variant-specific aura/sparkle identity while preserving the existing `PlatformBounce_V1` anchored idle loop.
+- Reward reveal and reward-secured moments now play variant-colored bursts: pink/white for Base, gold for Golden, icy blue/white for Diamond, and purple/cyan cosmic for Galaxy.
+- Return-run transformed Strawberita now uses the reward variant to color its attached trail and aura without adding any detached follower model.
+- Reward Tools now receive lightweight equip-only sparkle VFX while keeping the existing Tool grant flow unchanged.

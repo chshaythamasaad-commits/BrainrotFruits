@@ -5,6 +5,7 @@ local Workspace = game:GetService("Workspace")
 
 local brainrotFruits = ReplicatedStorage:WaitForChild("BrainrotFruits")
 local StrawberitaFactory = require(brainrotFruits.Models.StrawberitaFactory)
+local StrawberitaVFX = require(brainrotFruits.Shared.StrawberitaVFX)
 
 local StrawberitaTransformService = {}
 
@@ -44,6 +45,7 @@ local function markAnimationVersion()
 	local map = Workspace:FindFirstChild("BrainrotMap")
 	if map then
 		map:SetAttribute("StrawberitaAnimationVersion", ANIMATION_VERSION)
+		map:SetAttribute("StrawberitaVariantVFXVersion", StrawberitaVFX.Version)
 	end
 end
 
@@ -94,33 +96,18 @@ end
 local function addReturnRunSparkles(state)
 	local visualModel = state.visualModel
 	local root = visualModel and visualModel.PrimaryPart
-	if not root or root:FindFirstChild("ReturnRunSparkleAttachment") then
+	if not root then
 		state.returnTrailActive = true
 		return
 	end
 
-	local attachment = Instance.new("Attachment")
-	attachment.Name = "ReturnRunSparkleAttachment"
-	attachment.Position = Vector3.new(0, -1.4, 0.35)
-	attachment.Parent = root
-
-	local emitter = Instance.new("ParticleEmitter")
-	emitter.Name = "CuteReturnRunSparkles"
-	emitter.Color = ColorSequence.new(Color3.fromRGB(255, 244, 184), Color3.fromRGB(255, 128, 170))
-	emitter.LightEmission = 0.45
-	emitter.Rate = 10
-	emitter.Lifetime = NumberRange.new(0.35, 0.7)
-	emitter.Speed = NumberRange.new(0.25, 0.85)
-	emitter.SpreadAngle = Vector2.new(45, 45)
-	emitter.Size = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 0.14),
-		NumberSequenceKeypoint.new(0.55, 0.1),
-		NumberSequenceKeypoint.new(1, 0),
-	})
-	emitter.Parent = attachment
+	local variantVFXState = StrawberitaVFX.startTransformedPlayerVFX(state.player, visualModel, state.variantName or "Normal")
 	state.returnTrailActive = true
-	state.returnTrailEmitter = emitter
-	state.returnTrailAttachment = attachment
+	state.variantVFXState = variantVFXState
+	state.returnTrailEmitter = variantVFXState and variantVFXState.trailEmitter
+	state.returnTrailAttachment = variantVFXState and variantVFXState.trailAttachment
+	state.returnTrailMovingRate = variantVFXState and variantVFXState.trailMovingRate or 20
+	state.returnTrailIdleRate = variantVFXState and variantVFXState.trailIdleRate or 6
 end
 
 local function createEmitter(parent, name, colorSequence, rate)
@@ -301,7 +288,9 @@ local function updatePartOffsets(state, now, moving, dt)
 		state.idleSparkleEmitter.Rate = moving and 3 or 1
 	end
 	if state.returnTrailEmitter then
-		state.returnTrailEmitter.Rate = state.returnTrailActive and (moving and 20 or 6) or 0
+		local movingRate = state.returnTrailMovingRate or 20
+		local idleRate = state.returnTrailIdleRate or 6
+		state.returnTrailEmitter.Rate = state.returnTrailActive and (moving and movingRate or idleRate) or 0
 	end
 end
 
@@ -367,10 +356,11 @@ local function triggerHappyPop(state)
 		return
 	end
 	state.facePopUntil = os.clock() + FACE_POP_SECONDS
+	local config = StrawberitaVFX.getConfig(state.variantName or "Normal")
 	emitOneShot(
 		state.visualModel and state.visualModel.PrimaryPart,
 		"StrawberitaHappyPop",
-		ColorSequence.new(Color3.fromRGB(255, 246, 156), Color3.fromRGB(255, 128, 195)),
+		ColorSequence.new(config.sparkleColorA, config.sparkleColorB),
 		18
 	)
 end
@@ -391,6 +381,9 @@ local function triggerLaunchStretch(state)
 end
 
 local function cleanupAnimation(state)
+	if state.visualModel then
+		StrawberitaVFX.cleanupVFX(state.visualModel)
+	end
 	if state.animationConnection then
 		state.animationConnection:Disconnect()
 		state.animationConnection = nil
@@ -519,6 +512,7 @@ function StrawberitaTransformService.beginFlight(player, crate, parent)
 		autoRotate = humanoid.AutoRotate,
 		platformStand = humanoid.PlatformStand,
 		player = player,
+		variantName = "Base",
 	}
 
 	root.Anchored = true
@@ -548,6 +542,25 @@ function StrawberitaTransformService.beginFlight(player, crate, parent)
 	player:SetAttribute("IsTransformedStrawberita", true)
 	player:SetAttribute("PendingRewardName", "")
 	player:SetAttribute("ReturnRunActive", false)
+
+	return true
+end
+
+function StrawberitaTransformService.setVariant(player, variantName, reward)
+	local state = activeByUserId[player.UserId]
+	if not state then
+		return false
+	end
+
+	state.reward = reward
+	state.variantName = StrawberitaVFX.normalizeVariantName(variantName or reward)
+	player:SetAttribute("TransformedStrawberitaVariant", state.variantName)
+
+	if state.visualModel then
+		state.visualModel:SetAttribute("VariantName", state.variantName)
+		state.visualModel:SetAttribute("RewardVariant", variantName or state.variantName)
+		StrawberitaVFX.applyVariantVFX(state.visualModel, state.variantName, "Transform")
+	end
 
 	return true
 end
@@ -588,6 +601,9 @@ function StrawberitaTransformService.releaseForReturnRun(player, position)
 	player:SetAttribute("IsLaunching", false)
 	player:SetAttribute("IsCrate", false)
 	player:SetAttribute("IsTransformedStrawberita", true)
+	if not state.variantName or state.variantName == "" then
+		state.variantName = StrawberitaVFX.normalizeVariantName(player:GetAttribute("PendingRewardVariant"))
+	end
 	addReturnRunSparkles(state)
 	triggerHappyPop(state)
 	return true
@@ -601,13 +617,17 @@ function StrawberitaTransformService.playRewardSecured(player)
 
 	state.celebrationUntil = os.clock() + CELEBRATION_SECONDS
 	state.facePopUntil = os.clock() + FACE_POP_SECONDS
+	local config = StrawberitaVFX.getConfig(state.variantName or "Normal")
 	emitOneShot(
 		state.visualModel and state.visualModel.PrimaryPart,
 		"StrawberitaRewardSecured",
-		ColorSequence.new(Color3.fromRGB(103, 255, 139), Color3.fromRGB(255, 244, 184)),
+		ColorSequence.new(config.burstColorA, config.burstColorB),
 		34,
 		NumberRange.new(1.1, 2.6)
 	)
+	if state.visualModel and state.visualModel.PrimaryPart then
+		StrawberitaVFX.playRewardSecuredBurst(state.visualModel, state.visualModel.PrimaryPart.Position, state.variantName)
+	end
 	return true
 end
 
@@ -618,10 +638,11 @@ function StrawberitaTransformService.playRewardLost(player)
 	end
 
 	state.lostWobbleUntil = os.clock() + LOST_WOBBLE_SECONDS
+	local config = StrawberitaVFX.getConfig(state.variantName or "Normal")
 	emitOneShot(
 		state.visualModel and state.visualModel.PrimaryPart,
 		"StrawberitaBonkedPuff",
-		ColorSequence.new(Color3.fromRGB(255, 159, 190), Color3.fromRGB(218, 218, 218)),
+		ColorSequence.new(config.sparkleColorA, Color3.fromRGB(218, 218, 218)),
 		24,
 		NumberRange.new(0.9, 2.1)
 	)
@@ -663,6 +684,7 @@ function StrawberitaTransformService.finish(player, restoreMovement, position)
 	player:SetAttribute("IsLaunching", false)
 	player:SetAttribute("IsCrate", false)
 	player:SetAttribute("IsTransformedStrawberita", false)
+	player:SetAttribute("TransformedStrawberitaVariant", "")
 end
 
 Players.PlayerRemoving:Connect(function(player)

@@ -324,6 +324,35 @@ Latest multiplayer note: overlapping shared-catapult launches should now fail wi
 7. Confirm invisible spawn pads, `BaseClaimZone`, catapult interact zone, water, neon/glow pads, and signs remain clean/smooth.
 8. Confirm transformed-player Strawberita still uses one welded visual with no follower model and still grants the reward Tool on successful return.
 
+## Latest Strawberita Variant VFX Notes
+
+- Active VFX module: `src/ReplicatedStorage/BrainrotFruits/Shared/StrawberitaVFX.lua`.
+- Active platform VFX start path: `PlotService.placeRewardOnSlot()` calls `StrawberitaAnimation.startPlatformIdle()`, which now calls `StrawberitaVFX.startPlatformVFX()`.
+- Active transformed-player VFX path: `CatapultService.trackLanding()` passes the rolled reward variant into `StrawberitaTransformService.setVariant()` before return run, and `releaseForReturnRun()` starts the variant-colored attached trail.
+- Active reward burst path: `RewardService.revealCrate()` plays the reveal burst, and `RewardService.claimPendingReward()` plays the secured burst only after successful slot placement and Tool grant.
+- Active Tool VFX path: `RewardService.grantRewardTool()` calls `StrawberitaVFX.applyToolVFX()` so sparkle particles enable on equip and disable on unequip.
+- `Workspace.BrainrotMap` now sets `StrawberitaVariantVFXVersion = VariantAuraSparkle_V1`.
+- Platform/reveal Strawberita models receive `VariantVFX = Active` and `VariantName = Base`, `Golden`, `Diamond`, or `Galaxy`.
+- Variant identity config:
+  - Base: low-rate pink/white cheerful sparkle, no strong aura.
+  - Golden: warm gold aura, higher bounce, gold sparkle trail/bursts.
+  - Diamond: icy blue/white glow, crystal-like sparkles and bursts.
+  - Galaxy: strongest purple/cyan mythic aura, cosmic sparkles and trail.
+
+## Latest Strawberita Variant VFX Verification
+
+1. Press Play and confirm Output prints:
+   - `[BrainrotFruits] StrawberitaVariantVFX_V1 active`
+   - `[BrainrotFruits] Platform variant auras active`
+   - `[BrainrotFruits] Return-run variant trails active`
+   - `[BrainrotFruits] Reward reveal bursts active`
+2. In Explorer, confirm `Workspace.BrainrotMap` has `StrawberitaVariantVFXVersion = VariantAuraSparkle_V1`.
+3. Inspect the preview lineup or secured plot rewards and confirm Base, Golden, Diamond, and Galaxy have visibly different sparkle/aura colors.
+4. Launch and reveal a reward; confirm the reveal burst matches the rolled variant.
+5. During return run, confirm the transformed Strawberita trail is attached to the single welded visual and no follower model appears.
+6. Secure the reward and confirm the secured burst plays, the reward still places on the slot, and the matching Strawberita Tool still appears in Backpack.
+7. Equip the reward Tool and confirm its small sparkle effect enables only while equipped.
+
 ## Latest Temporary Showcase Removal Notes
 
 - Removed the temporary viewing-platform server script from `src/ServerScriptService/BrainrotFruits`.

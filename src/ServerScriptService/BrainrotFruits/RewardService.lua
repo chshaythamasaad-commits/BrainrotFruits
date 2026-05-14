@@ -4,6 +4,7 @@ local brainrotFruits = ReplicatedStorage:WaitForChild("BrainrotFruits")
 local RarityConfig = require(brainrotFruits.Shared.RarityConfig)
 local FruitConfig = require(brainrotFruits.Configs.BrainrotFruitConfig)
 local StrawberitaFactory = require(brainrotFruits.Models.StrawberitaFactory)
+local StrawberitaVFX = require(brainrotFruits.Shared.StrawberitaVFX)
 local FXService = require(script.Parent.FXService)
 local PlotService = require(script.Parent.Map.PlotService)
 
@@ -175,6 +176,7 @@ local function grantRewardTool(player, reward)
 		sparkles.SparkleColor = effects.sparkles
 		sparkles.Parent = handle
 	end
+	StrawberitaVFX.applyToolVFX(tool, variantName)
 
 	tool.Parent = backpack
 	return tool
@@ -244,7 +246,9 @@ function RewardService.revealCrate(player, crate, landingPosition, distance)
 	model:SetAttribute("BandName", reward.bandName)
 	model:SetAttribute("ClaimState", "PendingReturnRun")
 	model.Parent = rewardFolder
+	StrawberitaVFX.applyVariantVFX(model, reward.variantName, "Reveal")
 	FXService.emitBurst(rewardFolder, landingPosition + Vector3.new(0, 2.2, 0), Color3.fromRGB(255, 231, 120), "RevealBurst", 46)
+	StrawberitaVFX.playRevealBurst(rewardFolder, landingPosition + Vector3.new(0, 2.35, 0), reward.variantName)
 
 	print(
 		`[BrainrotFruits] Pending reveal for {player.Name}: {reward.displayName} ({reward.rarity}) at {math.floor(distance)} studs in {reward.bandName}.`
@@ -298,6 +302,7 @@ function RewardService.claimPendingReward(player, rewardModel, reward)
 		rewardModel:SetAttribute("RewardToolName", rewardTool.Name)
 		rewardModel:SetAttribute("RewardToolGranted", true)
 	end
+	StrawberitaVFX.playRewardSecuredBurst(rewardModel.Parent, rewardModel:GetPivot().Position + Vector3.new(0, 1.7, 0), reward.variantName)
 	print(`[BrainrotFruits] Secured {reward.displayName or rewardModel.Name} on Plot {placedSlot:GetAttribute("PlotId")} Slot {placedSlot:GetAttribute("SlotIndex")}.`)
 
 	return placedSlot

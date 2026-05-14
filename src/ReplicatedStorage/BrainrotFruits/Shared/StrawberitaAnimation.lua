@@ -1,5 +1,7 @@
 local RunService = game:GetService("RunService")
 
+local StrawberitaVFX = require(script.Parent.StrawberitaVFX)
+
 local StrawberitaAnimation = {}
 
 StrawberitaAnimation.PlatformVersion = "PlatformBounce_V1"
@@ -52,12 +54,17 @@ local function printPlatformVersion()
 	end
 end
 
-local function getRarity(model, reward)
-	return (reward and reward.rarity) or model:GetAttribute("Rarity") or "Common"
+local function getVariantName(model, reward)
+	return (reward and (reward.variantName or reward.variant))
+		or model:GetAttribute("VariantName")
+		or model:GetAttribute("RewardVariant")
+		or model:GetAttribute("Variant")
+		or "Normal"
 end
 
-local function getEffectConfig(rarity)
-	return RARITY_EFFECTS[rarity] or RARITY_EFFECTS.Common
+local function getEffectConfig(variantName)
+	local config = StrawberitaVFX.getConfig(variantName)
+	return config or RARITY_EFFECTS.Common
 end
 
 local function setPartsDisplaySafe(model)
@@ -72,42 +79,10 @@ local function setPartsDisplaySafe(model)
 end
 
 local function addPlatformEffects(state, config)
-	local root = state.root
-	if not root then
-		return
-	end
-
-	local attachment = Instance.new("Attachment")
-	attachment.Name = "PlatformIdleSparkleAttachment"
-	attachment.Position = Vector3.new(0, 1.1, 0)
-	attachment.Parent = root
-	state.sparkleAttachment = attachment
-
-	local emitter = Instance.new("ParticleEmitter")
-	emitter.Name = "PlatformIdleSparkles"
-	emitter.Color = ColorSequence.new(config.colorA, config.colorB)
-	emitter.LightEmission = 0.38
-	emitter.Rate = config.rate
-	emitter.Lifetime = NumberRange.new(0.65, 1.25)
-	emitter.Speed = NumberRange.new(0.15, 0.65)
-	emitter.SpreadAngle = Vector2.new(90, 90)
-	emitter.Size = NumberSequence.new({
-		NumberSequenceKeypoint.new(0, 0.12),
-		NumberSequenceKeypoint.new(0.5, 0.08),
-		NumberSequenceKeypoint.new(1, 0),
-	})
-	emitter.Parent = attachment
-	state.sparkleEmitter = emitter
-
-	if config.light then
-		local light = Instance.new("PointLight")
-		light.Name = "PlatformIdleGlow"
-		light.Color = config.light
-		light.Brightness = 0.28
-		light.Range = 6.5
-		light.Parent = root
-		state.glowLight = light
-	end
+	local vfxState = StrawberitaVFX.startPlatformVFX(state.model, state.variantName)
+	state.variantVFXState = vfxState
+	state.glowLight = vfxState and vfxState.glowLight
+	state.glowBaseBrightness = config.platformLightBrightness or 0
 end
 
 local function stopState(model)
@@ -131,6 +106,7 @@ local function stopState(model)
 			instance:Destroy()
 		end
 	end
+	StrawberitaVFX.cleanupVFX(model)
 end
 
 function StrawberitaAnimation.stopPlatformIdle(model)
@@ -153,8 +129,8 @@ function StrawberitaAnimation.startPlatformIdle(model, reward)
 	printPlatformVersion()
 	setPartsDisplaySafe(model)
 
-	local rarity = getRarity(model, reward)
-	local config = getEffectConfig(rarity)
+	local variantName = getVariantName(model, reward)
+	local config = getEffectConfig(variantName)
 	local basePivot = model:GetPivot()
 	local seed = (model:GetAttribute("OwnerUserId") or 0) + (model:GetAttribute("DisplaySlotIndex") or 0) * 0.37
 
@@ -163,6 +139,7 @@ function StrawberitaAnimation.startPlatformIdle(model, reward)
 		root = root,
 		basePivot = basePivot,
 		config = config,
+		variantName = variantName,
 	}
 	activeByModel[model] = state
 
@@ -185,14 +162,14 @@ function StrawberitaAnimation.startPlatformIdle(model, reward)
 		local now = os.clock()
 		local period = 1.35 + ((seed % 4) * 0.09)
 		local phase = (now / period + seed) * math.pi * 2
-		local y = (math.sin(phase) * 0.5 + 0.5) * config.bounce
+		local y = (math.sin(phase) * 0.5 + 0.5) * (config.platformBounce or config.bounce or 0.16)
 		local sway = math.sin(phase * 0.5) * 0.035
 		local tilt = math.sin(phase * 0.5) * math.rad(1.6)
 		local glowAlpha = math.sin(phase) * 0.5 + 0.5
 
 		model:PivotTo(basePivot * CFrame.new(sway, y, 0) * CFrame.Angles(0, 0, tilt))
 		if state.glowLight then
-			state.glowLight.Brightness = 0.22 + glowAlpha * 0.22
+			state.glowLight.Brightness = state.glowBaseBrightness * (0.68 + glowAlpha * 0.42)
 		end
 	end)
 

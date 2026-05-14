@@ -5,6 +5,7 @@ local PlotService = require(script.Parent.Map.PlotService)
 
 local brainrotFruits = ReplicatedStorage:WaitForChild("BrainrotFruits")
 local strawberitaFactory = require(brainrotFruits.Models.StrawberitaFactory)
+local StrawberitaVFX = require(brainrotFruits.Shared.StrawberitaVFX)
 
 local map = PlotService.getMap()
 local hub = map:WaitForChild("CentralHub")
@@ -71,6 +72,7 @@ local statue = strawberitaFactory.create("Galaxy", {
 statue.Name = "MythicStrawberitaShowcase"
 statue:SetAttribute("Showcase", true)
 statue.Parent = showcaseFolder
+StrawberitaVFX.applyVariantVFX(statue, "Galaxy", "Platform")
 
 for _, oldName in ipairs({ "GeneratedBrainrotPreview", "PreviewModels" }) do
 	local oldFolder = hub:FindFirstChild(oldName)
@@ -88,11 +90,14 @@ if DEBUG_VISUAL_MARKERS then
 	addActiveSign(previewFolder, Vector3.new(0, 8.75, 21))
 end
 
-strawberitaFactory.createPreviewLineup(
+local previewModels = strawberitaFactory.createPreviewLineup(
 	previewFolder,
 	{ "Normal", "Golden", "Diamond", "Galaxy" },
 	CFrame.new(-15, 2.25, 21) * CFrame.Angles(0, math.rad(180), 0)
 )
+for _, model in ipairs(previewModels) do
+	StrawberitaVFX.applyVariantVFX(model, model:GetAttribute("VariantId"), "Platform")
+end
 
 print("[BrainrotFruits] Strawberita preview refreshed from rebuilt factory")
 print("[BrainrotFruits] Debug visual markers hidden in normal mode")
