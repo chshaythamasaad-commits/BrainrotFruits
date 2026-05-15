@@ -2,36 +2,14 @@
   "name": "BrainrotFruits",
   "tree": {
     "$className": "DataModel",
-    "ReplicatedStorage": {
-      "BrainrotFruits": {
-        "$path": "src/ReplicatedStorage/BrainrotFruits"
-      }
-    },
     "ServerStorage": {
       "BrainrotFruitAssets": {
         "$path": "src/assets/BrainrotFruitAssets"
       }
     },
     "ServerScriptService": {
-      "BrainrotFruits": {
-        "$path": "src/ServerScriptService/BrainrotFruits"
-      }
-    },
-    "StarterPlayer": {
-      "StarterPlayerScripts": {
-        "BrainrotFruits": {
-          "$path": "src/StarterPlayer/StarterPlayerScripts/BrainrotFruits"
-        }
-      }
-    },
-    "StarterGui": {
-      "BrainrotFruits": {
-        "$path": "src/StarterGui/BrainrotFruits"
-      }
-    },
-    "Workspace": {
-      "BrainrotMap": {
-        "$path": "src/Workspace/BrainrotMap"
+      "CourseShapeGenerator": {
+        "$path": "src/ServerScriptService/BrainrotFruits/CourseShapeGenerator.server.luau"
       }
     }
   }
